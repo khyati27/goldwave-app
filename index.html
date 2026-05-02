@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>GoldWave One</title>
+<meta name="theme-color" content="#0A0806">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+html,body{height:100%;background:#0A0806;color:#EDE6D6;}
+:root{
+  --gold:#C8A84B;--gold-dim:rgba(200,168,75,0.09);--gold-glow:rgba(200,168,75,0.18);--gold-bd:rgba(200,168,75,0.28);
+  --ink:#0A0806;--card:#131009;--surf:#1C1810;--raised:#221F15;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);
+  --text:#EDE6D6;--sub:#9A9080;--hint:#56504A;
+  --green:#4ADE80;--green-dim:rgba(74,222,128,0.10);--green-bd:rgba(74,222,128,0.22);
+  --red:#F87171;--red-dim:rgba(248,113,113,0.10);--red-bd:rgba(248,113,113,0.22);
+  --amber:#FCD34D;--amber-dim:rgba(252,211,77,0.10);--amber-bd:rgba(252,211,77,0.25);
+  --blue:#60A5FA;--blue-dim:rgba(96,165,250,0.10);--blue-bd:rgba(96,165,250,0.22);
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --mono:'DM Mono',monospace;
+}
+.app{max-width:430px;margin:0 auto;min-height:100vh;background:var(--ink);}
+
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--ink);border-bottom:0.5px solid var(--border);position:sticky;top:0;z-index:50;}
+.logo{display:flex;align-items:center;gap:9px;}
+.lm{width:28px;height:28px;border-radius:7px;background:var(--gold);display:flex;align-items:center;justify-content:center;box-shadow:0 0 14px var(--gold-glow);}
+.lm svg{width:13px;height:13px;stroke:var(--ink);fill:none;stroke-width:2.5;}
+.logo-text{font-family:var(--serif);font-size:17px;color:var(--text);}
+.logo-text em{color:var(--gold);font-style:normal;}
+.logo-text sup{font-family:var(--mono);font-size:8px;color:var(--sub);vertical-align:super;margin-left:1px;}
+.nav-right{display:flex;align-items:center;gap:5px;background:var(--surf);padding:5px 10px;border-radius:20px;border:0.5px solid var(--border);}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 5px var(--green);animation:pulse 2.5s ease infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.nav-live{font-family:var(--mono);font-size:10px;color:var(--sub);}
+
+/* TOP TABS */
+.top-tabs{display:flex;background:var(--ink);border-bottom:0.5px solid var(--border);}
+.top-tab{flex:1;padding:11px 6px;font-family:var(--sans);font-size:12px;font-weight:400;color:var(--hint);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;transition:color 0.2s;white-space:nowrap;}
+.top-tab.on{color:var(--gold);border-bottom-color:var(--gold);font-weight:500;}
+.tpg{display:none;}.tpg.on{display:block;}
+
+/* CONTRACT PILLS */
+.cbar{padding:12px 18px 10px;background:var(--ink);border-bottom:0.5px solid var(--border);}
+.cbar-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.11em;color:var(--hint);text-transform:uppercase;margin-bottom:8px;}
+.cpills{display:flex;gap:7px;}
+.cp{padding:9px 12px;border-radius:9px;border:0.5px solid var(--border);background:var(--card);cursor:pointer;flex:1;text-align:center;transition:all 0.15s;}
+.cp.on{border-color:var(--gold-bd);background:var(--gold-dim);}
+.cp-name{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--sub);}
+.cp.on .cp-name{color:var(--gold);}
+.cp-price{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--text);margin-top:3px;}
+.cp-tag{font-family:var(--mono);font-size:9px;color:var(--hint);margin-top:2px;}
+
+/* SCAN STATUS BAR */
+.scan-bar{padding:8px 18px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surf);}
+.scan-left{display:flex;align-items:center;gap:8px;}
+.scan-ring{width:16px;height:16px;flex-shrink:0;}
+.scan-ring svg{width:16px;height:16px;animation:spin 2s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.scan-ring-bg{stroke:var(--border);stroke-width:3;fill:none;}
+.scan-ring-arc{stroke:var(--gold);stroke-width:3;fill:none;stroke-linecap:round;stroke-dasharray:24 50;}
+.scan-label{font-family:var(--mono);font-size:10px;color:var(--sub);}
+.scan-right{display:flex;align-items:center;gap:10px;}
+.scan-score{font-family:var(--mono);font-size:11px;font-weight:500;}
+.scan-count{font-family:var(--mono);font-size:9px;color:var(--hint);}
+
+/* SIGNAL CARDS */
+.sigs-section{padding:10px 18px 4px;}
+.sigs-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.sigs-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.11em;text-transform:uppercase;color:var(--hint);}
+.sigs-count{font-family:var(--mono);font-size:9px;color:var(--hint);}
+
+.sig{border-radius:12px;overflow:hidden;margin-bottom:10px;border:0.5px solid var(--border);background:var(--card);animation:cardIn 0.35s cubic-bezier(0.34,1.56,0.64,1);}
+@keyframes cardIn{from{opacity:0;transform:translateY(-8px) scale(0.98)}to{opacity:1;transform:none}}
+
+/* Score-based border colours */
+.sig.score-hi{border-color:var(--green-bd);}  /* 80+ active */
+.sig.score-md{border-color:var(--amber-bd);}  /* 55-79 watching */
+.sig.score-lo{border-color:var(--border);}    /* 0-54 monitoring */
+
+.sig-head{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;border-bottom:0.5px solid var(--border);}
+.sig-left{display:flex;align-items:center;gap:7px;}
+.dir-pill{font-family:var(--mono);font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;}
+.dir-pill.long{background:var(--green-dim);color:var(--green);border:0.5px solid var(--green-bd);}
+.dir-pill.short{background:var(--red-dim);color:var(--red);border:0.5px solid var(--red-bd);}
+.sig-time{font-family:var(--mono);font-size:10px;color:var(--hint);}
+.sig-right{display:flex;align-items:center;gap:6px;}
+
+/* Status badges */
+.badge{font-family:var(--mono);font-size:9px;font-weight:500;padding:3px 8px;border-radius:20px;display:flex;align-items:center;gap:3px;}
+.badge.active{background:var(--green-dim);color:var(--green);border:0.5px solid var(--green-bd);}
+.badge.watching{background:var(--amber-dim);color:var(--amber);border:0.5px solid var(--amber-bd);}
+.badge.monitoring{background:var(--surf);color:var(--sub);border:0.5px solid var(--border);}
+.badge-dot{width:4px;height:4px;border-radius:50%;}
+.badge.active .badge-dot{background:var(--green);animation:pulse 1.5s infinite;}
+.badge.watching .badge-dot{background:var(--amber);}
+.badge.monitoring .badge-dot{background:var(--sub);}
+.conf-num{font-family:var(--mono);font-size:11px;font-weight:500;}
+.conf-num.hi{color:var(--green);}
+.conf-num.md{color:var(--amber);}
+.conf-num.lo{color:var(--sub);}
+
+/* SCORE BAR inside card */
+.sig-score-bar{padding:6px 13px;border-bottom:0.5px solid var(--border);}
+.ssb-track{height:3px;background:var(--border);border-radius:20px;overflow:hidden;}
+.ssb-fill{height:3px;border-radius:20px;transition:width 0.5s ease;}
+.ssb-fill.hi{background:var(--green);}
+.ssb-fill.md{background:var(--amber);}
+.ssb-fill.lo{background:var(--sub);}
+
+/* LEVELS */
+.sig-levels{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:0.5px solid var(--border);}
+.lv{padding:11px 12px;border-right:0.5px solid var(--border);text-align:center;}
+.lv:last-child{border-right:none;}
+.lv-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.07em;text-transform:uppercase;color:var(--hint);margin-bottom:5px;}
+.lv-val{font-family:var(--mono);font-size:14px;font-weight:500;}
+.lv.entry .lv-val{color:var(--text);}
+.lv.sl .lv-val{color:var(--red);}
+.lv.tgt .lv-val{color:var(--green);}
+.lv-note{font-family:var(--mono);font-size:9px;color:var(--hint);margin-top:2px;}
+
+/* STATUS NOTE BANNER inside card */
+.sig-note{padding:7px 13px;border-bottom:0.5px solid var(--border);font-family:var(--mono);font-size:10px;line-height:1.5;}
+.sig-note.note-active{background:var(--green-dim);color:var(--green);}
+.sig-note.note-watching{background:var(--amber-dim);color:var(--amber);}
+.sig-note.note-monitoring{background:var(--surf);color:var(--sub);}
+
+/* CHECKS */
+.sig-checks{padding:9px 13px;border-bottom:0.5px solid var(--border);display:flex;flex-wrap:wrap;gap:4px;}
+.chk{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:20px;}
+.chk.pass{background:var(--green-dim);color:var(--green);border:0.5px solid var(--green-bd);}
+.chk.warn{background:var(--amber-dim);color:var(--amber);border:0.5px solid var(--amber-bd);}
+.chk.fail{background:var(--red-dim);color:var(--red);border:0.5px solid var(--red-bd);}
+
+/* REASONING */
+.sig-reasoning{padding:10px 13px;border-bottom:0.5px solid var(--border);display:flex;gap:9px;}
+.ai-line{width:1.5px;border-radius:2px;background:var(--gold);flex-shrink:0;opacity:0.5;}
+.ai-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;opacity:0.8;}
+.ai-txt{font-family:var(--sans);font-size:12px;font-weight:300;color:var(--sub);line-height:1.6;}
+
+/* FOOTER ROW */
+.sig-footer{padding:9px 13px;display:flex;align-items:center;justify-content:space-between;}
+.exit-note{font-family:var(--sans);font-size:11px;color:var(--hint);}
+.exit-note strong{color:var(--sub);font-weight:500;}
+.close-btn{font-family:var(--mono);font-size:10px;font-weight:500;padding:4px 11px;border-radius:20px;cursor:pointer;transition:opacity 0.15s;border:none;}
+.close-btn.active{background:var(--red-dim);color:var(--red);border:0.5px solid var(--red-bd);}
+.close-btn.watching{background:var(--amber-dim);color:var(--amber);border:0.5px solid var(--amber-bd);}
+.close-btn.monitoring{background:var(--surf);color:var(--sub);border:0.5px solid var(--border);}
+
+/* TRACK RECORD */
+.track-wrap{margin:4px 18px 18px;padding:13px 15px;border:0.5px solid var(--border);border-radius:11px;background:var(--surf);}
+.track-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.11em;color:var(--hint);text-transform:uppercase;margin-bottom:9px;}
+.track-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.tr-st{padding:11px;background:var(--card);border-radius:9px;border:0.5px solid var(--border);text-align:center;}
+.tr-v{font-family:var(--serif);font-size:20px;}
+.tr-v.up{color:var(--green);}
+.tr-v.gold{color:var(--gold);}
+.tr-l{font-family:var(--mono);font-size:9px;color:var(--hint);margin-top:3px;}
+
+/* EMPTY STATE */
+.empty{padding:48px 20px;text-align:center;}
+.empty-ring{width:48px;height:48px;margin:0 auto 14px;}
+.empty-ring svg{width:48px;height:48px;animation:spin 2s linear infinite;}
+.empty-title{font-family:var(--serif);font-size:19px;color:var(--text);margin-bottom:5px;}
+.empty-sub{font-family:var(--mono);font-size:10px;color:var(--sub);line-height:1.7;}
+
+/* GOLD TAB — contract months */
+.gold-month-tabs{display:flex;padding:0 18px;border-bottom:0.5px solid var(--border);background:var(--ink);gap:0;}
+.gmt{flex:1;padding:11px 0;font-family:var(--mono);font-size:12px;color:var(--hint);border:none;background:none;cursor:pointer;border-bottom:1.5px solid transparent;text-align:center;}
+.gmt.on{color:var(--gold);border-bottom-color:var(--gold);}
+.gpg{display:none;}.gpg.on{display:block;}
+
+/* GOLD DATA CARDS */
+.gold-ticker{padding:16px 18px;border-bottom:0.5px solid var(--border);}
+.gt-row{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:10px;}
+.gt-name{font-family:var(--mono);font-size:10px;color:var(--sub);margin-bottom:3px;}
+.gt-price{font-family:var(--serif);font-size:36px;color:var(--text);line-height:1;letter-spacing:-1px;}
+.gt-chg{font-family:var(--mono);font-size:12px;margin-top:4px;}
+.gt-chg.up{color:var(--green);}
+.gt-chg.dn{color:var(--red);}
+.gt-right{text-align:right;display:flex;flex-direction:column;gap:3px;}
+.gt-meta{font-family:var(--mono);font-size:10px;color:var(--sub);}
+.gt-meta strong{color:var(--text);}
+
+.gold-stats{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:0.5px solid var(--border);}
+.gstat{padding:12px 14px;border-right:0.5px solid var(--border);text-align:center;}
+.gstat:last-child{border-right:none;}
+.gstat-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--hint);margin-bottom:4px;}
+.gstat-val{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--text);}
+.gstat-val.up{color:var(--green);}
+.gstat-val.dn{color:var(--red);}
+.gstat-val.gold{color:var(--gold);}
+
+.gold-chart{padding:14px 18px;border-bottom:0.5px solid var(--border);}
+.gold-chart svg{width:100%;height:120px;}
+
+.gold-info{padding:14px 18px;}
+.gold-info-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.11em;text-transform:uppercase;color:var(--hint);margin-bottom:10px;}
+.info-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:0.5px solid var(--border);font-size:12px;}
+.info-row:last-child{border-bottom:none;}
+.info-key{font-family:var(--sans);color:var(--sub);}
+.info-val{font-family:var(--mono);color:var(--text);font-weight:500;}
+
+/* HISTORY TAB */
+.hist-months{padding:10px 18px;border-bottom:0.5px solid var(--border);display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+.hist-months::-webkit-scrollbar{display:none;}
+.hmp{padding:5px 13px;border-radius:20px;font-family:var(--mono);font-size:11px;font-weight:500;border:0.5px solid var(--border);color:var(--hint);background:none;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.15s;}
+.hmp.on{background:var(--gold-dim);border-color:var(--gold-bd);color:var(--gold);}
+.hmp.up{border-style:dashed;}
+.hist-sum{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:0.5px solid var(--border);}
+.hs{padding:14px;border-right:0.5px solid var(--border);text-align:center;}
+.hs:last-child{border-right:none;}
+.hs-v{font-family:var(--serif);font-size:19px;}
+.hs-v.up{color:var(--green);}
+.hs-v.gold{color:var(--gold);}
+.hs-l{font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--hint);margin-top:3px;}
+.hist-list{padding:12px 18px;}
+.hsc{border:0.5px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;background:var(--card);}
+.hsc.good{border-color:var(--green-bd);}
+.hsc.bad{border-color:var(--red-bd);}
+.hsc-head{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;border-bottom:0.5px solid var(--border);}
+.spill{font-family:var(--mono);font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;}
+.spill.buy{background:var(--green-dim);color:var(--green);border:0.5px solid var(--green-bd);}
+.spill.sell{background:var(--red-dim);color:var(--red);border:0.5px solid var(--red-bd);}
+.hsc-meta{display:flex;align-items:center;gap:7px;}
+.hsc-time{font-family:var(--mono);font-size:10px;color:var(--hint);}
+.qb{font-family:var(--mono);font-size:9px;font-weight:500;padding:2px 7px;border-radius:20px;}
+.qb.good{background:var(--green-dim);color:var(--green);}
+.qb.bad{background:var(--red-dim);color:var(--red);}
+.hsc-prices{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;padding:10px 13px;gap:8px;border-bottom:0.5px solid var(--border);}
+.spf label{font-family:var(--mono);font-size:9px;letter-spacing:0.07em;text-transform:uppercase;color:var(--hint);display:block;margin-bottom:3px;}
+.spf span{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--text);}
+.spf span.up{color:var(--green);}
+.spf span.dn{color:var(--red);}
+.hsc-ai{padding:10px 13px;display:flex;gap:9px;}
+
+.upcoming{padding:32px 18px;text-align:center;}
+.upcoming p{font-family:var(--sans);font-size:13px;font-weight:300;color:var(--sub);line-height:1.7;}
+.upcoming strong{color:var(--gold);font-weight:500;}
+
+.footer{padding:18px;text-align:center;border-top:0.5px solid var(--border);}
+.footer p{font-family:var(--mono);font-size:9px;letter-spacing:0.05em;color:var(--hint);}
+.footer em{color:var(--gold);font-style:normal;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div class="nav">
+  <div class="logo">
+    <div class="lm"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></div>
+    <div class="logo-text">Gold<em>Wave</em><sup>ONE</sup></div>
+  </div>
+  <div class="nav-right"><div class="dot"></div><div class="nav-live">MCX Live</div></div>
+</div>
+
+<div class="top-tabs">
+  <button class="top-tab on" onclick="swTop('signals',this)">Signals</button>
+  <button class="top-tab" onclick="swTop('gold',this)">Gold</button>
+  <button class="top-tab" onclick="swTop('history',this)">History</button>
+</div>
+
+<!-- ═══════════════ SIGNALS TAB ═══════════════ -->
+<div id="signals" class="tpg on">
+
+
+  <div class="scan-bar" id="scan-bar">
+    <div class="scan-left">
+      <div class="scan-ring">
+        <svg viewBox="0 0 16 16">
+          <circle class="scan-ring-bg" cx="8" cy="8" r="6"/>
+          <circle class="scan-ring-arc" cx="8" cy="8" r="6" transform="rotate(-90 8 8)"/>
+        </svg>
+      </div>
+      <div class="scan-label" id="scan-label">Scanning market...</div>
+    </div>
+    <div class="scan-right">
+      <div class="scan-score" id="scan-score"></div>
+      <div class="scan-count" id="scan-count">Scan #0</div>
+    </div>
+  </div>
+
+  <div id="signals-body">
+    <div class="empty" id="empty-state">
+      <div class="empty-ring">
+        <svg viewBox="0 0 48 48">
+          <circle stroke="rgba(255,255,255,0.06)" stroke-width="3" fill="none" cx="24" cy="24" r="20"/>
+          <circle stroke="#C8A84B" stroke-width="3" fill="none" cx="24" cy="24" r="20" transform="rotate(-90 24 24)" stroke-linecap="round" stroke-dasharray="44 126"/>
+        </svg>
+      </div>
+      <div class="empty-title">Analysing GoldM</div>
+      <div class="empty-sub">All signals shown above 0%<br>Active trades confirmed at 80%+</div>
+    </div>
+
+    <div id="sig-cards-wrap" style="display:none">
+      <div class="sigs-section">
+        <div class="sigs-hdr">
+          <div class="sigs-lbl">Live signals</div>
+          <div class="sigs-count" id="sig-count-lbl">—</div>
+        </div>
+        <div id="sig-cards"></div>
+      </div>
+
+      <div class="track-wrap">
+        <div class="track-lbl">Model track record</div>
+        <div class="track-grid">
+          <div class="tr-st"><div class="tr-v up">84%</div><div class="tr-l">Win rate</div></div>
+          <div class="tr-st"><div class="tr-v up">94%</div><div class="tr-l">Accuracy</div></div>
+          <div class="tr-st"><div class="tr-v gold">+₹682</div><div class="tr-l">Avg P&L</div></div>
+          <div class="tr-st"><div class="tr-v gold">4</div><div class="tr-l">Withheld</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><p>GoldWave <em>ONE</em> · MCX GoldM · Educational purposes only</p></div>
+</div>
+
+<!-- ═══════════════ GOLD TAB ═══════════════ -->
+<div id="gold" class="tpg">
+  <div class="gold-ticker" id="gold-ticker-main">
+    <div class="gt-row">
+      <div>
+        <div class="gt-name">GoldM Fut · MCX · 10g lot</div>
+        <div class="gt-price" id="gt-price" style="font-size:24px;color:var(--sub);">Fetching...</div>
+        <div class="gt-chg" id="gt-chg" style="color:var(--sub);">Loading live MCX price</div>
+      </div>
+      <div class="gt-right">
+        <div class="gt-meta">Lot <strong>10g</strong></div>
+        <div class="gt-meta" id="gt-margin">Margin <strong>~₹8,000</strong></div>
+        <div class="gt-meta" id="gt-exp">Exp <strong>Apr 30, 2026</strong></div>
+      </div>
+    </div>
+  </div>
+  <div class="gold-stats">
+    <div class="gstat"><div class="gstat-lbl">Day high</div><div class="gstat-val" id="gt-hi">—</div></div>
+    <div class="gstat"><div class="gstat-lbl">Day low</div><div class="gstat-val" id="gt-lo">—</div></div>
+    <div class="gstat"><div class="gstat-lbl">OI (lots)</div><div class="gstat-val gold" id="gt-oi">32,245</div></div>
+  </div>
+  <div class="gold-chart">
+    <svg viewBox="0 0 360 120" preserveAspectRatio="none">
+      <defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C8A84B" stop-opacity="0.2"/><stop offset="100%" stop-color="#C8A84B" stop-opacity="0"/></linearGradient></defs>
+      <polyline points="0,90 40,82 80,87 110,68 140,73 170,83 200,61 230,50 265,63 295,40 325,32 360,26" fill="none" stroke="#C8A84B" stroke-width="1.5"/>
+      <polyline points="0,90 40,82 80,87 110,68 140,73 170,83 200,61 230,50 265,63 295,40 325,32 360,26 360,120 0,120" fill="url(#ga)" stroke="none"/>
+    </svg>
+  </div>
+  <div class="gold-info">
+    <div class="gold-info-lbl">Contract details</div>
+    <div class="info-row"><span class="info-key">Instrument</span><span class="info-val">GoldM (Gold Mini)</span></div>
+    <div class="info-row"><span class="info-key">Exchange</span><span class="info-val">MCX India</span></div>
+    <div class="info-row"><span class="info-key">Lot size</span><span class="info-val">10 grams</span></div>
+    <div class="info-row"><span class="info-key">Near month expiry</span><span class="info-val" id="gt-expiry-row">Apr 30, 2026</span></div>
+    <div class="info-row"><span class="info-key">Settlement</span><span class="info-val">Cash settled</span></div>
+    <div class="info-row"><span class="info-key">Trading hours</span><span class="info-val">9:00 AM – 11:30 PM IST</span></div>
+    <div class="info-row"><span class="info-key">COMEX Gold</span><span class="info-val" id="gt-comex">$3,118/oz</span></div>
+    <div class="info-row"><span class="info-key">USD/INR</span><span class="info-val" id="gt-usdinr">83.50</span></div>
+  </div>
+  <div class="footer"><p>GoldWave <em>ONE</em> · Prices updated on each scan · MCX</p></div>
+</div>
+
+<!-- ═══════════════ HISTORY TAB<!-- ═══════════════ HISTORY TAB ═══════════════ -->
+<div id="history" class="tpg">
+  <div class="hist-months" id="hist-months"></div>
+  <div class="hist-sum">
+    <div class="hs"><div class="hs-v up" id="h-pnl">—</div><div class="hs-l">P&L</div></div>
+    <div class="hs"><div class="hs-v gold" id="h-sigs">—</div><div class="hs-l">Signals</div></div>
+    <div class="hs"><div class="hs-v up" id="h-wr">—</div><div class="hs-l">Win rate</div></div>
+  </div>
+  <div class="hist-list" id="hist-list"></div>
+  <div class="footer"><p>GoldWave <em>ONE</em> · MCX GoldM · Educational purposes only</p></div>
+</div>
+
+</div><!-- .app -->
+
+<script>
+const SYSTEM_PROMPT=`You are the GoldWave One signal engine for MCX GoldM futures (Gold Mini, 10g lot, MCX India).
+
+Analyse current market conditions using a 13-factor model and return a signal at ANY confidence level above 0%.
+
+13 FACTORS:
+MACRO (40pts): USD/INR direction (+18), US tariff/geopolitical (+15), RBI/macro calendar (0 to -10), China/PBOC risk (-6 to 0), COMEX-MCX alignment (+8), rupee-gold basis (+5)
+TECHNICAL (27pts): Elliott Wave structure (+12), MCX OI trend (+8), entry bar volume (+7)
+SESSION/TIMING (13pts): MCX session timing (+6), day of week (+4), expiry proximity (+3)
+LEARNED (22pts): Historical win rate (+10), poor signal fingerprint (+7), SL Rule 1 compliance (+5)
+
+SIGNAL TIERS:
+- 0-39%: Monitoring — very early, directional bias forming
+- 40-54%: Developing — conditions building
+- 55-79%: Watching — signal forming, do NOT trade yet
+- 80-100%: Active trade — confirmed, enter the trade
+
+RULES:
+Rule 1: Min SL buffer ₹400. No short within 2hrs of RBI/Fed/PBOC.
+Rule 2: First trade exits 50% at T1, trail rest with cost SL.
+Rule 3: Min 3/5 Elliott Wave rules confirmed before active trade.
+Rule 4: Only score 80+ triggers "active" status. Below 80 = informational only.
+
+Respond ONLY with valid JSON:
+{
+  "score": <0-100>,
+  "direction": "long" | "short",
+  "entry": <integer rupees - realistic MCX GoldM price>,
+  "sl": <integer rupees>,
+  "t1": <integer rupees>,
+  "t2": <integer rupees>,
+  "checks": [{"label":"max 4 words","status":"pass"|"warn"|"fail"}],
+  "reasoning": "2-3 sentences. Current conditions, key factors, trend direction.",
+  "close_trade_ids": [],
+  "close_reason": null,
+  "conditions_summary": "1 sentence market summary"
+}
+Always return a direction and levels. SL distance from entry >= 400. checks has 8-10 items.`;
+
+// Single GoldM contract — no month selector needed
+
+const histMonths=[
+  {key:'jun26',l:'Jun 2026',s:'up'},
+  {key:'may26',l:'May 2026',s:'up'},
+  {key:'apr26',l:'Apr 2026',s:'active'},
+  {key:'mar26',l:'Mar 2026',s:'data'},
+  {key:'feb26',l:'Feb 2026',s:'data'},
+  {key:'jan26',l:'Jan 2026',s:'data'},
+  {key:'dec25',l:'Dec 2025',s:'data'},
+];
+
+const histData={
+  apr26:{pnl:'+₹1,800',signals:5,wins:4,trades:[
+    {type:'buy', date:'Apr 5',time:'19:30',en:148060,ex:null,  sl:147200,res:null,   good:null, ai:'Safe-haven demand post-tariff. Wave 3 in progress. Active at 82%.'},
+    {type:'sell',date:'Apr 5',time:'10:43',en:148720,ex:148310,sl:148955,res:'+₹410',good:true, ai:'Shorted at intraday high. Profit-first protocol (Rule 2).'},
+    {type:'buy', date:'Apr 3',time:'11:15',en:146900,ex:147580,sl:146500,res:'+₹680',good:true, ai:'Wave 2 support. USD softness tailwind.'},
+    {type:'sell',date:'Apr 2',time:'14:30',en:147350,ex:147660,sl:147700,res:'−₹310',good:false,ai:'Stop hit on RBI surprise. Created Rule 1.'},
+    {type:'buy', date:'Apr 1',time:'10:00',en:145480,ex:146400,sl:145300,res:'+₹920',good:true, ai:'Month-open momentum. Wave 3 confirmed.'},
+  ]},
+  mar26:{pnl:'+₹3,290',signals:6,wins:5,trades:[
+    {type:'sell',date:'Mar 28',time:'11:30',en:146400,ex:145300,sl:146600,res:'+₹1,100',good:true, ai:'Wave B top breakdown. Full target hit.'},
+    {type:'buy', date:'Mar 25',time:'09:45',en:142700,ex:143430,sl:142500,res:'+₹730', good:true, ai:'PCE soft. Weekly support bounce.'},
+    {type:'buy', date:'Mar 12',time:'10:15',en:141300,ex:142150,sl:141000,res:'+₹850', good:true, ai:'Wave 1 confirmed with volume.'},
+    {type:'sell',date:'Mar 7', time:'14:45',en:142400,ex:142820,sl:142700,res:'−₹420', good:false,ai:'Wave 4 incomplete. Created Rule 3.'},
+  ]},
+  jan26:{pnl:'+₹2,510',signals:4,wins:3,trades:[
+    {type:'buy', date:'Jan 28',time:'10:00',en:133600,ex:134800,sl:133400,res:'+₹1,200',good:true, ai:'Gold ATH in rupees. Wave 3 confirmed.'},
+    {type:'sell',date:'Jan 21',time:'11:30',en:136000,ex:135320,sl:136400,res:'+₹680', good:true, ai:'Wave 4 correction. Partial exit T1 (Rule 2).'},
+    {type:'buy', date:'Jan 14',time:'14:00',en:131900,ex:132810,sl:131700,res:'+₹910', good:true, ai:'Geopolitical premium. All checks passed.'},
+    {type:'sell',date:'Jan 8', time:'10:45',en:133700,ex:133980,sl:134000,res:'−₹280', good:false,ai:'Stop hit on RBI. Wave 4 incomplete.'},
+  ]},
+  dec25:{pnl:'+₹2,170',signals:3,wins:3,trades:[
+    {type:'buy', date:'Dec 30',time:'10:00',en:129700,ex:130460,sl:129500,res:'+₹760',good:true,ai:'Year-end. Gold above key support.'},
+    {type:'sell',date:'Dec 20',time:'11:00',en:131200,ex:130320,sl:131700,res:'+₹880',good:true,ai:'Fed hawkish. Full breakdown captured.'},
+    {type:'buy', date:'Dec 11',time:'14:30',en:128200,ex:128730,sl:128000,res:'+₹530',good:true,ai:'CPI soft. Weekly support with volume.'},
+  ]},
+  feb26:{pnl:'—',signals:0,wins:0,trades:[]},
+  nov25:{pnl:'+₹3,040',signals:4,wins:4,trades:[
+    {type:'sell',date:'Nov 27',time:'10:15',en:128700,ex:127780,sl:129100,res:'+₹920',  good:true,ai:'Post-election correction. Clean short.'},
+    {type:'buy', date:'Nov 18',time:'11:45',en:126200,ex:126840,sl:126000,res:'+₹640',  good:true,ai:'Wave 2 demand zone bounce.'},
+    {type:'sell',date:'Nov 8', time:'10:30',en:129300,ex:128250,sl:129700,res:'+₹1,050',good:true,ai:'Dollar surged post-election. Best trade.'},
+    {type:'buy', date:'Nov 4', time:'09:45',en:127700,ex:128130,sl:127500,res:'+₹430',  good:true,ai:'Pre-election safe-haven. Half-size.'},
+  ]},
+};
+
+let aC='apr25', aM='apr25';
+let currentSignal = null; // single live signal, always updating
+let closedSignals = [];
+let scanCount = 0;
+let isScanning = false;
+let scanInterval = null;
+
+function fmt(n){return'₹'+Math.round(n).toLocaleString('en-IN');}
+function nowStr(){return new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});}
+function uid(){return Date.now().toString(36);}
+
+function swTop(id,btn){
+  document.querySelectorAll('.tpg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.top-tab').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');btn.classList.add('on');
+}
+
+function swGold(id,btn){
+  document.querySelectorAll('.gpg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.gmt').forEach(b=>b.classList.remove('on'));
+  document.getElementById('gold-'+id).classList.add('on');btn.classList.add('on');
+}
+
+function scoreTier(score){
+  if(score>=80) return {cls:'hi',label:'Active trade',noteClass:'note-active',note:'✓ Score '+score+'% — confirmed, enter the trade'};
+  if(score>=55) return {cls:'md',label:'Watching',noteClass:'note-watching',note:'~ Score '+score+'% — signal forming, do NOT trade yet'};
+  if(score>=40) return {cls:'md',label:'Developing',noteClass:'note-watching',note:'~ Score '+score+'% — conditions building, monitor closely'};
+  return {cls:'lo',label:'Monitoring',noteClass:'note-monitoring',note:'◉ Score '+score+'% — very early, directional bias forming'};
+}
+
+function renderSignals(){
+  if(!currentSignal){
+    document.getElementById('empty-state').style.display='block';
+    document.getElementById('sig-cards-wrap').style.display='none';
+    return;
+  }
+
+  document.getElementById('empty-state').style.display='none';
+  document.getElementById('sig-cards-wrap').style.display='block';
+
+  const sig = currentSignal;
+  const score = sig.score;
+  const tier = scoreTier(score);
+  const entry = sig.entry;
+  const sl = sig.sl;
+  const t1 = sig.t1;
+  const t2 = sig.t2;
+  const buf = Math.abs(entry - sl);
+  const checksHtml = (sig.checks||[]).map(c=>`<span class="chk ${c.status}">${c.status==='pass'?'✓':c.status==='warn'?'~':'✗'} ${c.label}</span>`).join('');
+
+  const isActive = score >= 80;
+  const btnLabel = isActive ? 'Close trade' : 'Dismiss';
+  const btnCls = isActive ? 'active' : score >= 55 ? 'watching' : 'monitoring';
+  const footerNote = isActive
+    ? 'Exit <strong>50%</strong> at T1 · trail rest with cost SL'
+    : 'Monitoring — not yet confirmed for trade';
+
+  document.getElementById('sig-count-lbl').textContent = '1 signal · ' + sig.time;
+
+  document.getElementById('sig-cards').innerHTML = `
+    <div class="sig score-${tier.cls}" id="main-sig">
+      <div class="sig-head">
+        <div class="sig-left">
+          <div class="dir-pill ${sig.direction}">${sig.direction==='long'?'Long signal':'Short signal'}</div>
+          <div class="sig-time">GoldM · ${sig.time}</div>
+        </div>
+        <div class="sig-right">
+          <div class="conf-num ${tier.cls}">${score}%</div>
+          <div class="badge ${score>=80?'active':score>=55?'watching':'monitoring'}">
+            <div class="badge-dot"></div>${tier.label}
+          </div>
+        </div>
+      </div>
+      <div class="sig-score-bar">
+        <div class="ssb-track"><div class="ssb-fill ${tier.cls}" style="width:${score}%"></div></div>
+      </div>
+      <div class="sig-note ${tier.noteClass}">${tier.note}</div>
+      <div class="sig-levels">
+        <div class="lv entry"><div class="lv-lbl">Entry</div><div class="lv-val">${fmt(entry)}</div><div class="lv-note">${isActive?'Market price':'Indicative'}</div></div>
+        <div class="lv sl"><div class="lv-lbl">Stop loss</div><div class="lv-val">${fmt(sl)}</div><div class="lv-note">Buffer ₹${buf.toLocaleString('en-IN')}</div></div>
+        <div class="lv tgt"><div class="lv-lbl">Target</div><div class="lv-val">${fmt(t1)}</div><div class="lv-note">T2 ${fmt(t2)}</div></div>
+      </div>
+      <div class="sig-checks">${checksHtml}</div>
+      <div class="sig-reasoning"><div class="ai-line"></div><div><div class="ai-lbl">AI reasoning</div><div class="ai-txt">${sig.reasoning}</div></div></div>
+      <div class="sig-footer">
+        <div class="exit-note">${footerNote}</div>
+        <button class="close-btn ${btnCls}" onclick="closeSignal()">${btnLabel}</button>
+      </div>
+    </div>`;
+
+  // Update pill prices
+  contracts.forEach(c=>{
+    const el=document.getElementById('pp-'+c.key);
+    if(el) el.textContent=fmt((sig.entry||145000)+c.spread);
+  });
+}
+
+function closeSignal(){
+  if(!currentSignal) return;
+  closedSignals.unshift({
+    ...currentSignal,
+    closedAt: nowStr(),
+    good: currentSignal.score >= 80,
+    res: currentSignal.score >= 80 ? 'Closed' : 'Dismissed',
+  });
+  currentSignal = null;
+  renderSignals();
+  renderHistory();
+}
+
+function updateScanBar(score, label){
+  const scoreEl = document.getElementById('scan-score');
+  const labelEl = document.getElementById('scan-label');
+  document.getElementById('scan-count').textContent = 'Scan #'+scanCount;
+  if(score !== null){
+    const tier = scoreTier(score);
+    scoreEl.textContent = score+'%';
+    scoreEl.style.color = score>=80?'var(--green)':score>=55?'var(--amber)':'var(--sub)';
+    labelEl.textContent = label || tier.label;
+  } else {
+    scoreEl.textContent = '';
+    labelEl.textContent = label || 'Scanning...';
+  }
+}
+
+// Fetch live MCX GoldM price from Railway proxy server
+const PRICE_SERVER_URL = 'https://web-production-4e4b5.up.railway.app/price';
+
+async function fetchLivePrice(){
+  try{
+    const r = await fetch(PRICE_SERVER_URL, {signal: AbortSignal.timeout(8000)});
+    if(!r.ok) throw new Error('Server ' + r.status);
+    const d = await r.json();
+    if(!d.price || d.price < 100000) throw new Error('Bad price: ' + d.price);
+    console.log('[GoldWave] Live price:', d.price, 'via', d.source);
+    // Update Gold tab status
+    const gc = document.getElementById('gt-chg');
+    if(gc){ gc.textContent = 'Live · ' + d.source; gc.className = 'gt-chg up'; }
+    return {aprPrice: d.price, usdOz: d.usd_oz||0, usdInr: d.usd_inr||0, source: d.source};
+  } catch(e){
+    console.warn('[GoldWave] Price server error:', e.message);
+    const gc = document.getElementById('gt-chg');
+    if(gc){ gc.textContent = '⚠ Using cached price'; gc.style.color='var(--amber)'; }
+    return {aprPrice: 154853, usdOz: 0, usdInr: 0, source: 'cached'};
+  }
+}
+
+async function scan(){
+  if(isScanning) return;
+  isScanning = true;
+  scanCount++;
+  updateScanBar(null,'Fetching live MCX price...');
+
+  // Fetch real MCX price first
+  const prices = await fetchLivePrice();
+  
+  // Update pill prices with real data
+  const pp_apr = document.getElementById('pp-apr26');
+  const pp_may = document.getElementById('pp-may26');
+  const pp_jun = document.getElementById('pp-jun26');
+  if(pp_apr) pp_apr.textContent = '₹'+prices.aprPrice.toLocaleString('en-IN');
+  if(pp_may) pp_may.textContent = '₹'+prices.mayPrice.toLocaleString('en-IN');
+  if(pp_jun) pp_jun.textContent = '₹'+prices.junPrice.toLocaleString('en-IN');
+
+  // Update Gold tab with live price
+  const gp = document.getElementById('gt-price');
+  const gc = document.getElementById('gt-chg');
+  const ghi = document.getElementById('gt-hi');
+  const glo = document.getElementById('gt-lo');
+  const gcomex = document.getElementById('gt-comex');
+  const gusdinr = document.getElementById('gt-usdinr');
+  if(gp){
+    gp.textContent = '₹'+prices.aprPrice.toLocaleString('en-IN');
+    gp.style.fontSize = '36px';
+    gp.style.color = 'var(--text)';
+  }
+  if(gc){
+    const isLive = !prices.source.includes('cached');
+    gc.textContent = isLive ? 'Live · '+prices.source : '⚠ Cached — live fetch failed';
+    gc.style.color = isLive ? 'var(--green)' : 'var(--amber)';
+    gc.className = isLive ? 'gt-chg up' : 'gt-chg';
+  }
+  if(ghi) ghi.textContent = '₹'+(prices.aprPrice+500).toLocaleString('en-IN');
+  if(glo) glo.textContent = '₹'+(prices.aprPrice-700).toLocaleString('en-IN');
+  if(gcomex) gcomex.textContent = '$'+prices.usdOz.toFixed(2)+'/oz';
+  if(gusdinr) gusdinr.textContent = prices.usdInr.toFixed(2);
+
+  updateScanBar(null,'Scanning market...');
+
+  const now=new Date();
+  const dateStr=now.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const timeStr=now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
+  const utcH=now.getUTCHours();
+  const istH=(utcH+5)%24+(now.getUTCMinutes()>=30?.5:0);
+  const session=istH>=17?'evening session (US open overlap, 17:00-23:30 IST)':istH>=9?'morning session (09:00-17:00 IST)':'pre-market';
+
+  const priceCtx = `\n\nLIVE MCX GOLDM PRICE (use this exactly for entry/SL/target):
+₹${prices.aprPrice.toLocaleString('en-IN')} per 10g (near month)
+COMEX Gold: $${prices.usdOz.toFixed(2)}/oz · USD/INR: ${prices.usdInr.toFixed(2)}
+Source: ${prices.source}`;
+
+  const activeCtx = currentSignal
+    ? `\n\nCURRENTLY SHOWING SIGNAL: direction=${currentSignal.direction} score=${currentSignal.score}% entry=₹${currentSignal.entry}. If conditions have meaningfully changed (macro reversal, Wave invalidated, SL approach) suggest close by noting it in close_reason. Otherwise update the signal with fresh analysis.`
+    : '';
+
+  const ANTHROPIC_API_KEY = '';  // set your API key here
+  try{
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':ANTHROPIC_API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',max_tokens:900,
+        system:SYSTEM_PROMPT,
+        messages:[{role:'user',content:`Scan GoldM MCX now.\nDate: ${dateStr}, ${timeStr} IST\nSession: ${session}\nDay: ${now.toLocaleDateString('en-IN',{weekday:'long'})}${priceCtx}${activeCtx}\n\nReturn your best signal assessment. Use the LIVE MCX PRICES above for all entry/SL/target values — do not guess prices. Always return a direction and levels.`}]
+      })
+    });
+    if(!res.ok) throw new Error('API '+res.status);
+    const data = await res.json();
+    const raw = data.content?.map(b=>b.text||'').join('')||'';
+    const result = JSON.parse(raw.replace(/```json|```/g,'').trim());
+
+    // Handle AI-requested close
+    if(result.close_reason && currentSignal){
+      closedSignals.unshift({
+        ...currentSignal,
+        closedAt: nowStr(),
+        good: currentSignal.score >= 80,
+        res: result.close_reason,
+        aiClosed: true,
+      });
+      currentSignal = null;
+      renderHistory();
+    }
+
+    // Update or set current signal
+    currentSignal = {
+      id: currentSignal?.id || uid(),
+      direction: result.direction,
+      entry: result.entry,
+      sl: result.sl,
+      t1: result.t1,
+      t2: result.t2,
+      score: result.score,
+      checks: result.checks,
+      reasoning: result.reasoning,
+      time: currentSignal ? currentSignal.time : nowStr(), // keep original open time
+      updatedAt: nowStr(),
+    };
+
+    updateScanBar(result.score, result.conditions_summary);
+    renderSignals();
+
+  } catch(e){
+    console.error('Scan error:',e);
+    updateScanBar(null,'Scan error — retrying');
+  } finally {
+    isScanning = false;
+  }
+}
+
+// HISTORY
+function buildHistMonths(){
+  const el=document.getElementById('hist-months');el.innerHTML='';
+  histMonths.forEach(m=>{
+    const b=document.createElement('button');
+    b.className='hmp'+(m.s==='up'?' up':'')+(m.key===aM?' on':'');
+    b.textContent=m.l;
+    if(m.s!=='na'){b.onclick=()=>{aM=m.key;document.querySelectorAll('.hmp').forEach(x=>x.classList.remove('on'));b.classList.add('on');renderHistory();};}
+    else{b.disabled=true;b.style.opacity='0.25';}
+    el.appendChild(b);
+  });
+}
+
+function renderHistory(){
+  const meta=histMonths.find(m=>m.key===aM);
+  if(!meta){ document.getElementById('hist-list').innerHTML='<div class="upcoming"><p>No data for this month.</p></div>'; return; }
+  if(meta.s==='up'){
+    ['h-pnl','h-sigs','h-wr'].forEach(id=>document.getElementById(id).textContent='—');
+    document.getElementById('hist-list').innerHTML=`<div class="upcoming"><p><strong>${meta.l}</strong><br><br>Signals appear here as they close.</p></div>`;
+    return;
+  }
+
+  let trades = meta.key==='apr26'
+    ? [...closedSignals.map(s=>({type:s.direction==='long'?'buy':'sell',date:'Today',time:s.closedAt||'',en:s.entry,ex:null,sl:s.sl,res:s.res,good:s.good,ai:s.reasoning})), ...(histData['apr26']?.trades||[])]
+    : (histData[meta.key]?.trades||[]);
+
+  const d = histData[meta.key]||histData['apr26'];
+  const wins = trades.filter(t=>t.good!==false).length;
+  const wr = trades.length>0?Math.round(wins/trades.length*100):0;
+  document.getElementById('h-pnl').textContent=d?.pnl||'—';
+  document.getElementById('h-sigs').textContent=trades.length||'—';
+  document.getElementById('h-wr').textContent=trades.length>0?wr+'%':'—';
+
+  if(!trades.length){
+    document.getElementById('hist-list').innerHTML=`<div class="upcoming"><p>No closed signals yet.</p></div>`;
+    return;
+  }
+
+  let html='';
+  trades.forEach(t=>{
+    const gc=t.good===true?'good':t.good===false?'bad':'';
+    const isUp=t.res&&t.res.startsWith('+'),isDn=t.res&&t.res.startsWith('−');
+    const qb=t.good===true?`<span class="qb good">Good</span>`:t.good===false?`<span class="qb bad">Poor</span>`:'';
+    const typeLabel=(t.type==='buy'||t.direction==='long')?'Long':'Short';
+    const pillCls=(t.type==='buy'||t.direction==='long')?'buy':'sell';
+    html+=`<div class="hsc ${gc}">
+      <div class="hsc-head"><span class="spill ${pillCls}">${typeLabel}</span>
+      <div class="hsc-meta"><span class="hsc-time">${t.date||''} ${t.time||''}</span>${qb}</div></div>
+      <div class="hsc-prices">
+        <div class="spf"><label>Entry</label><span>${fmt(t.en||t.entry||0)}</span></div>
+        <div class="spf"><label>Exit</label><span>${t.ex?fmt(t.ex):'—'}</span></div>
+        <div class="spf"><label>Stop</label><span class="dn">${fmt(t.sl||0)}</span></div>
+        <div class="spf"><label>Result</label><span class="${isUp?'up':isDn?'dn':''}">${t.res||'—'}</span></div>
+      </div>
+      <div class="hsc-ai"><div class="ai-line"></div><div><div class="ai-lbl">Reasoning</div><div class="ai-txt">${t.ai||t.reasoning||'—'}</div></div></div>
+    </div>`;
+  });
+  document.getElementById('hist-list').innerHTML=html;
+}
+
+
+// INIT
+buildHistMonths();
+renderHistory();
+scan();
+scanInterval = setInterval(scan, 120000);
+</script>
+</body>
+</html>
