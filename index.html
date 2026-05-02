@@ -874,12 +874,7 @@ CRITICAL INSTRUCTIONS: Only score factors with confirmed data. Mark unavailable 
     const mr = await fetch(API_BASE+'/macro', {signal: AbortSignal.timeout(5000)});
     if(mr.ok){
       const md = await mr.json();
-      macroCtx = `\n\nLIVE MACRO DATA:
-DXY (Dollar Index): ${md.dxy ? md.dxy.toFixed(2)+' ('+( md.dxy_chg>0?'+':'')+md.dxy_chg?.toFixed(2)+'% today)' : 'unavailable'}
-US 10-Year Yield: ${md.tnx ? md.tnx.toFixed(3)+'%' : 'unavailable'}
-Crude Oil WTI: ${md.crude ? '$'+md.crude.toFixed(2)+'/bbl' : 'unavailable'}
-S&P 500: ${md.spx ? md.spx.toLocaleString()+' ('+( md.spx_chg>0?'+':'')+md.spx_chg?.toFixed(2)+'%)' : 'unavailable'}
-Note: DXY up = gold bearish. Yields up = gold bearish. Risk-off (SPX down) = gold bullish.`;
+      macroCtx = `\n\nLIVE MACRO DATA:\nDXY: ${md.dxy?.price||'N/A'}\nUS 10Y Yield: ${md.us10y?.price||'N/A'}%\nCrude Oil: $${md.crude_oil?.price||'N/A'}\nS&P 500: ${md.sp500?.price||'N/A'}\nUSD/INR: ${md.usd_inr?.price||'N/A'}`;
     }
   } catch(e){ console.warn('Macro fetch failed:',e.message); }
 
@@ -890,7 +885,7 @@ Note: DXY up = gold bearish. Yields up = gold bearish. Risk-off (SPX down) = gol
   try{
     const res = await fetch(API_BASE+'/analyze',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json',},
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',max_tokens:900,
         system:SYSTEM_PROMPT,
@@ -1045,6 +1040,11 @@ async function scanXau(){
   if(isXauScanning) return;
   isXauScanning = true;
   xauScanCount++;
+  const xl = document.getElementById('scan-label-xau');
+  const xsc = document.getElementById('scan-score-xau');
+  const xcnt = document.getElementById('scan-count-xau');
+  if(xl) xl.textContent = 'Scanning XAU/USD...';
+  if(xcnt) xcnt.textContent = 'Scan #'+xauScanCount;
 
   const now = new Date();
   const xauPrice = document.getElementById('xau-price');
@@ -1075,7 +1075,7 @@ async function scanXau(){
 
     const res = await fetch(API_BASE+'/analyze',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json',},
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514', max_tokens:900,
         system:XAU_SYSTEM_PROMPT,
@@ -1114,7 +1114,8 @@ async function scanXau(){
     renderXauSignal();
   } catch(e){
     console.error('XAU scan error:',e);
-    if(xl) xl.textContent = 'XAU scan error — retrying';
+    const _xlErr = document.getElementById('scan-label-xau');
+    if(_xlErr) _xlErr.textContent = 'XAU scan error — retrying';
   } finally {
     isXauScanning = false;
   }
