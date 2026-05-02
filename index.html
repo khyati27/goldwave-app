@@ -41,11 +41,6 @@ html,body{height:100%;background:#0A0806;color:#EDE6D6;}
 .top-tabs{display:flex;background:var(--ink);border-bottom:0.5px solid var(--border);}
 .top-tab{flex:1;padding:11px 6px;font-family:var(--sans);font-size:12px;font-weight:400;color:var(--hint);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;transition:color 0.2s;white-space:nowrap;}
 .top-tab.on{color:var(--gold);border-bottom-color:var(--gold);font-weight:500;}
-.signal-subtabs{display:flex;padding:0 18px;background:var(--surf);border-bottom:0.5px solid var(--border);gap:0;}
-
-.ssub{flex:1;padding:10px 0;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--hint);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;letter-spacing:0.05em;}
-.ssub.on{color:var(--gold);border-bottom-color:var(--gold);}
-.sig-panel{display:none;}.sig-panel.on{display:block;}
 .tpg{display:none;}.tpg.on{display:block;}
 
 /* CONTRACT PILLS */
@@ -264,27 +259,13 @@ html,body{height:100%;background:#0A0806;color:#EDE6D6;}
 
 <div class="top-tabs">
   <button class="top-tab on" onclick="swTop('signals',this)">Signals</button>
-
-</div>
-<div class="signal-subtabs" id="signal-subtabs">
-  <button class="ssub on" onclick="swSignalTab('mcx',this)">MCX GoldM ₹</button>
-  <button class="ssub" onclick="swSignalTab('xau',this)">XAU/USD $</button>
+  <button class="top-tab" onclick="swTop('gold',this)">Gold</button>
+  <button class="top-tab" onclick="swTop('history',this)">History</button>
 </div>
 
 <!-- ═══════════════ SIGNALS TAB ═══════════════ -->
 <div id="signals" class="tpg on">
 
-
-      <div class="scan-label" id="scan-label">Scanning market...</div>
-    </div>
-    <div class="scan-right">
-      <div class="scan-score" id="scan-score"></div>
-      <div class="scan-count" id="scan-count">Scan #0</div>
-    </div>
-  </div>
-
-  <div id="signals-body">
-  <div id="sig-mcx" class="sig-panel on">
 
   <div class="scan-bar" id="scan-bar">
     <div class="scan-left">
@@ -294,6 +275,15 @@ html,body{height:100%;background:#0A0806;color:#EDE6D6;}
           <circle class="scan-ring-arc" cx="8" cy="8" r="6" transform="rotate(-90 8 8)"/>
         </svg>
       </div>
+      <div class="scan-label" id="scan-label">Scanning market...</div>
+    </div>
+    <div class="scan-right">
+      <div class="scan-score" id="scan-score"></div>
+      <div class="scan-count" id="scan-count">Scan #0</div>
+    </div>
+  </div>
+
+  <div id="signals-body">
     <div class="empty" id="empty-state">
       <div class="empty-ring">
         <svg viewBox="0 0 48 48">
@@ -325,163 +315,53 @@ html,body{height:100%;background:#0A0806;color:#EDE6D6;}
       </div>
     </div>
   </div>
-    <div class="footer"><p>GoldWave <em>ONE</em> · MCX GoldM · Educational purposes only</p></div>
-  </div><!-- end sig-mcx -->
-
-  <!-- XAU/USD PANEL -->
-  <div id="sig-xau" class="sig-panel">
-    <div class="scan-bar" id="scan-bar-xau">
-      <div class="scan-left">
-        <div class="scan-ring">
-          <svg viewBox="0 0 16 16">
-            <circle class="scan-ring-bg" cx="8" cy="8" r="6"/>
-            <circle class="scan-ring-arc" cx="8" cy="8" r="6" transform="rotate(-90 8 8)"/>
-          </svg>
-        </div>
-        <div class="scan-label" id="scan-label-xau">Scanning XAU/USD...</div>
-      </div>
-      <div class="scan-right">
-        <div class="scan-score" id="scan-score-xau"></div>
-        <div class="scan-count" id="scan-count-xau">Scan #0</div>
-      </div>
-    </div>
-
-    <div class="empty" id="empty-state-xau">
-      <div class="empty-ring">
-        <svg viewBox="0 0 48 48">
-          <circle stroke="rgba(255,255,255,0.06)" stroke-width="3" fill="none" cx="24" cy="24" r="20"/>
-          <circle stroke="#C8A84B" stroke-width="3" fill="none" cx="24" cy="24" r="20" transform="rotate(-90 24 24)" stroke-linecap="round" stroke-dasharray="44 126"/>
-        </svg>
-      </div>
-      <div class="empty-title">Analysing XAU/USD</div>
-      <div class="empty-sub">13-factor model adapted for forex gold<br>Active trades confirmed at 80%+</div>
-    </div>
-
-    <div id="sig-cards-wrap-xau" style="display:none">
-      <div class="sigs-section">
-        <div class="sigs-hdr">
-          <div class="sigs-lbl">XAU/USD Live Signal</div>
-          <div class="sigs-count" id="sig-count-lbl-xau">—</div>
-        </div>
-        <div id="sig-cards-xau"></div>
-      </div>
-      <div class="track-wrap">
-        <div class="track-lbl">XAU/USD Model</div>
-        <div class="track-grid">
-          <div class="tr-st"><div class="tr-v up">82%</div><div class="tr-l">Win rate</div></div>
-          <div class="tr-st"><div class="tr-v up">91%</div><div class="tr-l">Accuracy</div></div>
-          <div class="tr-st"><div class="tr-v gold">+$18</div><div class="tr-l">Avg P&L/oz</div></div>
-          <div class="tr-st"><div class="tr-v gold">3</div><div class="tr-l">Withheld</div></div>
-        </div>
-      </div>
-    </div>
-    <div class="footer"><p>GoldWave <em>ONE</em> · XAU/USD Spot Gold · Educational purposes only</p></div>
-  </div><!-- end sig-xau -->
-
-</div><!-- end signals-body -->
+  <div class="footer"><p>GoldWave <em>ONE</em> · MCX GoldM · Educational purposes only</p></div>
+</div>
 
 <!-- ═══════════════ GOLD TAB ═══════════════ -->
-<div id="gold" class="tpg" style="display:none!important">
-  <!-- Sub-tabs -->
-  <div class="gold-month-tabs">
-    <button class="gmt on" onclick="swGold('mcx',this)">MCX GoldM</button>
-    <button class="gmt" onclick="swGold('xau',this)">XAU/USD</button>
-  </div>
-
-  <!-- MCX PAGE -->
-  <div id="gold-mcx" class="gpg on">
-    <div class="gold-ticker">
-      <div class="gt-row">
-        <div>
-          <div class="gt-name">GoldM Fut · MCX · 10g lot</div>
-          <div class="gt-price" id="gt-price" style="font-size:24px;color:var(--sub);">Fetching...</div>
-          <div class="gt-chg" id="gt-chg" style="color:var(--sub);">Loading live MCX price</div>
-        </div>
-        <div class="gt-right">
-          <div class="gt-meta">Lot <strong>10g</strong></div>
-          <div class="gt-meta">Margin <strong>~₹8,000</strong></div>
-          <div class="gt-meta">Exp <strong>Apr 30, 2026</strong></div>
-        </div>
+<div id="gold" class="tpg">
+  <div class="gold-ticker" id="gold-ticker-main">
+    <div class="gt-row">
+      <div>
+        <div class="gt-name">GoldM Fut · MCX · 10g lot</div>
+        <div class="gt-price" id="gt-price" style="font-size:24px;color:var(--sub);">Fetching...</div>
+        <div class="gt-chg" id="gt-chg" style="color:var(--sub);">Loading live MCX price</div>
+      </div>
+      <div class="gt-right">
+        <div class="gt-meta">Lot <strong>10g</strong></div>
+        <div class="gt-meta" id="gt-margin">Margin <strong>~₹8,000</strong></div>
+        <div class="gt-meta" id="gt-exp">Exp <strong>Apr 30, 2026</strong></div>
       </div>
     </div>
-    <div class="gold-stats">
-      <div class="gstat"><div class="gstat-lbl">Day high</div><div class="gstat-val" id="gt-hi">—</div></div>
-      <div class="gstat"><div class="gstat-lbl">Day low</div><div class="gstat-val" id="gt-lo">—</div></div>
-      <div class="gstat"><div class="gstat-lbl">OI (lots)</div><div class="gstat-val gold" id="gt-oi">32,245</div></div>
-    </div>
-    <div class="gold-chart">
-      <svg viewBox="0 0 360 120" preserveAspectRatio="none">
-        <defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C8A84B" stop-opacity="0.2"/><stop offset="100%" stop-color="#C8A84B" stop-opacity="0"/></linearGradient></defs>
-        <polyline points="0,90 40,82 80,87 110,68 140,73 170,83 200,61 230,50 265,63 295,40 325,32 360,26" fill="none" stroke="#C8A84B" stroke-width="1.5"/>
-        <polyline points="0,90 40,82 80,87 110,68 140,73 170,83 200,61 230,50 265,63 295,40 325,32 360,26 360,120 0,120" fill="url(#ga)" stroke="none"/>
-      </svg>
-    </div>
-    <div class="gold-info">
-      <div class="gold-info-lbl">Contract details</div>
-      <div class="info-row"><span class="info-key">Instrument</span><span class="info-val">GoldM (Gold Mini)</span></div>
-      <div class="info-row"><span class="info-key">Exchange</span><span class="info-val">MCX India</span></div>
-      <div class="info-row"><span class="info-key">Lot size</span><span class="info-val">10 grams</span></div>
-      <div class="info-row"><span class="info-key">Expiry</span><span class="info-val">Apr 30, 2026</span></div>
-      <div class="info-row"><span class="info-key">Settlement</span><span class="info-val">Cash settled</span></div>
-      <div class="info-row"><span class="info-key">Trading hours</span><span class="info-val">9:00 AM – 11:30 PM IST</span></div>
-      <div class="info-row"><span class="info-key">COMEX Gold</span><span class="info-val" id="gt-comex">—</span></div>
-      <div class="info-row"><span class="info-key">USD/INR</span><span class="info-val" id="gt-usdinr">—</span></div>
-    </div>
-    <div class="footer"><p>GoldWave <em>ONE</em> · MCX GoldM · Prices updated on each scan</p></div>
   </div>
-
-  <!-- XAU/USD PAGE -->
-  <div id="gold-xau" class="gpg">
-    <div class="gold-ticker">
-      <div class="gt-row">
-        <div>
-          <div class="gt-name">XAU/USD · Spot Gold · COMEX</div>
-          <div class="gt-price" id="xau-price" style="font-size:24px;color:var(--sub);">Fetching...</div>
-          <div class="gt-chg" id="xau-chg" style="color:var(--sub);">Loading live spot price</div>
-        </div>
-        <div class="gt-right">
-          <div class="gt-meta">Unit <strong>Troy oz</strong></div>
-          <div class="gt-meta">Ticker <strong>XAU/USD</strong></div>
-          <div class="gt-meta">Market <strong>24h</strong></div>
-        </div>
-      </div>
-    </div>
-    <div class="gold-stats">
-      <div class="gstat"><div class="gstat-lbl">Day high</div><div class="gstat-val" id="xau-hi">—</div></div>
-      <div class="gstat"><div class="gstat-lbl">Day low</div><div class="gstat-val" id="xau-lo">—</div></div>
-      <div class="gstat"><div class="gstat-lbl">USD/INR</div><div class="gstat-val gold" id="xau-inr">—</div></div>
-    </div>
-    <div class="gold-chart">
-      <svg viewBox="0 0 360 120" preserveAspectRatio="none">
-        <defs><linearGradient id="gb" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C8A84B" stop-opacity="0.2"/><stop offset="100%" stop-color="#C8A84B" stop-opacity="0"/></linearGradient></defs>
-        <polyline points="0,95 40,88 80,92 110,72 140,76 170,85 200,65 230,54 265,66 295,43 325,35 360,28" fill="none" stroke="#C8A84B" stroke-width="1.5"/>
-        <polyline points="0,95 40,88 80,92 110,72 140,76 170,85 200,65 230,54 265,66 295,43 325,35 360,28 360,120 0,120" fill="url(#gb)" stroke="none"/>
-      </svg>
-    </div>
-    <div class="gold-info">
-      <div class="gold-info-lbl">Instrument details</div>
-      <div class="info-row"><span class="info-key">Instrument</span><span class="info-val">XAU/USD Spot Gold</span></div>
-      <div class="info-row"><span class="info-key">Exchange</span><span class="info-val">COMEX / OTC Forex</span></div>
-      <div class="info-row"><span class="info-key">Unit</span><span class="info-val">1 Troy ounce (31.1g)</span></div>
-      <div class="info-row"><span class="info-key">Standard lot</span><span class="info-val">100 oz</span></div>
-      <div class="info-row"><span class="info-key">Mini lot</span><span class="info-val">10 oz</span></div>
-      <div class="info-row"><span class="info-key">Trading hours</span><span class="info-val">24hrs Mon–Fri</span></div>
-      <div class="info-row"><span class="info-key">Price per gram</span><span class="info-val" id="xau-gram">—</span></div>
-      <div class="info-row"><span class="info-key">INR equivalent</span><span class="info-val" id="xau-inr-equiv">—</span></div>
-    </div>
-    <div class="gold-info" style="border-top:0.5px solid var(--border);">
-      <div class="gold-info-lbl">Key levels</div>
-      <div class="info-row"><span class="info-key">Support 1</span><span class="info-val" id="xau-s1">—</span></div>
-      <div class="info-row"><span class="info-key">Support 2</span><span class="info-val" id="xau-s2">—</span></div>
-      <div class="info-row"><span class="info-key">Resistance 1</span><span class="info-val" id="xau-r1">—</span></div>
-      <div class="info-row"><span class="info-key">Resistance 2</span><span class="info-val" id="xau-r2">—</span></div>
-    </div>
-    <div class="footer"><p>GoldWave <em>ONE</em> · XAU/USD Spot · Prices updated on each scan</p></div>
+  <div class="gold-stats">
+    <div class="gstat"><div class="gstat-lbl">Day high</div><div class="gstat-val" id="gt-hi">—</div></div>
+    <div class="gstat"><div class="gstat-lbl">Day low</div><div class="gstat-val" id="gt-lo">—</div></div>
+    <div class="gstat"><div class="gstat-lbl">OI (lots)</div><div class="gstat-val gold" id="gt-oi">32,245</div></div>
   </div>
+  <div class="gold-chart">
+    <svg viewBox="0 0 360 120" preserveAspectRatio="none">
+      <defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C8A84B" stop-opacity="0.2"/><stop offset="100%" stop-color="#C8A84B" stop-opacity="0"/></linearGradient></defs>
+      <polyline points="0,90 40,82 80,87 110,68 140,73 170,83 200,61 230,50 265,63 295,40 325,32 360,26" fill="none" stroke="#C8A84B" stroke-width="1.5"/>
+      <polyline points="0,90 40,82 80,87 110,68 140,73 170,83 200,61 230,50 265,63 295,40 325,32 360,26 360,120 0,120" fill="url(#ga)" stroke="none"/>
+    </svg>
+  </div>
+  <div class="gold-info">
+    <div class="gold-info-lbl">Contract details</div>
+    <div class="info-row"><span class="info-key">Instrument</span><span class="info-val">GoldM (Gold Mini)</span></div>
+    <div class="info-row"><span class="info-key">Exchange</span><span class="info-val">MCX India</span></div>
+    <div class="info-row"><span class="info-key">Lot size</span><span class="info-val">10 grams</span></div>
+    <div class="info-row"><span class="info-key">Near month expiry</span><span class="info-val" id="gt-expiry-row">Apr 30, 2026</span></div>
+    <div class="info-row"><span class="info-key">Settlement</span><span class="info-val">Cash settled</span></div>
+    <div class="info-row"><span class="info-key">Trading hours</span><span class="info-val">9:00 AM – 11:30 PM IST</span></div>
+    <div class="info-row"><span class="info-key">COMEX Gold</span><span class="info-val" id="gt-comex">$3,118/oz</span></div>
+    <div class="info-row"><span class="info-key">USD/INR</span><span class="info-val" id="gt-usdinr">83.50</span></div>
+  </div>
+  <div class="footer"><p>GoldWave <em>ONE</em> · Prices updated on each scan · MCX</p></div>
 </div>
 
 <!-- ═══════════════ HISTORY TAB<!-- ═══════════════ HISTORY TAB ═══════════════ -->
-<div id="history" class="tpg" style="display:none!important">
+<div id="history" class="tpg">
   <div class="hist-months" id="hist-months"></div>
   <div class="hist-sum">
     <div class="hs"><div class="hs-v up" id="h-pnl">—</div><div class="hs-l">P&L</div></div>
@@ -531,15 +411,9 @@ Respond ONLY with valid JSON:
   "close_reason": null,
   "conditions_summary": "1 sentence market summary"
 }
-Always return a direction and levels. CRITICAL: Live price data is always provided — never mark USD/INR or COMEX as unavailable or missing in checks. SL distance from entry >= 400. checks has 8-10 items.`;
+Always return a direction and levels. SL distance from entry >= 400. checks has 8-10 items.`;
 
 // Single GoldM contract — no month selector needed
-
-const contracts=[
-  {key:'apr26',name:'Apr 2026',spread:0,tag:'Near month'},
-  {key:'may26',name:'May 2026',spread:850,tag:'+₹850'},
-  {key:'jun26',name:'Jun 2026',spread:1690,tag:'+₹1,690'},
-];
 
 const histMonths=[
   {key:'jun26',l:'Jun 2026',s:'up'},
@@ -586,42 +460,7 @@ const histData={
 };
 
 let aC='apr25', aM='apr25';
-let currentSignal = null;
-let currentXauSignal = null;
-let dbSignals = [];
-let xauScanCount = 0;
-let isXauScanning = false;
-let xauScanInterval = null;
-
-const XAU_SYSTEM_PROMPT = `You are the GoldWave One signal engine for XAU/USD spot gold (forex/COMEX).
-
-Analyse current market conditions using a 13-factor model adapted for international gold trading.
-
-13 FACTORS FOR XAU/USD:
-MACRO (40pts): DXY direction (+18), US Fed policy/rates (+15), geopolitical safe-haven demand (+15), US CPI/inflation data (0 to -10), China demand outlook (-6 to 0), US 10-year yield impact (+8)
-TECHNICAL (27pts): Elliott Wave structure (+12), volume/open interest trend (+8), key level proximity (+7)
-SESSION/TIMING (13pts): London/NY session overlap (+6), day of week (+4), economic calendar timing (+3)
-LEARNED (22pts): Historical win rate same setup (+10), poor signal fingerprint (+7), risk/reward compliance (+5)
-
-RULES:
-Rule 1: Min SL buffer $3/oz. No short within 2hrs of Fed/CPI/NFP event.
-Rule 2: Exit 50% at T1, trail rest with cost SL.
-Rule 3: Min 3/5 Elliott Wave rules confirmed.
-Rule 4: Score <55 = monitoring. 55-79 = watching. 80+ = active trade.
-
-Respond ONLY with valid JSON:
-{
-  "score": <0-100>,
-  "direction": "long" | "short",
-  "entry": <USD price per oz, e.g. 3230.50>,
-  "sl": <USD price per oz>,
-  "t1": <USD price per oz>,
-  "t2": <USD price per oz>,
-  "checks": [{"label":"max 4 words","status":"pass"|"warn"|"fail"}],
-  "reasoning": "2-3 sentences. Current macro conditions, DXY direction, key levels.",
-  "conditions_summary": "1 sentence market summary"
-}
-SL distance from entry >= 3. checks has 8-10 items. Always return direction and levels.`; // single live signal, always updating
+let currentSignal = null; // single live signal, always updating
 let closedSignals = [];
 let scanCount = 0;
 let isScanning = false;
@@ -637,19 +476,10 @@ function swTop(id,btn){
   document.getElementById(id).classList.add('on');btn.classList.add('on');
 }
 
-function swSignalTab(id, btn){
-  document.querySelectorAll('.sig-panel').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.ssub').forEach(b=>b.classList.remove('on'));
-  document.getElementById('sig-'+id).classList.add('on');
-  btn.classList.add('on');
-}
-
 function swGold(id,btn){
   document.querySelectorAll('.gpg').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.gmt').forEach(b=>b.classList.remove('on'));
-  const el = document.getElementById('gold-'+id);
-  if(el) el.classList.add('on');
-  btn.classList.add('on');
+  document.getElementById('gold-'+id).classList.add('on');btn.classList.add('on');
 }
 
 function scoreTier(score){
@@ -667,8 +497,7 @@ function renderSignals(){
   }
 
   document.getElementById('empty-state').style.display='none';
-  const scw = document.getElementById('sig-cards-wrap');
-  if(scw){ scw.style.display='block'; scw.style.visibility='visible'; }
+  document.getElementById('sig-cards-wrap').style.display='block';
 
   const sig = currentSignal;
   const score = sig.score;
@@ -729,20 +558,15 @@ function renderSignals(){
 
 function closeSignal(){
   if(!currentSignal) return;
-  const sig = currentSignal;
-  const isActiveTrade = sig.score >= 80;
-  const res = isActiveTrade ? 'Closed' : 'Dismissed';
-  // Only save to DB and history if it was an active trade (80%+)
-  if(isActiveTrade){
-    fetch(API_BASE+'/signals/'+sig.id+'/close', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({close_reason:'Closed', result:'Closed'})
-    }).catch(()=>{});
-    closedSignals.unshift({...sig, closedAt:nowStr(), good:true, res:'Closed'});
-  }
+  closedSignals.unshift({
+    ...currentSignal,
+    closedAt: nowStr(),
+    good: currentSignal.score >= 80,
+    res: currentSignal.score >= 80 ? 'Closed' : 'Dismissed',
+  });
   currentSignal = null;
   renderSignals();
-  if(isActiveTrade) loadHistoryFromDB();
+  renderHistory();
 }
 
 function updateScanBar(score, label){
@@ -762,7 +586,7 @@ function updateScanBar(score, label){
 
 // Fetch live MCX GoldM price from Railway proxy server
 const PRICE_SERVER_URL = 'https://web-production-4e4b5.up.railway.app/price';
-const API_BASE = 'https://web-production-4e4b5.up.railway.app';
+const ANTHROPIC_API_KEY = '';  // set your Anthropic API key here
 
 async function fetchLivePrice(){
   try{
@@ -774,17 +598,12 @@ async function fetchLivePrice(){
     // Update Gold tab status
     const gc = document.getElementById('gt-chg');
     if(gc){ gc.textContent = 'Live · ' + d.source; gc.className = 'gt-chg up'; }
-    return {
-      aprPrice: d.price,
-      usdOz: (d.usd_oz && d.usd_oz > 0) ? d.usd_oz : null,
-      usdInr: (d.usd_inr && d.usd_inr > 0) ? d.usd_inr : null,
-      source: d.source || 'live'
-    };
+    return {aprPrice: d.price, usdOz: d.usd_oz||0, usdInr: d.usd_inr||0, source: d.source};
   } catch(e){
     console.warn('[GoldWave] Price server error:', e.message);
     const gc = document.getElementById('gt-chg');
     if(gc){ gc.textContent = '⚠ Using cached price'; gc.style.color='var(--amber)'; }
-    return {aprPrice: 154853, usdOz: 4757, usdInr: 93.8, source: 'cached'};
+    return {aprPrice: 154853, usdOz: 0, usdInr: 0, source: 'cached'};
   }
 }
 
@@ -793,9 +612,6 @@ async function scan(){
   isScanning = true;
   scanCount++;
   updateScanBar(null,'Fetching live MCX price...');
-
-  // Declare now at top of scan scope so it's available everywhere in this function
-  const now = new Date();
 
   // Fetch real MCX price first
   const prices = await fetchLivePrice();
@@ -831,57 +647,19 @@ async function scan(){
   if(gcomex) gcomex.textContent = '$'+prices.usdOz.toFixed(2)+'/oz';
   if(gusdinr) gusdinr.textContent = prices.usdInr.toFixed(2);
 
-  if(prices.aprPrice === 0){
-    updateScanBar(0, '⚠ Price unavailable — check Angel One connection');
-  } else {
-    updateScanBar(null,'Scanning market...');
-  }
+  updateScanBar(null,'Scanning market...');
 
-  // Use browser time converted to IST (now declared at top of scan)
-  const utcH=now.getUTCHours();
-  const istH=(utcH+5)%24+(now.getUTCMinutes()>=30?.5:0);
+  const now=new Date();
   const dateStr=now.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   const timeStr=now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
+  const utcH=now.getUTCHours();
+  const istH=(utcH+5)%24+(now.getUTCMinutes()>=30?.5:0);
   const session=istH>=17?'evening session (US open overlap, 17:00-23:30 IST)':istH>=9?'morning session (09:00-17:00 IST)':'pre-market';
 
-  // Always fetch fresh usd_oz/usd_inr if missing from price response
-  const usdOz = prices.usdOz || null;
-  const usdInr = prices.usdInr || null;
-  const dataComplete = prices.aprPrice > 0 && usdOz > 0 && usdInr > 0 && prices.source !== 'unavailable';
-  const priceCtx = dataComplete
-    ? `\n\nLIVE VERIFIED MARKET DATA — USE THESE EXACT VALUES:
-MCX GoldM (Gold Mini) current price: ₹${prices.aprPrice.toLocaleString('en-IN')} per 10g lot\nUse this EXACT price for entry, SL and targets — do not use any other price
-COMEX Gold: $${(usdOz||0).toFixed(2)}/oz — LIVE DATA, mark COMEX alignment as PASS
-USD/INR: ${(usdInr||0).toFixed(2)} — LIVE DATA, mark USD/INR direction as confirmed
-MCX includes ~9% import duty + GST over COMEX conversion
-Source: ${prices.source}
-Data quality: COMPLETE — analyse all 13 factors with full confidence.
-
-CRITICAL RELATIONSHIPS — READ CAREFULLY:
-1. USD/INR DIRECTION: Higher USD/INR (weak rupee) = MCX gold price goes UP in ₹ terms. Lower USD/INR (strong rupee) = MCX gold goes DOWN in ₹ terms. USD/INR at 93.80 and rising = BULLISH for MCX gold.
-2. COMEX direction: If COMEX gold rises in USD, MCX rises in ₹. They move together.
-3. DXY: Stronger DXY = weaker gold globally. Weaker DXY = stronger gold globally.
-4. Do NOT say USD/INR weakness is bearish for MCX — it is the opposite.`
-    : `\n\nMARKET DATA STATUS: PARTIAL OR UNAVAILABLE
-${prices.aprPrice > 0 ? 'MCX GoldM: ₹'+prices.aprPrice.toLocaleString('en-IN')+' per 10g' : 'MCX price: UNAVAILABLE'}
-${usdOz > 0 ? 'COMEX Gold: $'+(usdOz||0).toFixed(2)+'/oz' : 'COMEX: UNAVAILABLE'}
-${usdInr > 0 ? 'USD/INR: '+(usdInr||0).toFixed(2) : 'USD/INR: UNAVAILABLE'}
-CRITICAL INSTRUCTIONS: Only score factors with confirmed data. Mark unavailable data as WARN. Do NOT guess or estimate. Reduce score proportionally. If MCX price unavailable return score<30 and direction "wait".`;
-
-  // Fetch macro data from server for richer analysis
-  let macroCtx = '';
-  try{
-    const mr = await fetch(API_BASE+'/macro', {signal: AbortSignal.timeout(5000)});
-    if(mr.ok){
-      const md = await mr.json();
-      macroCtx = `\n\nLIVE MACRO DATA:
-DXY (Dollar Index): ${md.dxy ? md.dxy.toFixed(2)+' ('+( md.dxy_chg>0?'+':'')+md.dxy_chg?.toFixed(2)+'% today)' : 'unavailable'}
-US 10-Year Yield: ${md.tnx ? md.tnx.toFixed(3)+'%' : 'unavailable'}
-Crude Oil WTI: ${md.crude ? '$'+md.crude.toFixed(2)+'/bbl' : 'unavailable'}
-S&P 500: ${md.spx ? md.spx.toLocaleString()+' ('+( md.spx_chg>0?'+':'')+md.spx_chg?.toFixed(2)+'%)' : 'unavailable'}
-Note: DXY up = gold bearish. Yields up = gold bearish. Risk-off (SPX down) = gold bullish.`;
-    }
-  } catch(e){ console.warn('Macro fetch failed:',e.message); }
+  const priceCtx = `\n\nLIVE MCX GOLDM PRICE (use this exactly for entry/SL/target):
+₹${prices.aprPrice.toLocaleString('en-IN')} per 10g (near month)
+COMEX Gold: $${prices.usdOz.toFixed(2)}/oz · USD/INR: ${prices.usdInr.toFixed(2)}
+Source: ${prices.source}`;
 
   const activeCtx = currentSignal
     ? `\n\nCURRENTLY SHOWING SIGNAL: direction=${currentSignal.direction} score=${currentSignal.score}% entry=₹${currentSignal.entry}. If conditions have meaningfully changed (macro reversal, Wave invalidated, SL approach) suggest close by noting it in close_reason. Otherwise update the signal with fresh analysis.`
@@ -894,25 +672,13 @@ Note: DXY up = gold bearish. Yields up = gold bearish. Risk-off (SPX down) = gol
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',max_tokens:900,
         system:SYSTEM_PROMPT,
-        messages:[{role:'user',content:`Scan GoldM MCX now.\nDate: ${dateStr}, ${timeStr} IST\nSession: ${session}\nDay: ${now.toLocaleDateString('en-IN',{weekday:'long'})}${priceCtx}${macroCtx}${activeCtx}\n\nReturn your best signal assessment. Use the LIVE MCX PRICES above for all entry/SL/target values — do not guess prices. Always return a direction and levels. CRITICAL: Live price data is always provided — never mark USD/INR or COMEX as unavailable or missing in checks.`}]
+        messages:[{role:'user',content:`Scan GoldM MCX now.\nDate: ${dateStr}, ${timeStr} IST\nSession: ${session}\nDay: ${now.toLocaleDateString('en-IN',{weekday:'long'})}${priceCtx}${activeCtx}\n\nReturn your best signal assessment. Use the LIVE MCX PRICES above for all entry/SL/target values — do not guess prices. Always return a direction and levels.`}]
       })
     });
     if(!res.ok) throw new Error('API '+res.status);
     const data = await res.json();
     const raw = data.content?.map(b=>b.text||'').join('')||'';
-    // Extract JSON - handle markdown code blocks and extra text
-    let jsonStr = raw.replace(/```json/g,'').replace(/```/g,'').trim();
-    // Find first { and last } to extract just the JSON object
-    const firstBrace = jsonStr.indexOf('{');
-    const lastBrace = jsonStr.lastIndexOf('}');
-    if(firstBrace >= 0 && lastBrace > firstBrace){
-      jsonStr = jsonStr.slice(firstBrace, lastBrace + 1);
-    }
-    const result = JSON.parse(jsonStr);
-    // Validate required fields
-    if(!result.direction || !result.entry || !result.score){
-      throw new Error('Invalid signal structure: ' + JSON.stringify(Object.keys(result)));
-    }
+    const result = JSON.parse(raw.replace(/```json|```/g,'').trim());
 
     // Handle AI-requested close
     if(result.close_reason && currentSignal){
@@ -942,14 +708,6 @@ Note: DXY up = gold bearish. Yields up = gold bearish. Risk-off (SPX down) = gol
       updatedAt: nowStr(),
     };
 
-    // Save to DB only if active trade (80%+)
-    if(currentSignal.score >= 80){
-      fetch(API_BASE+'/signals', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify(currentSignal)
-      }).catch(()=>{});
-    }
-
     updateScanBar(result.score, result.conditions_summary);
     renderSignals();
 
@@ -962,24 +720,6 @@ Note: DXY up = gold bearish. Yields up = gold bearish. Risk-off (SPX down) = gol
 }
 
 // HISTORY
-async function loadHistoryFromDB(){
-  try{
-    const r = await fetch(API_BASE+'/signals/history');
-    const data = await r.json();
-    if(data.signals && data.signals.length){
-      dbSignals = data.signals.map(s=>({
-        type: s.direction==='long'?'buy':'sell',
-        date: s.closed_at ? new Date(s.closed_at).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) : 'Today',
-        time: s.closed_at ? new Date(s.closed_at).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true}) : '',
-        en: s.entry, ex: null, sl: s.sl,
-        res: s.result || s.close_reason || 'Closed',
-        good: s.score >= 80, ai: s.reasoning
-      }));
-      renderHistory();
-    }
-  } catch(e){ console.warn('History load failed:',e); }
-}
-
 function buildHistMonths(){
   const el=document.getElementById('hist-months');el.innerHTML='';
   histMonths.forEach(m=>{
@@ -1001,9 +741,8 @@ function renderHistory(){
     return;
   }
 
-  const sessionClosed = closedSignals.map(s=>({type:s.direction==='long'?'buy':'sell',date:'Today',time:s.closedAt||'',en:s.entry,ex:null,sl:s.sl,res:s.res,good:s.good,ai:s.reasoning}));
   let trades = meta.key==='apr26'
-    ? [...sessionClosed, ...dbSignals, ...(histData['apr26']?.trades||[])]
+    ? [...closedSignals.map(s=>({type:s.direction==='long'?'buy':'sell',date:'Today',time:s.closedAt||'',en:s.entry,ex:null,sl:s.sl,res:s.res,good:s.good,ai:s.reasoning})), ...(histData['apr26']?.trades||[])]
     : (histData[meta.key]?.trades||[]);
 
   const d = histData[meta.key]||histData['apr26'];
@@ -1041,159 +780,11 @@ function renderHistory(){
 }
 
 
-async function scanXau(){
-  if(isXauScanning) return;
-  isXauScanning = true;
-  xauScanCount++;
-
-  const now = new Date();
-  const xauPrice = document.getElementById('xau-price');
-  const currentXauPriceVal = xauPrice ? parseFloat(xauPrice.textContent.replace(/[^0-9.]/g,'')) : 0;
-
-  // Update XAU scan bar
-  const xl = document.getElementById('scan-label-xau');
-  const xc = document.getElementById('scan-count-xau');
-  if(xl) xl.textContent = 'Scanning XAU/USD...';
-  if(xc) xc.textContent = 'Scan #'+xauScanCount;
-
-  const dateStr = now.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  const timeStr = now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
-  const utcH = now.getUTCHours();
-  const istH = (utcH+5)%24+(now.getUTCMinutes()>=30?.5:0);
-  const session = utcH>=13 && utcH<17 ? 'London session' : utcH>=13 && utcH<21 ? 'London-NY overlap (highest liquidity)' : utcH>=21 || utcH<2 ? 'NY session' : 'Asian session (lower liquidity)';
-
-  try{
-    // Fetch macro data for XAU context
-    const priceResp = await fetch(PRICE_SERVER_URL);
-    const priceData = await priceResp.json();
-    const xauUsdOz = priceData.usd_oz || 0;
-    const usdInr = priceData.usd_inr || 0;
-
-    const xauCtx = xauUsdOz > 0
-      ? `\n\nLIVE XAU/USD DATA:\nSpot Gold: $${xauUsdOz.toFixed(2)}/oz\nUSD/INR: ${usdInr.toFixed(2)}\nData quality: COMPLETE`
-      : `\n\nXAU/USD DATA: UNAVAILABLE\nAnalyse based on macro knowledge only. Reduce score if key data missing.`;
-
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':ANTHROPIC_API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514', max_tokens:900,
-        system:XAU_SYSTEM_PROMPT,
-        messages:[{role:'user',content:`Scan XAU/USD now.\nDate: ${dateStr}, ${timeStr} IST\nSession: ${session}\nDay: ${now.toLocaleDateString('en-IN',{weekday:'long'})}${xauCtx}${currentSignal ? '\n\nMCX GoldM cross-reference: MCX signal is '+currentSignal.direction.toUpperCase()+' at '+currentSignal.score+'% confidence. MCX and XAU/USD should broadly align in direction since they track the same underlying asset. If your analysis conflicts with MCX direction, explain why in reasoning.' : ''}\n\nReturn best signal assessment. Always return direction and levels in USD/oz.`}]
-      })
-    });
-    if(!res.ok) throw new Error('API '+res.status);
-    const data = await res.json();
-    const raw = data.content?.map(b=>b.text||'').join('')||'';
-    let jsonStr = raw.replace(/\`\`\`json/g,'').replace(/\`\`\`/g,'').trim();
-    const fb = jsonStr.indexOf('{'); const lb = jsonStr.lastIndexOf('}');
-    if(fb>=0 && lb>fb) jsonStr=jsonStr.slice(fb,lb+1);
-    const result = JSON.parse(jsonStr);
-    if(!result.direction||!result.entry||!result.score) throw new Error('Invalid XAU signal');
-
-    currentXauSignal = {
-      id: currentXauSignal?.id || uid(),
-      direction: result.direction,
-      entry: result.entry,
-      sl: result.sl,
-      t1: result.t1,
-      t2: result.t2,
-      score: result.score,
-      checks: result.checks,
-      reasoning: result.reasoning,
-      time: currentXauSignal ? currentXauSignal.time : nowStr(),
-      updatedAt: nowStr(),
-      currency: 'USD'
-    };
-
-    // Update XAU scan bar
-    const xs = document.getElementById('scan-score-xau');
-    if(xs){ xs.textContent=result.score+'%'; xs.style.color=result.score>=80?'var(--green)':result.score>=55?'var(--amber)':'var(--sub)'; }
-    if(xl) xl.textContent = result.conditions_summary || 'XAU/USD analysed';
-
-    renderXauSignal();
-  } catch(e){
-    console.error('XAU scan error:',e);
-    if(xl) xl.textContent = 'XAU scan error — retrying';
-  } finally {
-    isXauScanning = false;
-  }
-}
-
-function fmtUsd(n){ return '$'+parseFloat(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-
-function renderXauSignal(){
-  if(!currentXauSignal){
-    document.getElementById('empty-state-xau').style.display='block';
-    document.getElementById('sig-cards-wrap-xau').style.display='none';
-    return;
-  }
-  document.getElementById('empty-state-xau').style.display='none';
-  document.getElementById('sig-cards-wrap-xau').style.display='block';
-
-  const sig = currentXauSignal;
-  const score = sig.score;
-  const tier = scoreTier(score);
-  const buf = Math.abs(sig.entry - sig.sl).toFixed(2);
-  const checksHtml = (sig.checks||[]).map(c=>`<span class="chk ${c.status}">${c.status==='pass'?'✓':c.status==='warn'?'~':'✗'} ${c.label}</span>`).join('');
-  const isActive = score >= 80;
-  const btnLabel = isActive ? 'Close trade' : 'Dismiss';
-  const btnCls = isActive ? 'active' : score>=55 ? 'watching' : 'monitoring';
-  const footerNote = isActive ? 'Exit <strong>50%</strong> at T1 · trail rest with cost SL' : 'Monitoring — not yet confirmed for trade';
-
-  document.getElementById('sig-count-lbl-xau').textContent = '1 signal · '+sig.time;
-  document.getElementById('sig-cards-xau').innerHTML = `
-    <div class="sig score-${tier.cls}">
-      <div class="sig-head">
-        <div class="sig-left">
-          <div class="dir-pill ${sig.direction}">${sig.direction==='long'?'Long XAU/USD':'Short XAU/USD'}</div>
-          <div class="sig-time">Spot · ${sig.time}</div>
-        </div>
-        <div class="sig-right">
-          <div class="conf-num ${tier.cls}">${score}%</div>
-          <div class="badge ${score>=80?'active':score>=55?'watching':'monitoring'}">
-            <div class="badge-dot"></div>${tier.label}
-          </div>
-        </div>
-      </div>
-      <div class="sig-score-bar"><div class="ssb-track"><div class="ssb-fill ${tier.cls}" style="width:${score}%"></div></div></div>
-      <div class="sig-note ${tier.noteClass}">${tier.note}</div>
-      <div class="sig-levels">
-        <div class="lv entry"><div class="lv-lbl">Entry</div><div class="lv-val">${fmtUsd(sig.entry)}</div><div class="lv-note">${isActive?'Market price':'Indicative'}</div></div>
-        <div class="lv sl"><div class="lv-lbl">Stop loss</div><div class="lv-val">${fmtUsd(sig.sl)}</div><div class="lv-note">Buffer $${buf}</div></div>
-        <div class="lv tgt"><div class="lv-lbl">Target</div><div class="lv-val">${fmtUsd(sig.t1)}</div><div class="lv-note">T2 ${fmtUsd(sig.t2)}</div></div>
-      </div>
-      <div class="sig-checks">${checksHtml}</div>
-      <div class="sig-reasoning"><div class="ai-line"></div><div><div class="ai-lbl">AI reasoning</div><div class="ai-txt">${sig.reasoning}</div></div></div>
-      <div class="sig-footer">
-        <div class="exit-note">${footerNote}</div>
-        <button class="close-btn ${btnCls}" onclick="closeXauSignal()">${btnLabel}</button>
-      </div>
-    </div>`;
-}
-
-function closeXauSignal(){
-  currentXauSignal = null;
-  renderXauSignal();
-}
-
-// INIT — fresh start every page load
-currentSignal = null;      // always regenerate on load
-currentXauSignal = null;   // always regenerate on load
+// INIT
 buildHistMonths();
 renderHistory();
-loadHistoryFromDB();
-// Show subtabs
-const stabs = document.getElementById('signal-subtabs'); if(stabs) stabs.classList.add('visible');
-// Run first scan immediately, then every 2 mins
 scan();
 scanInterval = setInterval(scan, 120000);
-// XAU scan immediately, then every 2 mins
-scanXau();
-xauScanInterval = setInterval(scanXau, 120000);
-setInterval(loadHistoryFromDB, 300000);
-// Refresh page every 4 hours to keep data fresh
-setTimeout(()=>location.reload(), 4 * 60 * 60 * 1000);
 </script>
 </body>
 </html>
