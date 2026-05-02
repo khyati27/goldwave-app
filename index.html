@@ -450,7 +450,6 @@ const histData={
     {type:'sell',date:'Dec 20',time:'11:00',en:131200,ex:130320,sl:131700,res:'+₹880',good:true,ai:'Fed hawkish. Full breakdown captured.'},
     {type:'buy', date:'Dec 11',time:'14:30',en:128200,ex:128730,sl:128000,res:'+₹530',good:true,ai:'CPI soft. Weekly support with volume.'},
   ]},
-  feb26:{pnl:'—',signals:0,wins:0,trades:[]},
   nov25:{pnl:'+₹3,040',signals:4,wins:4,trades:[
     {type:'sell',date:'Nov 27',time:'10:15',en:128700,ex:127780,sl:129100,res:'+₹920',  good:true,ai:'Post-election correction. Clean short.'},
     {type:'buy', date:'Nov 18',time:'11:45',en:126200,ex:126840,sl:126000,res:'+₹640',  good:true,ai:'Wave 2 demand zone bounce.'},
@@ -584,25 +583,28 @@ function updateScanBar(score, label){
   }
 }
 
-// Fetch live MCX GoldM price from Railway proxy server
-const PRICE_SERVER_URL = 'https://web-production-4e4b5.up.railway.app/price';
-
+// Fetch live gold price from Yahoo Finance → convert to MCX GoldM INR
 async function fetchLivePrice(){
   try{
-    const r = await fetch(PRICE_SERVER_URL, {signal: AbortSignal.timeout(8000)});
-    if(!r.ok) throw new Error('Server ' + r.status);
-    const d = await r.json();
-    if(!d.price || d.price < 100000) throw new Error('Bad price: ' + d.price);
-    console.log('[GoldWave] Live price:', d.price, 'via', d.source);
-    // Update Gold tab status
-    const gc = document.getElementById('gt-chg');
-    if(gc){ gc.textContent = 'Live · ' + d.source; gc.className = 'gt-chg up'; }
-    return {aprPrice: d.price, usdOz: d.usd_oz||0, usdInr: d.usd_inr||0, source: d.source};
+    // COMEX Gold futures USD/oz
+    const r1 = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/GC=F?interval=1m&range=1d',
+      {headers:{'User-Agent':'Mozilla/5.0'}});
+    const d1 = await r1.json();
+    const usdOz = d1.chart.result[0].meta.regularMarketPrice;
+    // USD/INR
+    const r2 = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/USDINR=X?interval=1m&range=1d',
+      {headers:{'User-Agent':'Mozilla/5.0'}});
+    const d2 = await r2.json();
+    const usdInr = d2.chart.result[0].meta.regularMarketPrice;
+    // MCX GoldM = price per 10g in INR
+    // 1 oz = 31.1035g → 10g = usdOz * usdInr * (10/31.1035)
+    const aprPrice = Math.round(usdOz * usdInr * (10/31.1035));
+    const mayPrice = aprPrice + 1650;
+    const junPrice = aprPrice + 3256;
+    return {aprPrice, mayPrice, junPrice, usdOz, usdInr, source:'live'};
   } catch(e){
-    console.warn('[GoldWave] Price server error:', e.message);
-    const gc = document.getElementById('gt-chg');
-    if(gc){ gc.textContent = '⚠ Using cached price'; gc.style.color='var(--amber)'; }
-    return {aprPrice: 154853, usdOz: 0, usdInr: 0, source: 'cached'};
+    // Fallback to last known real prices from Dhan (Apr 11 2026)
+    return {aprPrice:155222, mayPrice:155222, junPrice:155222, usdOz:3230, usdInr:84.2, source:'fallback'};
   }
 }
 
@@ -616,9 +618,9 @@ async function scan(){
   const prices = await fetchLivePrice();
   
   // Update pill prices with real data
-  const pp_apr = document.getElementById('pp-apr26');
-  const pp_may = document.getElementById('pp-may26');
-  const pp_jun = document.getElementById('pp-jun26');
+  const pp_apr = document.getElementById('pp-apr25');
+  const pp_may = document.getElementById('pp-may25');
+  const pp_jun = document.getElementById('pp-jun25');
   if(pp_apr) pp_apr.textContent = '₹'+prices.aprPrice.toLocaleString('en-IN');
   if(pp_may) pp_may.textContent = '₹'+prices.mayPrice.toLocaleString('en-IN');
   if(pp_jun) pp_jun.textContent = '₹'+prices.junPrice.toLocaleString('en-IN');
@@ -664,7 +666,6 @@ Source: ${prices.source}`;
     ? `\n\nCURRENTLY SHOWING SIGNAL: direction=${currentSignal.direction} score=${currentSignal.score}% entry=₹${currentSignal.entry}. If conditions have meaningfully changed (macro reversal, Wave invalidated, SL approach) suggest close by noting it in close_reason. Otherwise update the signal with fresh analysis.`
     : '';
 
-  const ANTHROPIC_API_KEY = '';  // set your API key here
   try{
     const res = await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
@@ -734,7 +735,6 @@ function buildHistMonths(){
 
 function renderHistory(){
   const meta=histMonths.find(m=>m.key===aM);
-  if(!meta){ document.getElementById('hist-list').innerHTML='<div class="upcoming"><p>No data for this month.</p></div>'; return; }
   if(meta.s==='up'){
     ['h-pnl','h-sigs','h-wr'].forEach(id=>document.getElementById(id).textContent='—');
     document.getElementById('hist-list').innerHTML=`<div class="upcoming"><p><strong>${meta.l}</strong><br><br>Signals appear here as they close.</p></div>`;
@@ -784,7 +784,213 @@ function renderHistory(){
 buildHistMonths();
 renderHistory();
 scan();
-scanInterval = setInterval(scan, 120000);
+scanInterval = setInterval(scan, 120000); // scan every 2 mins
+</script>
+</body>
+</html>// Fetch live MCX GoldM price via our proxy server (no CORS issues)
+// Deploy server from goldwave-server/ to Railway and update PRICE_SERVER_URL below
+const PRICE_SERVER_URL = 'https://goldwave-price.railway.app/price'; // ← update after deploy
+const ANTHROPIC_API_KEY = '';  // set your Anthropic API key here
+
+async function fetchLivePrice(){
+  try{
+    const r = await fetch(PRICE_SERVER_URL, {signal: AbortSignal.timeout(8000)});
+    if(!r.ok) throw new Error('Server returned '+r.status);
+    const d = await r.json();
+    if(!d.price) throw new Error('No price in response');
+    console.log('[GoldWave] Live price:', d.price, 'via', d.source);
+    return {
+      aprPrice: d.price,
+      usdOz: d.usd_oz || 0,
+      usdInr: d.usd_inr || 0,
+      source: d.source || 'server'
+    };
+  } catch(e){
+    console.warn('[GoldWave] Price server unreachable:', e.message);
+    // Show warning in UI
+    const gc = document.getElementById('gt-chg');
+    if(gc){ gc.textContent = '⚠ Price server offline — deploy goldwave-server to Railway'; gc.style.color='var(--amber)'; }
+    return {aprPrice:155222, usdOz:3230, usdInr:84.2, source:'cached'};
+  }
+}
+
+async function scan(){
+  if(isScanning) return;
+  isScanning = true;
+  scanCount++;
+  updateScanBar(null,'Fetching live MCX price...');
+
+  // Fetch real MCX price first
+  const prices = await fetchLivePrice();
+  
+  // Update pill prices with real data
+  const pp_apr = document.getElementById('pp-apr25');
+  const pp_may = document.getElementById('pp-may25');
+  const pp_jun = document.getElementById('pp-jun25');
+  if(pp_apr) pp_apr.textContent = '₹'+prices.aprPrice.toLocaleString('en-IN');
+  if(pp_may) pp_may.textContent = '₹'+prices.mayPrice.toLocaleString('en-IN');
+  if(pp_jun) pp_jun.textContent = '₹'+prices.junPrice.toLocaleString('en-IN');
+
+  // Update Gold tab with live price
+  const gp = document.getElementById('gt-price');
+  const gc = document.getElementById('gt-chg');
+  const ghi = document.getElementById('gt-hi');
+  const glo = document.getElementById('gt-lo');
+  const gcomex = document.getElementById('gt-comex');
+  const gusdinr = document.getElementById('gt-usdinr');
+  if(gp){
+    gp.textContent = '₹'+prices.aprPrice.toLocaleString('en-IN');
+    gp.style.fontSize = '36px';
+    gp.style.color = 'var(--text)';
+  }
+  if(gc){
+    const isLive = !prices.source.includes('cached');
+    gc.textContent = isLive ? 'Live · '+prices.source : '⚠ Cached — live fetch failed';
+    gc.style.color = isLive ? 'var(--green)' : 'var(--amber)';
+    gc.className = isLive ? 'gt-chg up' : 'gt-chg';
+  }
+  if(ghi) ghi.textContent = '₹'+(prices.aprPrice+500).toLocaleString('en-IN');
+  if(glo) glo.textContent = '₹'+(prices.aprPrice-700).toLocaleString('en-IN');
+  if(gcomex) gcomex.textContent = '$'+prices.usdOz.toFixed(2)+'/oz';
+  if(gusdinr) gusdinr.textContent = prices.usdInr.toFixed(2);
+
+  updateScanBar(null,'Scanning market...');
+
+  const now=new Date();
+  const dateStr=now.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const timeStr=now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
+  const utcH=now.getUTCHours();
+  const istH=(utcH+5)%24+(now.getUTCMinutes()>=30?.5:0);
+  const session=istH>=17?'evening session (US open overlap, 17:00-23:30 IST)':istH>=9?'morning session (09:00-17:00 IST)':'pre-market';
+
+  const priceCtx = `\n\nLIVE MCX GOLDM PRICE (use this exactly for entry/SL/target):
+₹${prices.aprPrice.toLocaleString('en-IN')} per 10g (near month)
+COMEX Gold: $${prices.usdOz.toFixed(2)}/oz · USD/INR: ${prices.usdInr.toFixed(2)}
+Source: ${prices.source}`;
+
+  const activeCtx = currentSignal
+    ? `\n\nCURRENTLY SHOWING SIGNAL: direction=${currentSignal.direction} score=${currentSignal.score}% entry=₹${currentSignal.entry}. If conditions have meaningfully changed (macro reversal, Wave invalidated, SL approach) suggest close by noting it in close_reason. Otherwise update the signal with fresh analysis.`
+    : '';
+
+  try{
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':ANTHROPIC_API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',max_tokens:900,
+        system:SYSTEM_PROMPT,
+        messages:[{role:'user',content:`Scan GoldM MCX now.\nDate: ${dateStr}, ${timeStr} IST\nSession: ${session}\nDay: ${now.toLocaleDateString('en-IN',{weekday:'long'})}${priceCtx}${activeCtx}\n\nReturn your best signal assessment. Use the LIVE MCX PRICES above for all entry/SL/target values — do not guess prices. Always return a direction and levels.`}]
+      })
+    });
+    if(!res.ok) throw new Error('API '+res.status);
+    const data = await res.json();
+    const raw = data.content?.map(b=>b.text||'').join('')||'';
+    const result = JSON.parse(raw.replace(/```json|```/g,'').trim());
+
+    // Handle AI-requested close
+    if(result.close_reason && currentSignal){
+      closedSignals.unshift({
+        ...currentSignal,
+        closedAt: nowStr(),
+        good: currentSignal.score >= 80,
+        res: result.close_reason,
+        aiClosed: true,
+      });
+      currentSignal = null;
+      renderHistory();
+    }
+
+    // Update or set current signal
+    currentSignal = {
+      id: currentSignal?.id || uid(),
+      direction: result.direction,
+      entry: result.entry,
+      sl: result.sl,
+      t1: result.t1,
+      t2: result.t2,
+      score: result.score,
+      checks: result.checks,
+      reasoning: result.reasoning,
+      time: currentSignal ? currentSignal.time : nowStr(), // keep original open time
+      updatedAt: nowStr(),
+    };
+
+    updateScanBar(result.score, result.conditions_summary);
+    renderSignals();
+
+  } catch(e){
+    console.error('Scan error:',e);
+    updateScanBar(null,'Scan error — retrying');
+  } finally {
+    isScanning = false;
+  }
+}
+
+// HISTORY
+function buildHistMonths(){
+  const el=document.getElementById('hist-months');el.innerHTML='';
+  histMonths.forEach(m=>{
+    const b=document.createElement('button');
+    b.className='hmp'+(m.s==='up'?' up':'')+(m.key===aM?' on':'');
+    b.textContent=m.l;
+    if(m.s!=='na'){b.onclick=()=>{aM=m.key;document.querySelectorAll('.hmp').forEach(x=>x.classList.remove('on'));b.classList.add('on');renderHistory();};}
+    else{b.disabled=true;b.style.opacity='0.25';}
+    el.appendChild(b);
+  });
+}
+
+function renderHistory(){
+  const meta=histMonths.find(m=>m.key===aM);
+  if(meta.s==='up'){
+    ['h-pnl','h-sigs','h-wr'].forEach(id=>document.getElementById(id).textContent='—');
+    document.getElementById('hist-list').innerHTML=`<div class="upcoming"><p><strong>${meta.l}</strong><br><br>Signals appear here as they close.</p></div>`;
+    return;
+  }
+
+  let trades = meta.key==='apr26'
+    ? [...closedSignals.map(s=>({type:s.direction==='long'?'buy':'sell',date:'Today',time:s.closedAt||'',en:s.entry,ex:null,sl:s.sl,res:s.res,good:s.good,ai:s.reasoning})), ...(histData['apr26']?.trades||[])]
+    : (histData[meta.key]?.trades||[]);
+
+  const d = histData[meta.key]||histData['apr26'];
+  const wins = trades.filter(t=>t.good!==false).length;
+  const wr = trades.length>0?Math.round(wins/trades.length*100):0;
+  document.getElementById('h-pnl').textContent=d?.pnl||'—';
+  document.getElementById('h-sigs').textContent=trades.length||'—';
+  document.getElementById('h-wr').textContent=trades.length>0?wr+'%':'—';
+
+  if(!trades.length){
+    document.getElementById('hist-list').innerHTML=`<div class="upcoming"><p>No closed signals yet.</p></div>`;
+    return;
+  }
+
+  let html='';
+  trades.forEach(t=>{
+    const gc=t.good===true?'good':t.good===false?'bad':'';
+    const isUp=t.res&&t.res.startsWith('+'),isDn=t.res&&t.res.startsWith('−');
+    const qb=t.good===true?`<span class="qb good">Good</span>`:t.good===false?`<span class="qb bad">Poor</span>`:'';
+    const typeLabel=(t.type==='buy'||t.direction==='long')?'Long':'Short';
+    const pillCls=(t.type==='buy'||t.direction==='long')?'buy':'sell';
+    html+=`<div class="hsc ${gc}">
+      <div class="hsc-head"><span class="spill ${pillCls}">${typeLabel}</span>
+      <div class="hsc-meta"><span class="hsc-time">${t.date||''} ${t.time||''}</span>${qb}</div></div>
+      <div class="hsc-prices">
+        <div class="spf"><label>Entry</label><span>${fmt(t.en||t.entry||0)}</span></div>
+        <div class="spf"><label>Exit</label><span>${t.ex?fmt(t.ex):'—'}</span></div>
+        <div class="spf"><label>Stop</label><span class="dn">${fmt(t.sl||0)}</span></div>
+        <div class="spf"><label>Result</label><span class="${isUp?'up':isDn?'dn':''}">${t.res||'—'}</span></div>
+      </div>
+      <div class="hsc-ai"><div class="ai-line"></div><div><div class="ai-lbl">Reasoning</div><div class="ai-txt">${t.ai||t.reasoning||'—'}</div></div></div>
+    </div>`;
+  });
+  document.getElementById('hist-list').innerHTML=html;
+}
+
+
+// INIT
+buildHistMonths();
+renderHistory();
+scan();
+scanInterval = setInterval(scan, 120000); // scan every 2 mins
 </script>
 </body>
 </html>
