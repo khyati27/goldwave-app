@@ -762,7 +762,6 @@ function updateScanBar(score, label){
 
 // Fetch live MCX GoldM price from Railway proxy server
 const PRICE_SERVER_URL = 'https://web-production-4e4b5.up.railway.app/price';
-const ANTHROPIC_API_KEY = '';  // set your Anthropic API key here
 const API_BASE = 'https://web-production-4e4b5.up.railway.app';
 
 async function fetchLivePrice(){
@@ -889,9 +888,9 @@ Note: DXY up = gold bearish. Yields up = gold bearish. Risk-off (SPX down) = gol
     : '';
 
   try{
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
+    const res = await fetch(API_BASE+'/analyze',{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':ANTHROPIC_API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',max_tokens:900,
         system:SYSTEM_PROMPT,
@@ -1074,9 +1073,9 @@ async function scanXau(){
       ? `\n\nLIVE XAU/USD DATA:\nSpot Gold: $${xauUsdOz.toFixed(2)}/oz\nUSD/INR: ${usdInr.toFixed(2)}\nData quality: COMPLETE`
       : `\n\nXAU/USD DATA: UNAVAILABLE\nAnalyse based on macro knowledge only. Reduce score if key data missing.`;
 
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
+    const res = await fetch(API_BASE+'/analyze',{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':ANTHROPIC_API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514', max_tokens:900,
         system:XAU_SYSTEM_PROMPT,
