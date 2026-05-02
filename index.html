@@ -274,15 +274,6 @@ html,body{height:100%;background:#0A0806;color:#EDE6D6;}
 <!-- ═══════════════ SIGNALS TAB ═══════════════ -->
 <div id="signals" class="tpg on">
 
-
-      <div class="scan-label" id="scan-label">Scanning market...</div>
-    </div>
-    <div class="scan-right">
-      <div class="scan-score" id="scan-score"></div>
-      <div class="scan-count" id="scan-count">Scan #0</div>
-    </div>
-  </div>
-
   <div id="signals-body">
   <div id="sig-mcx" class="sig-panel on">
 
@@ -294,7 +285,15 @@ html,body{height:100%;background:#0A0806;color:#EDE6D6;}
           <circle class="scan-ring-arc" cx="8" cy="8" r="6" transform="rotate(-90 8 8)"/>
         </svg>
       </div>
-    <div class="empty" id="empty-state">
+      <div class="scan-label" id="scan-label">Scanning market...</div>
+    </div>
+    <div class="scan-right">
+      <div class="scan-score" id="scan-score"></div>
+      <div class="scan-count" id="scan-count">Scan #0</div>
+    </div>
+  </div>
+
+  <div class="empty" id="empty-state">
       <div class="empty-ring">
         <svg viewBox="0 0 48 48">
           <circle stroke="rgba(255,255,255,0.06)" stroke-width="3" fill="none" cx="24" cy="24" r="20"/>
@@ -585,7 +584,7 @@ const histData={
   ]},
 };
 
-let aC='apr25', aM='apr25';
+let aC='apr26', aM='apr26';
 let currentSignal = null;
 let currentXauSignal = null;
 let dbSignals = [];
@@ -828,8 +827,8 @@ async function scan(){
   }
   if(ghi) ghi.textContent = '₹'+(prices.aprPrice+500).toLocaleString('en-IN');
   if(glo) glo.textContent = '₹'+(prices.aprPrice-700).toLocaleString('en-IN');
-  if(gcomex) gcomex.textContent = '$'+prices.usdOz.toFixed(2)+'/oz';
-  if(gusdinr) gusdinr.textContent = prices.usdInr.toFixed(2);
+  if(gcomex) gcomex.textContent = prices.usdOz ? '$'+prices.usdOz.toFixed(2)+'/oz' : '—';
+  if(gusdinr) gusdinr.textContent = prices.usdInr ? prices.usdInr.toFixed(2) : '—';
 
   if(prices.aprPrice === 0){
     updateScanBar(0, '⚠ Price unavailable — check Angel One connection');
@@ -1050,11 +1049,7 @@ async function scanXau(){
   const xauPrice = document.getElementById('xau-price');
   const currentXauPriceVal = xauPrice ? parseFloat(xauPrice.textContent.replace(/[^0-9.]/g,'')) : 0;
 
-  // Update XAU scan bar
-  const xl = document.getElementById('scan-label-xau');
-  const xc = document.getElementById('scan-count-xau');
-  if(xl) xl.textContent = 'Scanning XAU/USD...';
-  if(xc) xc.textContent = 'Scan #'+xauScanCount;
+  // (scan bar already initialized above)
 
   const dateStr = now.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   const timeStr = now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
