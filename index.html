@@ -873,7 +873,7 @@ CRITICAL INSTRUCTIONS: Only score factors with confirmed data. Mark unavailable 
     const mr = await fetch(API_BASE+'/macro', {signal: AbortSignal.timeout(5000)});
     if(mr.ok){
       const md = await mr.json();
-      macroCtx = `\n\nLIVE MACRO DATA:\nDXY: ${md.dxy?.price||'N/A'}\nUS 10Y Yield: ${md.us10y?.price||'N/A'}%\nCrude Oil: $${md.crude_oil?.price||'N/A'}\nS&P 500: ${md.sp500?.price||'N/A'}\nUSD/INR: ${md.usd_inr?.price||'N/A'}`;
+      macroCtx = `\n\nLIVE MACRO DATA:\nDXY (Dollar Index): ${md.dxy?.price||'N/A'} — ${md.dxy?.price > 100 ? 'STRONG USD = bearish for gold' : 'WEAK USD = bullish for gold'}\nUS 10Y Yield: ${md.us10y?.price||'N/A'}% — ${md.us10y?.price > 4.5 ? 'HIGH yield = bearish gold' : 'moderate yield'}\nCrude Oil WTI: $${md.crude_oil?.price||'N/A'}\nS&P 500: ${md.sp500?.price||'N/A'}\nUSD/INR: ${md.usd_inr?.price||'N/A'}\nIndia VIX: ${md.india_vix?.price||'N/A'} — ${md.india_vix?.price > 20 ? 'HIGH fear = safe-haven gold demand' : 'low fear'}\nRBI event within 2 days: ${md.rbi_event_soon ? 'YES — avoid short positions' : 'No'}\nFed event within 2 days: ${md.fed_event_soon ? 'YES — heightened volatility expected' : 'No'}\nMCX expiry week: ${md.expiry_week ? 'YES — expect higher volatility, reduce position size' : 'No'}`;
     }
   } catch(e){ console.warn('Macro fetch failed:',e.message); }
 
@@ -1058,11 +1058,20 @@ async function scanXau(){
   const session = utcH>=13 && utcH<17 ? 'London session' : utcH>=13 && utcH<21 ? 'London-NY overlap (highest liquidity)' : utcH>=21 || utcH<2 ? 'NY session' : 'Asian session (lower liquidity)';
 
   try{
-    // Fetch macro data for XAU context
+    // Fetch price and macro data for XAU context
     const priceResp = await fetch(PRICE_SERVER_URL);
     const priceData = await priceResp.json();
     const xauUsdOz = priceData.usd_oz || 0;
     const usdInr = priceData.usd_inr || 0;
+
+    let xauMacroCtx = '';
+    try{
+      const xmr = await fetch(API_BASE+'/macro', {signal: AbortSignal.timeout(5000)});
+      if(xmr.ok){
+        const xmd = await xmr.json();
+        xauMacroCtx = `\n\nLIVE MACRO DATA:\nDXY (Dollar Index): ${xmd.dxy?.price||'N/A'} — ${xmd.dxy?.price > 100 ? 'STRONG USD = bearish for gold' : 'WEAK USD = bullish for gold'}\nUS 10Y Yield: ${xmd.us10y?.price||'N/A'}% — ${xmd.us10y?.price > 4.5 ? 'HIGH yield = bearish gold' : 'moderate yield'}\nCrude Oil WTI: $${xmd.crude_oil?.price||'N/A'}\nS&P 500: ${xmd.sp500?.price||'N/A'}\nIndia VIX: ${xmd.india_vix?.price||'N/A'} — ${xmd.india_vix?.price > 20 ? 'HIGH fear = safe-haven gold demand' : 'low fear'}\nRBI event within 2 days: ${xmd.rbi_event_soon ? 'YES — avoid short positions' : 'No'}\nFed event within 2 days: ${xmd.fed_event_soon ? 'YES — heightened volatility expected' : 'No'}\nMCX expiry week: ${xmd.expiry_week ? 'YES — expect higher volatility, reduce position size' : 'No'}`;
+      }
+    } catch(e){ console.warn('XAU macro fetch failed:',e.message); }
 
     const xauCtx = xauUsdOz > 0
       ? `\n\nLIVE XAU/USD DATA:\nSpot Gold: $${xauUsdOz.toFixed(2)}/oz\nUSD/INR: ${usdInr.toFixed(2)}\nData quality: COMPLETE`
@@ -1074,7 +1083,7 @@ async function scanXau(){
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514', max_tokens:900,
         system:XAU_SYSTEM_PROMPT,
-        messages:[{role:'user',content:`Scan XAU/USD now.\nDate: ${dateStr}, ${timeStr} IST\nSession: ${session}\nDay: ${now.toLocaleDateString('en-IN',{weekday:'long'})}${xauCtx}${currentSignal ? '\n\nMCX GoldM cross-reference: MCX signal is '+currentSignal.direction.toUpperCase()+' at '+currentSignal.score+'% confidence. MCX and XAU/USD should broadly align in direction since they track the same underlying asset. If your analysis conflicts with MCX direction, explain why in reasoning.' : ''}\n\nReturn best signal assessment. Always return direction and levels in USD/oz.`}]
+        messages:[{role:'user',content:`Scan XAU/USD now.\nDate: ${dateStr}, ${timeStr} IST\nSession: ${session}\nDay: ${now.toLocaleDateString('en-IN',{weekday:'long'})}${xauCtx}${xauMacroCtx}${currentSignal ? '\n\nMCX GoldM cross-reference: MCX signal is '+currentSignal.direction.toUpperCase()+' at '+currentSignal.score+'% confidence. MCX and XAU/USD should broadly align in direction since they track the same underlying asset. If your analysis conflicts with MCX direction, explain why in reasoning.' : ''}\n\nReturn best signal assessment. Always return direction and levels in USD/oz.`}]
       })
     });
     if(!res.ok) throw new Error('API '+res.status);
