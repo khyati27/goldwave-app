@@ -587,10 +587,17 @@ SESSION/TIMING (13pts): London/NY session overlap (+6), day of week (+4), econom
 LEARNED (22pts): Historical win rate same setup (+10), poor signal fingerprint (+7), risk/reward compliance (+5)
 
 RULES:
-Rule 1: Min SL buffer $3/oz. No short within 2hrs of Fed/CPI/NFP event.
+Rule 1: Min SL buffer $3.50/oz including spread cost. No short within 2hrs of Fed/CPI/NFP event.
 Rule 2: Exit 50% at T1, trail rest with cost SL.
 Rule 3: Min 3/5 Elliott Wave rules confirmed.
 Rule 4: Score <55 = monitoring. 55-79 = watching. 80+ = active trade.
+
+CFD SPREAD CONTEXT:
+Current XAU/USD spot, Bid, and Ask prices are provided in the user message.
+Typical CFD spread: $0.30-0.50/oz (shown as ~$0.60 round-trip cost).
+Account for spread in SL placement — SL must be at least $3.50/oz from entry including spread cost.
+For a long: entry at Ask price, SL at least $3.50 below entry.
+For a short: entry at Bid price, SL at least $3.50 above entry.
 
 Respond ONLY with valid JSON:
 {
@@ -604,7 +611,7 @@ Respond ONLY with valid JSON:
   "reasoning": "2-3 sentences. Current macro conditions, DXY direction, key levels.",
   "conditions_summary": "1 sentence market summary"
 }
-SL distance from entry >= 3. checks has 8-10 items. Always return direction and levels.`; // single live signal, always updating
+SL distance from entry >= 3.50 (includes spread). checks has 8-10 items. Always return direction and levels.`; // single live signal, always updating
 let closedSignals = [];
 let scanCount = 0;
 let isScanning = false;
@@ -757,10 +764,18 @@ async function fetchLivePrice(){
     // Update Gold tab status
     const gc = document.getElementById('gt-chg');
     if(gc){ gc.textContent = 'Live · ' + d.source; gc.className = 'gt-chg up'; }
+    // Update XAU price display if spot data available
+    if(d.xau_spot && d.xau_spot > 500){
+      const xp = document.getElementById('xau-price');
+      if(xp){ xp.textContent = '$'+d.xau_spot.toFixed(2); xp.style.color='var(--gold)'; }
+    }
     return {
       aprPrice: d.price,
       usdOz: (d.usd_oz && d.usd_oz > 0) ? d.usd_oz : null,
       usdInr: (d.usd_inr && d.usd_inr > 0) ? d.usd_inr : null,
+      xauSpot: d.xau_spot || null,
+      xauBid:  d.xau_bid  || null,
+      xauAsk:  d.xau_ask  || null,
       source: d.source || 'live'
     };
   } catch(e){
@@ -1078,6 +1093,20 @@ async function scanXau(){
   if(xcnt) xcnt.textContent = 'Scan #'+xauScanCount;
 
   try{
+    // Fetch price for XAU spot display
+    let xauSpot = null, xauBid = null, xauAsk = null;
+    try{
+      const pr = await fetch(PRICE_SERVER_URL, {signal: AbortSignal.timeout(6000)});
+      if(pr.ok){
+        const pd = await pr.json();
+        if(pd.xau_spot && pd.xau_spot > 500){
+          xauSpot = pd.xau_spot; xauBid = pd.xau_bid; xauAsk = pd.xau_ask;
+          const xp = document.getElementById('xau-price');
+          if(xp){ xp.textContent = '$'+xauSpot.toFixed(2); xp.style.color='var(--gold)'; }
+        }
+      }
+    } catch(e){ console.warn('XAU price fetch:', e.message); }
+
     const r = await fetch(API_BASE+'/signal/current', {signal: AbortSignal.timeout(10000)});
     if(!r.ok) throw new Error('XAU signal fetch '+r.status);
     const data = await r.json();
@@ -1096,7 +1125,8 @@ async function scanXau(){
         reasoning: sig.reasoning,
         time: new Date(sig.generated_at||Date.now()).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true}),
         updatedAt: nowStr(),
-        currency: 'USD'
+        currency: 'USD',
+        xauSpot, xauBid, xauAsk
       };
       if(xsc){ xsc.textContent=sig.score+'%'; xsc.style.color=sig.score>=80?'var(--green)':sig.score>=55?'var(--amber)':'var(--sub)'; }
       if(xl) xl.textContent = sig.conditions_summary || 'XAU/USD analysed';
@@ -1216,6 +1246,14 @@ function renderXauSignal(){
   const btnLabel = isActive ? 'Close trade' : 'Dismiss';
   const btnCls = isActive ? 'active' : score>=55 ? 'watching' : 'monitoring';
   const footerNote = isActive ? 'Exit <strong>50%</strong> at T1 · trail rest with cost SL' : 'Monitoring — not yet confirmed for trade';
+  const spreadHtml = sig.xauSpot
+    ? `<div class="spread-info" style="font-size:11px;color:var(--sub);padding:6px 0 2px;display:flex;gap:10px;flex-wrap:wrap;">
+        <span>Spot <strong style="color:var(--gold)">$${sig.xauSpot.toFixed(2)}</strong></span>
+        <span>Bid <strong>$${sig.xauBid.toFixed(2)}</strong></span>
+        <span>Ask <strong>$${sig.xauAsk.toFixed(2)}</strong></span>
+        <span style="color:var(--amber)">Spread ~$0.60 · incl. in SL</span>
+      </div>`
+    : '';
 
   document.getElementById('sig-count-lbl-xau').textContent = '1 signal · '+sig.time;
   document.getElementById('sig-cards-xau').innerHTML = `
@@ -1234,6 +1272,7 @@ function renderXauSignal(){
       </div>
       <div class="sig-score-bar"><div class="ssb-track"><div class="ssb-fill ${tier.cls}" style="width:${score}%"></div></div></div>
       <div class="sig-note ${tier.noteClass}">${tier.note}</div>
+      ${spreadHtml}
       <div class="sig-levels">
         <div class="lv entry"><div class="lv-lbl">Entry</div><div class="lv-val">${fmtUsd(sig.entry)}</div><div class="lv-note">${isActive?'Market price':'Indicative'}</div></div>
         <div class="lv sl"><div class="lv-lbl">Stop loss</div><div class="lv-val">${fmtUsd(sig.sl)}</div><div class="lv-note">Buffer $${buf}</div></div>
