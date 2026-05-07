@@ -390,24 +390,38 @@ Respond ONLY with valid JSON in this exact structure:
 }
 
 function buildMacroContext(md, pd){
-  if(!md || !md.macro_data) return '';
-  const m = md.macro_data;
-  return `
-LIVE MARKET DATA (${new Date().toLocaleString('en-IN', {timeZone:'Asia/Kolkata'})} IST):
-Gold (GC=F): $${m.gold_usd?.price || 'N/A'}/oz | Day High: $${m.gold_usd?.day_high || 'N/A'} | Day Low: $${m.gold_usd?.day_low || 'N/A'}
-MCX GoldM: ₹${pd.price || 'N/A'} per 10g
-XAU/USD Spot: $${pd.xau_spot || m.gold_usd?.price || 'N/A'}
-USD/INR: ${pd.usd_inr || m.usd_inr?.price || 'N/A'}
-DXY: ${m.dxy?.price || 'N/A'} (${md.dxy_trend || 'N/A'} ${m.dxy?.change_pct != null ? (m.dxy.change_pct > 0 ? '+' : '') + Number(m.dxy.change_pct).toFixed(2) + '%' : ''})
-US 10Y Yield: ${m.us10y?.price || 'N/A'}%
-Crude Oil: $${m.crude_oil?.price || 'N/A'}
-S&P 500: ${m.sp500?.price || 'N/A'}
-Silver: $${m.silver?.price || 'N/A'}
-Gold/Silver Ratio: ${m.gold_silver_ratio?.ratio || 'N/A'}
-India VIX: ${m.india_vix?.price || 'N/A'}
-Days to MCX Expiry: ${md.days_to_expiry || 'N/A'}
-RBI Event Soon: ${md.rbi_event_soon ? 'YES' : 'No'}
-Fed Event Soon: ${md.fed_event_soon ? 'YES' : 'No'}`;
+  const m = (md && md.macro_data) ? md.macro_data : {};
+  const now = new Date().toLocaleString('en-IN', {timeZone:'Asia/Kolkata'});
+  
+  // Always build context even if macro fetch failed
+  const goldPrice = (m.gold_usd?.price) || (pd.usd_oz) || (pd.xau_spot) || 4750;
+  const xauSpot = pd.xau_spot || pd.usd_oz || goldPrice;
+  const mcxPrice = pd.price || 0;
+  const usdInr = pd.usd_inr || m.usd_inr?.price || 94.92;
+  
+  return `LIVE MARKET DATA AS OF ${now} IST — USE THESE EXACT PRICES FOR ALL ANALYSIS:
+
+GOLD PRICES (current, not historical):
+• XAU/USD Spot: $${Number(xauSpot).toFixed(2)}/oz  ← USE THIS as current gold price
+• MCX GoldM: ₹${mcxPrice > 0 ? Number(mcxPrice).toLocaleString('en-IN') : 'N/A'} per 10g
+• COMEX GC=F: $${goldPrice}/oz
+• Day High: $${m.gold_usd?.day_high || 'N/A'} | Day Low: $${m.gold_usd?.day_low || 'N/A'}
+
+GOLD IS AT $${Number(xauSpot).toFixed(0)} — ALL KEY LEVELS MUST BE NEAR THIS PRICE.
+DO NOT use 2023 prices ($1,800-$2,200). Current range is $4,500-$5,000.
+
+MACRO DATA:
+• USD/INR: ${usdInr}
+• DXY: ${m.dxy?.price || 'N/A'} (${md?.dxy_trend || 'falling'})
+• US 10Y Yield: ${m.us10y?.price || 'N/A'}%
+• Crude Oil WTI: $${m.crude_oil?.price || 'N/A'}
+• S&P 500: ${m.sp500?.price || 'N/A'}
+• Silver: $${m.silver?.price || 'N/A'}/oz
+• Gold/Silver Ratio: ${m.gold_silver_ratio?.ratio || 'N/A'}
+• India VIX: ${m.india_vix?.price || 'N/A'}
+• Fed Event Soon: ${md?.fed_event_soon ? 'YES — heightened volatility' : 'No'}
+• RBI Event Soon: ${md?.rbi_event_soon ? 'YES' : 'No'}
+• Days to MCX Expiry: ${md?.days_to_expiry || 'N/A'}`;
 }
 
 function renderResult(a, md, pd){
