@@ -3,1312 +3,560 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>GoldWave One</title>
-<meta name="theme-color" content="#0A0806">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>GoldWave ONE · Market Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
-html,body{height:100%;background:#0A0806;color:#EDE6D6;}
+*{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --gold:#C8A84B;--gold-dim:rgba(200,168,75,0.09);--gold-glow:rgba(200,168,75,0.18);--gold-bd:rgba(200,168,75,0.28);
-  --ink:#0A0806;--card:#131009;--surf:#1C1810;--raised:#221F15;
-  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);
-  --text:#EDE6D6;--sub:#9A9080;--hint:#56504A;
-  --green:#4ADE80;--green-dim:rgba(74,222,128,0.10);--green-bd:rgba(74,222,128,0.22);
-  --red:#F87171;--red-dim:rgba(248,113,113,0.10);--red-bd:rgba(248,113,113,0.22);
-  --amber:#FCD34D;--amber-dim:rgba(252,211,77,0.10);--amber-bd:rgba(252,211,77,0.25);
-  --blue:#60A5FA;--blue-dim:rgba(96,165,250,0.10);--blue-bd:rgba(96,165,250,0.22);
-  --serif:'DM Serif Display',Georgia,serif;
-  --sans:'DM Sans',system-ui,sans-serif;
-  --mono:'DM Mono',monospace;
+  --cream:#FAF7F2;
+  --warm:#F2EDE4;
+  --border:#E8E0D0;
+  --text:#1A1612;
+  --sub:#6B6158;
+  --hint:#A09488;
+  --gold:#B8860B;
+  --gold-light:#D4A017;
+  --gold-bg:rgba(184,134,11,0.08);
+  --green:#1A7A4A;
+  --green-bg:rgba(26,122,74,0.08);
+  --red:#C0392B;
+  --red-bg:rgba(192,57,43,0.08);
+  --amber:#B8600B;
+  --amber-bg:rgba(184,96,11,0.08);
+  --blue:#1A4A7A;
+  --blue-bg:rgba(26,74,122,0.08);
+  --card:#FFFFFF;
+  --shadow:0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  --shadow-lg:0 4px 24px rgba(0,0,0,0.10);
+  --radius:16px;
+  --mono:'DM Mono', monospace;
+  --serif:'DM Serif Display', serif;
+  --sans:'DM Sans', sans-serif;
 }
-.app{max-width:430px;margin:0 auto;min-height:100vh;background:var(--ink);}
+html,body{height:100%;background:var(--cream);color:var(--text);font-family:var(--sans);}
 
-.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--ink);border-bottom:0.5px solid var(--border);position:sticky;top:0;z-index:50;}
-.logo{display:flex;align-items:center;gap:9px;}
-.lm{width:28px;height:28px;border-radius:7px;background:var(--gold);display:flex;align-items:center;justify-content:center;box-shadow:0 0 14px var(--gold-glow);}
-.lm svg{width:13px;height:13px;stroke:var(--ink);fill:none;stroke-width:2.5;}
-.logo-text{font-family:var(--serif);font-size:17px;color:var(--text);}
-.logo-text em{color:var(--gold);font-style:normal;}
-.logo-text sup{font-family:var(--mono);font-size:8px;color:var(--sub);vertical-align:super;margin-left:1px;}
-.nav-right{display:flex;align-items:center;gap:5px;background:var(--surf);padding:5px 10px;border-radius:20px;border:0.5px solid var(--border);}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 5px var(--green);animation:pulse 2.5s ease infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-.nav-live{font-family:var(--mono);font-size:10px;color:var(--sub);}
+/* ── LAYOUT ── */
+.app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;}
 
-/* TOP TABS */
-.top-tabs{display:flex;background:var(--ink);border-bottom:0.5px solid var(--border);}
-.top-tab{flex:1;padding:11px 6px;font-family:var(--sans);font-size:12px;font-weight:400;color:var(--hint);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;transition:color 0.2s;white-space:nowrap;}
-.top-tab.on{color:var(--gold);border-bottom-color:var(--gold);font-weight:500;}
-.signal-subtabs{display:flex;padding:0 18px;background:var(--surf);border-bottom:0.5px solid var(--border);gap:0;}
+/* ── HEADER ── */
+.header{padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between;}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-icon{width:36px;height:36px;background:var(--text);border-radius:10px;display:flex;align-items:center;justify-content:center;}
+.logo-icon svg{width:20px;height:20px;fill:var(--cream);}
+.logo-name{font-family:var(--serif);font-size:20px;color:var(--text);letter-spacing:-0.3px;}
+.logo-name span{color:var(--gold);}
+.logo-badge{font-family:var(--mono);font-size:9px;color:var(--hint);letter-spacing:0.1em;margin-left:2px;vertical-align:super;}
+.status-pill{display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--card);border:1px solid var(--border);border-radius:20px;font-family:var(--mono);font-size:11px;color:var(--sub);}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
 
-.ssub{flex:1;padding:10px 0;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--hint);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;letter-spacing:0.05em;}
-.ssub.on{color:var(--gold);border-bottom-color:var(--gold);}
-.sig-panel{display:none;}.sig-panel.on{display:block;}
-.tpg{display:none;}.tpg.on{display:block;}
+/* ── HERO SEARCH ── */
+.hero{padding:32px 20px 20px;}
+.hero-title{font-family:var(--serif);font-size:28px;line-height:1.2;color:var(--text);margin-bottom:6px;}
+.hero-title em{color:var(--gold);font-style:italic;}
+.hero-sub{font-size:13px;color:var(--sub);margin-bottom:24px;line-height:1.5;}
 
-/* CONTRACT PILLS */
-.cbar{padding:12px 18px 10px;background:var(--ink);border-bottom:0.5px solid var(--border);}
-.cbar-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.11em;color:var(--hint);text-transform:uppercase;margin-bottom:8px;}
-.cpills{display:flex;gap:7px;}
-.cp{padding:9px 12px;border-radius:9px;border:0.5px solid var(--border);background:var(--card);cursor:pointer;flex:1;text-align:center;transition:all 0.15s;}
-.cp.on{border-color:var(--gold-bd);background:var(--gold-dim);}
-.cp-name{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--sub);}
-.cp.on .cp-name{color:var(--gold);}
-.cp-price{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--text);margin-top:3px;}
-.cp-tag{font-family:var(--mono);font-size:9px;color:var(--hint);margin-top:2px;}
+.search-wrap{position:relative;}
+.search-input{width:100%;padding:16px 50px 16px 18px;border:1.5px solid var(--border);border-radius:14px;font-size:15px;font-family:var(--sans);background:var(--card);color:var(--text);outline:none;transition:border-color 0.2s,box-shadow 0.2s;box-shadow:var(--shadow);}
+.search-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-bg);}
+.search-input::placeholder{color:var(--hint);}
+.search-btn{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:36px;height:36px;background:var(--text);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
+.search-btn:hover{background:var(--gold);}
+.search-btn svg{width:16px;height:16px;fill:var(--cream);}
 
-/* SCAN STATUS BAR */
-.scan-bar{padding:8px 18px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surf);}
-.scan-left{display:flex;align-items:center;gap:8px;}
-.scan-ring{width:16px;height:16px;flex-shrink:0;}
-.scan-ring svg{width:16px;height:16px;animation:spin 2s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.scan-ring-bg{stroke:var(--border);stroke-width:3;fill:none;}
-.scan-ring-arc{stroke:var(--gold);stroke-width:3;fill:none;stroke-linecap:round;stroke-dasharray:24 50;}
-.scan-label{font-family:var(--mono);font-size:10px;color:var(--sub);}
-.scan-right{display:flex;align-items:center;gap:10px;}
-.scan-score{font-family:var(--mono);font-size:11px;font-weight:500;}
-.scan-count{font-family:var(--mono);font-size:9px;color:var(--hint);}
+/* ── QUICK PICKS ── */
+.quick-picks{padding:0 20px 24px;}
+.qp-label{font-family:var(--mono);font-size:10px;color:var(--hint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;}
+.qp-chips{display:flex;gap:8px;flex-wrap:wrap;}
+.qp-chip{padding:7px 14px;background:var(--card);border:1px solid var(--border);border-radius:20px;font-size:12px;font-family:var(--mono);color:var(--sub);cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+.qp-chip:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-bg);}
+.qp-chip.active{border-color:var(--gold);color:var(--gold);background:var(--gold-bg);}
 
-/* SIGNAL CARDS */
-.sigs-section{padding:10px 18px 4px;}
-.sigs-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-.sigs-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.11em;text-transform:uppercase;color:var(--hint);}
-.sigs-count{font-family:var(--mono);font-size:9px;color:var(--hint);}
+/* ── LOADING ── */
+.loading{padding:40px 20px;text-align:center;display:none;}
+.loading.show{display:block;}
+.loading-ring{width:48px;height:48px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-text{font-family:var(--mono);font-size:12px;color:var(--hint);}
+.loading-steps{margin-top:8px;font-size:11px;color:var(--hint);}
 
-.sig{border-radius:12px;overflow:hidden;margin-bottom:10px;border:0.5px solid var(--border);background:var(--card);animation:cardIn 0.35s cubic-bezier(0.34,1.56,0.64,1);}
-@keyframes cardIn{from{opacity:0;transform:translateY(-8px) scale(0.98)}to{opacity:1;transform:none}}
+/* ── RESULT CARD ── */
+.result{padding:0 20px 40px;display:none;}
+.result.show{display:block;}
 
-/* Score-based border colours */
-.sig.score-hi{border-color:var(--green-bd);}  /* 80+ active */
-.sig.score-md{border-color:var(--amber-bd);}  /* 55-79 watching */
-.sig.score-lo{border-color:var(--border);}    /* 0-54 monitoring */
+.inst-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;}
+.inst-name{font-family:var(--serif);font-size:24px;color:var(--text);}
+.inst-meta{font-size:12px;color:var(--hint);font-family:var(--mono);margin-top:2px;}
+.inst-price{text-align:right;}
+.inst-price-val{font-family:var(--mono);font-size:20px;font-weight:500;color:var(--text);}
+.inst-price-chg{font-family:var(--mono);font-size:11px;margin-top:2px;}
+.inst-price-chg.up{color:var(--green);}
+.inst-price-chg.dn{color:var(--red);}
 
-.sig-head{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;border-bottom:0.5px solid var(--border);}
-.sig-left{display:flex;align-items:center;gap:7px;}
-.dir-pill{font-family:var(--mono);font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;}
-.dir-pill.long{background:var(--green-dim);color:var(--green);border:0.5px solid var(--green-bd);}
-.dir-pill.short{background:var(--red-dim);color:var(--red);border:0.5px solid var(--red-bd);}
-.sig-time{font-family:var(--mono);font-size:10px;color:var(--hint);}
-.sig-right{display:flex;align-items:center;gap:6px;}
+/* Sentiment meter */
+.sentiment-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:12px;box-shadow:var(--shadow);}
+.sentiment-label{font-family:var(--mono);font-size:10px;color:var(--hint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;}
+.sentiment-bar-wrap{height:8px;background:var(--warm);border-radius:4px;overflow:hidden;margin-bottom:8px;}
+.sentiment-bar{height:100%;border-radius:4px;transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1);}
+.sentiment-bar.bullish{background:linear-gradient(90deg,var(--green),#2ECC71);}
+.sentiment-bar.bearish{background:linear-gradient(90deg,var(--red),#E74C3C);}
+.sentiment-bar.neutral{background:linear-gradient(90deg,var(--amber),#F39C12);}
+.sentiment-footer{display:flex;justify-content:space-between;align-items:center;}
+.sentiment-verdict{font-family:var(--serif);font-size:18px;color:var(--text);}
+.sentiment-score{font-family:var(--mono);font-size:12px;color:var(--hint);}
 
-/* Status badges */
-.badge{font-family:var(--mono);font-size:9px;font-weight:500;padding:3px 8px;border-radius:20px;display:flex;align-items:center;gap:3px;}
-.badge.active{background:var(--green-dim);color:var(--green);border:0.5px solid var(--green-bd);}
-.badge.watching{background:var(--amber-dim);color:var(--amber);border:0.5px solid var(--amber-bd);}
-.badge.monitoring{background:var(--surf);color:var(--sub);border:0.5px solid var(--border);}
-.badge-dot{width:4px;height:4px;border-radius:50%;}
-.badge.active .badge-dot{background:var(--green);animation:pulse 1.5s infinite;}
-.badge.watching .badge-dot{background:var(--amber);}
-.badge.monitoring .badge-dot{background:var(--sub);}
-.conf-num{font-family:var(--mono);font-size:11px;font-weight:500;}
-.conf-num.hi{color:var(--green);}
-.conf-num.md{color:var(--amber);}
-.conf-num.lo{color:var(--sub);}
+/* Section cards */
+.section-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:12px;box-shadow:var(--shadow);}
+.section-title{font-family:var(--mono);font-size:10px;color:var(--hint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
 
-/* SCORE BAR inside card */
-.sig-score-bar{padding:6px 13px;border-bottom:0.5px solid var(--border);}
-.ssb-track{height:3px;background:var(--border);border-radius:20px;overflow:hidden;}
-.ssb-fill{height:3px;border-radius:20px;transition:width 0.5s ease;}
-.ssb-fill.hi{background:var(--green);}
-.ssb-fill.md{background:var(--amber);}
-.ssb-fill.lo{background:var(--sub);}
+/* Key levels */
+.levels-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.level-item{padding:12px;background:var(--warm);border-radius:10px;}
+.level-lbl{font-family:var(--mono);font-size:10px;color:var(--hint);margin-bottom:4px;}
+.level-val{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--text);}
+.level-val.support{color:var(--green);}
+.level-val.resistance{color:var(--red);}
+.level-val.target{color:var(--blue);}
 
-/* LEVELS */
-.sig-levels{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:0.5px solid var(--border);}
-.lv{padding:11px 12px;border-right:0.5px solid var(--border);text-align:center;}
-.lv:last-child{border-right:none;}
-.lv-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.07em;text-transform:uppercase;color:var(--hint);margin-bottom:5px;}
-.lv-val{font-family:var(--mono);font-size:14px;font-weight:500;}
-.lv.entry .lv-val{color:var(--text);}
-.lv.sl .lv-val{color:var(--red);}
-.lv.tgt .lv-val{color:var(--green);}
-.lv-note{font-family:var(--mono);font-size:9px;color:var(--hint);margin-top:2px;}
+/* Factors */
+.factors-list{display:flex;flex-direction:column;gap:8px;}
+.factor-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:10px;}
+.factor-item.bullish{background:var(--green-bg);}
+.factor-item.bearish{background:var(--red-bg);}
+.factor-item.neutral{background:var(--amber-bg);}
+.factor-icon{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;}
+.factor-item.bullish .factor-icon{background:var(--green);color:white;}
+.factor-item.bearish .factor-icon{background:var(--red);color:white;}
+.factor-item.neutral .factor-icon{background:var(--amber);color:white;}
+.factor-text{font-size:13px;color:var(--text);line-height:1.4;}
+.factor-text strong{font-weight:600;}
 
-/* STATUS NOTE BANNER inside card */
-.sig-note{padding:7px 13px;border-bottom:0.5px solid var(--border);font-family:var(--mono);font-size:10px;line-height:1.5;}
-.sig-note.note-active{background:var(--green-dim);color:var(--green);}
-.sig-note.note-watching{background:var(--amber-dim);color:var(--amber);}
-.sig-note.note-monitoring{background:var(--surf);color:var(--sub);}
+/* Indicators */
+.indicators-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.ind-item{padding:12px;background:var(--warm);border-radius:10px;}
+.ind-lbl{font-family:var(--mono);font-size:10px;color:var(--hint);margin-bottom:4px;}
+.ind-val{font-family:var(--mono);font-size:13px;font-weight:500;}
+.ind-val.bull{color:var(--green);}
+.ind-val.bear{color:var(--red);}
+.ind-val.neut{color:var(--amber);}
+.ind-note{font-size:10px;color:var(--hint);margin-top:2px;}
 
-/* CHECKS */
-.sig-checks{padding:9px 13px;border-bottom:0.5px solid var(--border);display:flex;flex-wrap:wrap;gap:4px;}
-.chk{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:20px;}
-.chk.pass{background:var(--green-dim);color:var(--green);border:0.5px solid var(--green-bd);}
-.chk.warn{background:var(--amber-dim);color:var(--amber);border:0.5px solid var(--amber-bd);}
-.chk.fail{background:var(--red-dim);color:var(--red);border:0.5px solid var(--red-bd);}
+/* News */
+.news-list{display:flex;flex-direction:column;gap:10px;}
+.news-item{padding:12px;background:var(--warm);border-radius:10px;cursor:pointer;}
+.news-item:hover{background:var(--border);}
+.news-headline{font-size:13px;color:var(--text);line-height:1.4;margin-bottom:4px;}
+.news-meta{font-family:var(--mono);font-size:10px;color:var(--hint);}
 
-/* REASONING */
-.sig-reasoning{padding:10px 13px;border-bottom:0.5px solid var(--border);display:flex;gap:9px;}
-.ai-line{width:1.5px;border-radius:2px;background:var(--gold);flex-shrink:0;opacity:0.5;}
-.ai-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;opacity:0.8;}
-.ai-txt{font-family:var(--sans);font-size:12px;font-weight:300;color:var(--sub);line-height:1.6;}
+/* Summary */
+.summary-text{font-size:14px;color:var(--text);line-height:1.7;}
 
-/* FOOTER ROW */
-.sig-footer{padding:9px 13px;display:flex;align-items:center;justify-content:space-between;}
-.exit-note{font-family:var(--sans);font-size:11px;color:var(--hint);}
-.exit-note strong{color:var(--sub);font-weight:500;}
-.close-btn{font-family:var(--mono);font-size:10px;font-weight:500;padding:4px 11px;border-radius:20px;cursor:pointer;transition:opacity 0.15s;border:none;}
-.close-btn.active{background:var(--red-dim);color:var(--red);border:0.5px solid var(--red-bd);}
-.close-btn.watching{background:var(--amber-dim);color:var(--amber);border:0.5px solid var(--amber-bd);}
-.close-btn.monitoring{background:var(--surf);color:var(--sub);border:0.5px solid var(--border);}
+/* Risk factors */
+.risk-list{display:flex;flex-direction:column;gap:6px;}
+.risk-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text);}
+.risk-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0;}
+.risk-dot.high{background:var(--red);}
+.risk-dot.low{background:var(--green);}
 
-/* TRACK RECORD */
-.track-wrap{margin:4px 18px 18px;padding:13px 15px;border:0.5px solid var(--border);border-radius:11px;background:var(--surf);}
-.track-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.11em;color:var(--hint);text-transform:uppercase;margin-bottom:9px;}
-.track-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
-.tr-st{padding:11px;background:var(--card);border-radius:9px;border:0.5px solid var(--border);text-align:center;}
-.tr-v{font-family:var(--serif);font-size:20px;}
-.tr-v.up{color:var(--green);}
-.tr-v.gold{color:var(--gold);}
-.tr-l{font-family:var(--mono);font-size:9px;color:var(--hint);margin-top:3px;}
+/* What to watch */
+.watch-list{display:flex;flex-direction:column;gap:8px;}
+.watch-item{padding:10px 12px;background:var(--blue-bg);border-radius:10px;font-size:13px;color:var(--blue);line-height:1.4;}
 
-/* EMPTY STATE */
-.empty{padding:48px 20px;text-align:center;}
-.empty-ring{width:48px;height:48px;margin:0 auto 14px;}
-.empty-ring svg{width:48px;height:48px;animation:spin 2s linear infinite;}
-.empty-title{font-family:var(--serif);font-size:19px;color:var(--text);margin-bottom:5px;}
-.empty-sub{font-family:var(--mono);font-size:10px;color:var(--sub);line-height:1.7;}
+/* Disclaimer */
+.disclaimer{padding:16px 20px;font-size:11px;color:var(--hint);text-align:center;border-top:1px solid var(--border);margin-top:8px;}
 
-/* GOLD TAB — contract months */
-.gold-month-tabs{display:flex;padding:0 18px;border-bottom:0.5px solid var(--border);background:var(--ink);gap:0;}
-.gmt{flex:1;padding:11px 0;font-family:var(--mono);font-size:12px;color:var(--hint);border:none;background:none;cursor:pointer;border-bottom:1.5px solid transparent;text-align:center;}
-.gmt.on{color:var(--gold);border-bottom-color:var(--gold);}
-.gpg{display:none;}.gpg.on{display:block;}
+/* Error */
+.error-card{background:var(--red-bg);border:1px solid rgba(192,57,43,0.2);border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.error-text{font-size:13px;color:var(--red);}
 
-/* GOLD DATA CARDS */
-.gold-ticker{padding:16px 18px;border-bottom:0.5px solid var(--border);}
-.gt-row{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:10px;}
-.gt-name{font-family:var(--mono);font-size:10px;color:var(--sub);margin-bottom:3px;}
-.gt-price{font-family:var(--serif);font-size:36px;color:var(--text);line-height:1;letter-spacing:-1px;}
-.gt-chg{font-family:var(--mono);font-size:12px;margin-top:4px;}
-.gt-chg.up{color:var(--green);}
-.gt-chg.dn{color:var(--red);}
-.gt-right{text-align:right;display:flex;flex-direction:column;gap:3px;}
-.gt-meta{font-family:var(--mono);font-size:10px;color:var(--sub);}
-.gt-meta strong{color:var(--text);}
+/* Skeleton */
+.skeleton{background:linear-gradient(90deg,var(--warm) 25%,var(--border) 50%,var(--warm) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px;}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-.gold-stats{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:0.5px solid var(--border);}
-.gstat{padding:12px 14px;border-right:0.5px solid var(--border);text-align:center;}
-.gstat:last-child{border-right:none;}
-.gstat-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--hint);margin-bottom:4px;}
-.gstat-val{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--text);}
-.gstat-val.up{color:var(--green);}
-.gstat-val.dn{color:var(--red);}
-.gstat-val.gold{color:var(--gold);}
-
-.gold-chart{padding:14px 18px;border-bottom:0.5px solid var(--border);}
-.gold-chart svg{width:100%;height:120px;}
-
-.gold-info{padding:14px 18px;}
-.gold-info-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.11em;text-transform:uppercase;color:var(--hint);margin-bottom:10px;}
-.info-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:0.5px solid var(--border);font-size:12px;}
-.info-row:last-child{border-bottom:none;}
-.info-key{font-family:var(--sans);color:var(--sub);}
-.info-val{font-family:var(--mono);color:var(--text);font-weight:500;}
-
-/* HISTORY TAB */
-.hist-months{padding:10px 18px;border-bottom:0.5px solid var(--border);display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
-.hist-months::-webkit-scrollbar{display:none;}
-.hmp{padding:5px 13px;border-radius:20px;font-family:var(--mono);font-size:11px;font-weight:500;border:0.5px solid var(--border);color:var(--hint);background:none;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.15s;}
-.hmp.on{background:var(--gold-dim);border-color:var(--gold-bd);color:var(--gold);}
-.hmp.up{border-style:dashed;}
-.hist-sum{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:0.5px solid var(--border);}
-.hs{padding:14px;border-right:0.5px solid var(--border);text-align:center;}
-.hs:last-child{border-right:none;}
-.hs-v{font-family:var(--serif);font-size:19px;}
-.hs-v.up{color:var(--green);}
-.hs-v.gold{color:var(--gold);}
-.hs-l{font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--hint);margin-top:3px;}
-.hist-list{padding:12px 18px;}
-.hsc{border:0.5px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;background:var(--card);}
-.hsc.good{border-color:var(--green-bd);}
-.hsc.bad{border-color:var(--red-bd);}
-.hsc-head{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;border-bottom:0.5px solid var(--border);}
-.spill{font-family:var(--mono);font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;}
-.spill.buy{background:var(--green-dim);color:var(--green);border:0.5px solid var(--green-bd);}
-.spill.sell{background:var(--red-dim);color:var(--red);border:0.5px solid var(--red-bd);}
-.hsc-meta{display:flex;align-items:center;gap:7px;}
-.hsc-time{font-family:var(--mono);font-size:10px;color:var(--hint);}
-.qb{font-family:var(--mono);font-size:9px;font-weight:500;padding:2px 7px;border-radius:20px;}
-.qb.good{background:var(--green-dim);color:var(--green);}
-.qb.bad{background:var(--red-dim);color:var(--red);}
-.hsc-prices{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;padding:10px 13px;gap:8px;border-bottom:0.5px solid var(--border);}
-.spf label{font-family:var(--mono);font-size:9px;letter-spacing:0.07em;text-transform:uppercase;color:var(--hint);display:block;margin-bottom:3px;}
-.spf span{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--text);}
-.spf span.up{color:var(--green);}
-.spf span.dn{color:var(--red);}
-.hsc-ai{padding:10px 13px;display:flex;gap:9px;}
-
-.upcoming{padding:32px 18px;text-align:center;}
-.upcoming p{font-family:var(--sans);font-size:13px;font-weight:300;color:var(--sub);line-height:1.7;}
-.upcoming strong{color:var(--gold);font-weight:500;}
-
-.footer{padding:18px;text-align:center;border-top:0.5px solid var(--border);}
-.footer p{font-family:var(--mono);font-size:9px;letter-spacing:0.05em;color:var(--hint);}
-.footer em{color:var(--gold);font-style:normal;}
+@media(max-width:480px){
+  .hero-title{font-size:24px;}
+  .inst-name{font-size:20px;}
+}
 </style>
 </head>
 <body>
 <div class="app">
 
-<div class="nav">
-  <div class="logo">
-    <div class="lm"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></div>
-    <div class="logo-text">Gold<em>Wave</em><sup>ONE</sup></div>
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <div>
+        <span class="logo-name">GoldWave<span>ONE</span></span><span class="logo-badge">BETA</span>
+      </div>
+    </div>
+    <div class="status-pill">
+      <div class="status-dot"></div>
+      Live
+    </div>
   </div>
-  <div class="nav-right"><div class="dot"></div><div class="nav-live">MCX Live</div></div>
+
+  <!-- HERO SEARCH -->
+  <div class="hero">
+    <div class="hero-title">Market<br><em>Intelligence</em></div>
+    <div class="hero-sub">Search any instrument — get AI-powered context, key levels, and what to watch.</div>
+    <div class="search-wrap">
+      <input class="search-input" id="search-input" type="text" placeholder="Search: Gold, XAUUSD, Apple, Reliance..." autocomplete="off" autocorrect="off">
+      <button class="search-btn" id="search-btn" onclick="runAnalysis()">
+        <svg viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- QUICK PICKS -->
+  <div class="quick-picks">
+    <div class="qp-label">Quick picks</div>
+    <div class="qp-chips">
+      <div class="qp-chip" onclick="quickSearch('XAU/USD Gold')">XAU/USD</div>
+      <div class="qp-chip" onclick="quickSearch('MCX GoldM India futures')">MCX GoldM</div>
+      <div class="qp-chip" onclick="quickSearch('Silver XAG/USD')">Silver</div>
+      <div class="qp-chip" onclick="quickSearch('Crude Oil WTI')">Crude Oil</div>
+      <div class="qp-chip" onclick="quickSearch('Nifty 50 India')">Nifty 50</div>
+      <div class="qp-chip" onclick="quickSearch('Bitcoin BTC/USD')">Bitcoin</div>
+      <div class="qp-chip" onclick="quickSearch('US Dollar Index DXY')">DXY</div>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading" id="loading">
+    <div class="loading-ring"></div>
+    <div class="loading-text">Analysing market conditions...</div>
+    <div class="loading-steps" id="loading-steps">Fetching live data</div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result" id="result"></div>
+
+  <!-- DISCLAIMER -->
+  <div class="disclaimer">
+    GoldWave ONE · Educational purposes only · Not financial advice · Always do your own research
+  </div>
+
 </div>
-
-<div class="top-tabs">
-  <button class="top-tab on" onclick="swTop('signals',this)">Signals</button>
-
-</div>
-<div class="signal-subtabs" id="signal-subtabs">
-  <button class="ssub on" onclick="swSignalTab('mcx',this)">MCX GoldM ₹</button>
-  <button class="ssub" onclick="swSignalTab('xau',this)">XAU/USD $</button>
-</div>
-
-<!-- ═══════════════ SIGNALS TAB ═══════════════ -->
-<div id="signals" class="tpg on">
-
-  <div id="signals-body">
-  <div id="sig-mcx" class="sig-panel on">
-
-  <div class="scan-bar" id="scan-bar">
-    <div class="scan-left">
-      <div class="scan-ring">
-        <svg viewBox="0 0 16 16">
-          <circle class="scan-ring-bg" cx="8" cy="8" r="6"/>
-          <circle class="scan-ring-arc" cx="8" cy="8" r="6" transform="rotate(-90 8 8)"/>
-        </svg>
-      </div>
-      <div class="scan-label" id="scan-label">Scanning market...</div>
-    </div>
-    <div class="scan-right">
-      <div class="scan-score" id="scan-score"></div>
-      <div class="scan-count" id="scan-count">Scan #0</div>
-    </div>
-  </div>
-
-  <div class="empty" id="empty-state">
-      <div class="empty-ring">
-        <svg viewBox="0 0 48 48">
-          <circle stroke="rgba(255,255,255,0.06)" stroke-width="3" fill="none" cx="24" cy="24" r="20"/>
-          <circle stroke="#C8A84B" stroke-width="3" fill="none" cx="24" cy="24" r="20" transform="rotate(-90 24 24)" stroke-linecap="round" stroke-dasharray="44 126"/>
-        </svg>
-      </div>
-      <div class="empty-title">Analysing GoldM</div>
-      <div class="empty-sub">All signals shown above 0%<br>Active trades confirmed at 80%+</div>
-    </div>
-
-    <div id="sig-cards-wrap" style="display:none">
-      <div class="sigs-section">
-        <div class="sigs-hdr">
-          <div class="sigs-lbl">Live signals</div>
-          <div class="sigs-count" id="sig-count-lbl">—</div>
-        </div>
-        <div id="sig-cards"></div>
-      </div>
-
-      </div>
-    </div>
-  </div>
-    <div class="footer"><p>GoldWave <em>ONE</em> · MCX GoldM · Educational purposes only</p></div>
-  </div><!-- end sig-mcx -->
-
-  <!-- XAU/USD PANEL -->
-  <div id="sig-xau" class="sig-panel">
-    <div class="scan-bar" id="scan-bar-xau">
-      <div class="scan-left">
-        <div class="scan-ring">
-          <svg viewBox="0 0 16 16">
-            <circle class="scan-ring-bg" cx="8" cy="8" r="6"/>
-            <circle class="scan-ring-arc" cx="8" cy="8" r="6" transform="rotate(-90 8 8)"/>
-          </svg>
-        </div>
-        <div class="scan-label" id="scan-label-xau">Scanning XAU/USD...</div>
-      </div>
-      <div class="scan-right">
-        <div class="scan-score" id="scan-score-xau"></div>
-        <div class="scan-count" id="scan-count-xau">Scan #0</div>
-      </div>
-    </div>
-
-    <div class="empty" id="empty-state-xau">
-      <div class="empty-ring">
-        <svg viewBox="0 0 48 48">
-          <circle stroke="rgba(255,255,255,0.06)" stroke-width="3" fill="none" cx="24" cy="24" r="20"/>
-          <circle stroke="#C8A84B" stroke-width="3" fill="none" cx="24" cy="24" r="20" transform="rotate(-90 24 24)" stroke-linecap="round" stroke-dasharray="44 126"/>
-        </svg>
-      </div>
-      <div class="empty-title">Analysing XAU/USD</div>
-      <div class="empty-sub">13-factor model adapted for forex gold<br>Active trades confirmed at 80%+</div>
-    </div>
-
-    <div id="sig-cards-wrap-xau" style="display:none">
-      <div class="sigs-section">
-        <div class="sigs-hdr">
-          <div class="sigs-lbl">XAU/USD Live Signal</div>
-          <div class="sigs-count" id="sig-count-lbl-xau">—</div>
-        </div>
-        <div id="sig-cards-xau"></div>
-      </div>
-      </div>
-    </div>
-    <div class="footer"><p>GoldWave <em>ONE</em> · XAU/USD Spot Gold · Educational purposes only</p></div>
-  </div><!-- end sig-xau -->
-
-</div><!-- end signals-body -->
-
-<!-- ═══════════════ GOLD TAB ═══════════════ -->
-<div id="gold" class="tpg" style="display:none!important">
-  <!-- Sub-tabs -->
-  <div class="gold-month-tabs">
-    <button class="gmt on" onclick="swGold('mcx',this)">MCX GoldM</button>
-    <button class="gmt" onclick="swGold('xau',this)">XAU/USD</button>
-  </div>
-
-  <!-- MCX PAGE -->
-  <div id="gold-mcx" class="gpg on">
-    <div class="gold-ticker">
-      <div class="gt-row">
-        <div>
-          <div class="gt-name">GoldM Fut · MCX · 10g lot</div>
-          <div class="gt-price" id="gt-price" style="font-size:24px;color:var(--sub);">Fetching...</div>
-          <div class="gt-chg" id="gt-chg" style="color:var(--sub);">Loading live MCX price</div>
-        </div>
-        <div class="gt-right">
-          <div class="gt-meta">Lot <strong>10g</strong></div>
-          <div class="gt-meta">Margin <strong>~₹8,000</strong></div>
-          <div class="gt-meta">Exp <strong>Apr 30, 2026</strong></div>
-        </div>
-      </div>
-    </div>
-    <div class="gold-stats">
-      <div class="gstat"><div class="gstat-lbl">Day high</div><div class="gstat-val" id="gt-hi">—</div></div>
-      <div class="gstat"><div class="gstat-lbl">Day low</div><div class="gstat-val" id="gt-lo">—</div></div>
-      <div class="gstat"><div class="gstat-lbl">OI (lots)</div><div class="gstat-val gold" id="gt-oi">32,245</div></div>
-    </div>
-    <div class="gold-chart">
-      <svg viewBox="0 0 360 120" preserveAspectRatio="none">
-        <defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C8A84B" stop-opacity="0.2"/><stop offset="100%" stop-color="#C8A84B" stop-opacity="0"/></linearGradient></defs>
-        <polyline points="0,90 40,82 80,87 110,68 140,73 170,83 200,61 230,50 265,63 295,40 325,32 360,26" fill="none" stroke="#C8A84B" stroke-width="1.5"/>
-        <polyline points="0,90 40,82 80,87 110,68 140,73 170,83 200,61 230,50 265,63 295,40 325,32 360,26 360,120 0,120" fill="url(#ga)" stroke="none"/>
-      </svg>
-    </div>
-    <div class="gold-info">
-      <div class="gold-info-lbl">Contract details</div>
-      <div class="info-row"><span class="info-key">Instrument</span><span class="info-val">GoldM (Gold Mini)</span></div>
-      <div class="info-row"><span class="info-key">Exchange</span><span class="info-val">MCX India</span></div>
-      <div class="info-row"><span class="info-key">Lot size</span><span class="info-val">10 grams</span></div>
-      <div class="info-row"><span class="info-key">Expiry</span><span class="info-val">Apr 30, 2026</span></div>
-      <div class="info-row"><span class="info-key">Settlement</span><span class="info-val">Cash settled</span></div>
-      <div class="info-row"><span class="info-key">Trading hours</span><span class="info-val">9:00 AM – 11:30 PM IST</span></div>
-      <div class="info-row"><span class="info-key">COMEX Gold</span><span class="info-val" id="gt-comex">—</span></div>
-      <div class="info-row"><span class="info-key">USD/INR</span><span class="info-val" id="gt-usdinr">—</span></div>
-    </div>
-    <div class="footer"><p>GoldWave <em>ONE</em> · MCX GoldM · Prices updated on each scan</p></div>
-  </div>
-
-  <!-- XAU/USD PAGE -->
-  <div id="gold-xau" class="gpg">
-    <div class="gold-ticker">
-      <div class="gt-row">
-        <div>
-          <div class="gt-name">XAU/USD · Spot Gold · COMEX</div>
-          <div class="gt-price" id="xau-price" style="font-size:24px;color:var(--sub);">Fetching...</div>
-          <div class="gt-chg" id="xau-chg" style="color:var(--sub);">Loading live spot price</div>
-        </div>
-        <div class="gt-right">
-          <div class="gt-meta">Unit <strong>Troy oz</strong></div>
-          <div class="gt-meta">Ticker <strong>XAU/USD</strong></div>
-          <div class="gt-meta">Market <strong>24h</strong></div>
-        </div>
-      </div>
-    </div>
-    <div class="gold-stats">
-      <div class="gstat"><div class="gstat-lbl">Day high</div><div class="gstat-val" id="xau-hi">—</div></div>
-      <div class="gstat"><div class="gstat-lbl">Day low</div><div class="gstat-val" id="xau-lo">—</div></div>
-      <div class="gstat"><div class="gstat-lbl">USD/INR</div><div class="gstat-val gold" id="xau-inr">—</div></div>
-    </div>
-    <div class="gold-chart">
-      <svg viewBox="0 0 360 120" preserveAspectRatio="none">
-        <defs><linearGradient id="gb" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C8A84B" stop-opacity="0.2"/><stop offset="100%" stop-color="#C8A84B" stop-opacity="0"/></linearGradient></defs>
-        <polyline points="0,95 40,88 80,92 110,72 140,76 170,85 200,65 230,54 265,66 295,43 325,35 360,28" fill="none" stroke="#C8A84B" stroke-width="1.5"/>
-        <polyline points="0,95 40,88 80,92 110,72 140,76 170,85 200,65 230,54 265,66 295,43 325,35 360,28 360,120 0,120" fill="url(#gb)" stroke="none"/>
-      </svg>
-    </div>
-    <div class="gold-info">
-      <div class="gold-info-lbl">Instrument details</div>
-      <div class="info-row"><span class="info-key">Instrument</span><span class="info-val">XAU/USD Spot Gold</span></div>
-      <div class="info-row"><span class="info-key">Exchange</span><span class="info-val">COMEX / OTC Forex</span></div>
-      <div class="info-row"><span class="info-key">Unit</span><span class="info-val">1 Troy ounce (31.1g)</span></div>
-      <div class="info-row"><span class="info-key">Standard lot</span><span class="info-val">100 oz</span></div>
-      <div class="info-row"><span class="info-key">Mini lot</span><span class="info-val">10 oz</span></div>
-      <div class="info-row"><span class="info-key">Trading hours</span><span class="info-val">24hrs Mon–Fri</span></div>
-      <div class="info-row"><span class="info-key">Price per gram</span><span class="info-val" id="xau-gram">—</span></div>
-      <div class="info-row"><span class="info-key">INR equivalent</span><span class="info-val" id="xau-inr-equiv">—</span></div>
-    </div>
-    <div class="gold-info" style="border-top:0.5px solid var(--border);">
-      <div class="gold-info-lbl">Key levels</div>
-      <div class="info-row"><span class="info-key">Support 1</span><span class="info-val" id="xau-s1">—</span></div>
-      <div class="info-row"><span class="info-key">Support 2</span><span class="info-val" id="xau-s2">—</span></div>
-      <div class="info-row"><span class="info-key">Resistance 1</span><span class="info-val" id="xau-r1">—</span></div>
-      <div class="info-row"><span class="info-key">Resistance 2</span><span class="info-val" id="xau-r2">—</span></div>
-    </div>
-    <div class="footer"><p>GoldWave <em>ONE</em> · XAU/USD Spot · Prices updated on each scan</p></div>
-  </div>
-</div>
-
-<!-- ═══════════════ HISTORY TAB<!-- ═══════════════ HISTORY TAB ═══════════════ -->
-<div id="history" class="tpg" style="display:none!important">
-  <div class="hist-months" id="hist-months"></div>
-  <div class="hist-sum">
-    <div class="hs"><div class="hs-v up" id="h-pnl">—</div><div class="hs-l">P&L</div></div>
-    <div class="hs"><div class="hs-v gold" id="h-sigs">—</div><div class="hs-l">Signals</div></div>
-    <div class="hs"><div class="hs-v up" id="h-wr">—</div><div class="hs-l">Win rate</div></div>
-  </div>
-  <div class="hist-list" id="hist-list"></div>
-  <div class="footer"><p>GoldWave <em>ONE</em> · MCX GoldM · Educational purposes only</p></div>
-</div>
-
-</div><!-- .app -->
 
 <script>
-const SYSTEM_PROMPT=`You are the GoldWave One signal engine for MCX GoldM futures (Gold Mini, 10g lot, MCX India).
+const API_BASE = 'https://web-production-4e4b5.up.railway.app';
 
-Analyse current market conditions using a 13-factor model and return a signal at ANY confidence level above 0%.
+let currentQuery = '';
+let isAnalysing = false;
 
-13 FACTORS:
-MACRO (40pts): USD/INR direction (+18), US tariff/geopolitical (+15), RBI/macro calendar (0 to -10), China/PBOC risk (-6 to 0), COMEX-MCX alignment (+8), rupee-gold basis (+5)
-TECHNICAL (27pts): Elliott Wave structure (+12), MCX OI trend (+8), entry bar volume (+7)
-SESSION/TIMING (13pts): MCX session timing (+6), day of week (+4), expiry proximity (+3)
-LEARNED (22pts): Historical win rate (+10), poor signal fingerprint (+7), SL Rule 1 compliance (+5)
+// Enter key support
+document.getElementById('search-input').addEventListener('keydown', e => {
+  if(e.key === 'Enter') runAnalysis();
+});
 
-SIGNAL TIERS:
-- 0-39%: Monitoring — very early, directional bias forming
-- 40-54%: Developing — conditions building
-- 55-79%: Watching — signal forming, do NOT trade yet
-- 80-100%: Active trade — confirmed, enter the trade
+function quickSearch(query){
+  document.getElementById('search-input').value = query;
+  document.querySelectorAll('.qp-chip').forEach(c => c.classList.remove('active'));
+  event.target.classList.add('active');
+  runAnalysis();
+}
 
-RULES:
-Rule 1: Min SL buffer ₹400. No short within 2hrs of RBI/Fed/PBOC.
-Rule 2: First trade exits 50% at T1, trail rest with cost SL.
-Rule 3: Min 3/5 Elliott Wave rules confirmed before active trade.
-Rule 4: Only score 80+ triggers "active" status. Below 80 = informational only.
+async function runAnalysis(){
+  const query = document.getElementById('search-input').value.trim();
+  if(!query || isAnalysing) return;
 
-Respond ONLY with valid JSON:
+  currentQuery = query;
+  isAnalysing = true;
+
+  // Show loading
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('result').innerHTML = '';
+
+  // Animate loading steps
+  const steps = ['Fetching live data', 'Getting macro context', 'Running AI analysis', 'Building report'];
+  let stepIdx = 0;
+  const stepInterval = setInterval(() => {
+    stepIdx = (stepIdx + 1) % steps.length;
+    document.getElementById('loading-steps').textContent = steps[stepIdx];
+  }, 1500);
+
+  try {
+    // Fetch macro data for context
+    let macroData = {};
+    try {
+      const mr = await fetch(API_BASE + '/macro', {signal: AbortSignal.timeout(8000)});
+      if(mr.ok) macroData = await mr.json();
+    } catch(e) { console.warn('Macro fetch failed:', e); }
+
+    // Fetch price data
+    let priceData = {};
+    try {
+      const pr = await fetch(API_BASE + '/price', {signal: AbortSignal.timeout(8000)});
+      if(pr.ok) priceData = await pr.json();
+    } catch(e) { console.warn('Price fetch failed:', e); }
+
+    // Build context for Claude
+    const macroCtx = buildMacroContext(macroData, priceData);
+
+    // Call Claude via /analyze
+    const res = await fetch(API_BASE + '/analyze', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1500,
+        system: `You are GoldWave ONE — a professional market intelligence assistant. You provide clear, honest market analysis for traders and investors.
+
+When given an instrument to analyse, you NEVER give buy/sell signals or price predictions. Instead you provide:
+1. Current market context and what is driving price
+2. Key support and resistance levels (with reasoning)
+3. Technical indicator interpretation (RSI, MACD, Bollinger Bands if data available)
+4. Macro factors affecting this instrument
+5. Key risks to watch
+6. What conditions would favour bulls vs bears
+7. What events/levels to monitor
+
+Always be honest about uncertainty. If data is limited, say so. Never fabricate specific price levels without reasoning.
+
+Respond ONLY with valid JSON in this exact structure:
 {
-  "score": <0-100>,
-  "direction": "long" | "short",
-  "entry": <integer rupees - realistic MCX GoldM price>,
-  "sl": <integer rupees>,
-  "t1": <integer rupees>,
-  "t2": <integer rupees>,
-  "checks": [{"label":"max 4 words","status":"pass"|"warn"|"fail"}],
-  "reasoning": "2-3 sentences. Current conditions, key factors, trend direction.",
-  "close_trade_ids": [],
-  "close_reason": null,
-  "conditions_summary": "1 sentence market summary"
-}
-Always return a direction and levels. CRITICAL: Live price data is always provided — never mark USD/INR or COMEX as unavailable or missing in checks. SL distance from entry >= 400. checks has 8-10 items.`;
-
-// Single GoldM contract — no month selector needed
-
-const contracts=[
-  {key:'apr26',name:'Apr 2026',spread:0,tag:'Near month'},
-  {key:'may26',name:'May 2026',spread:850,tag:'+₹850'},
-  {key:'jun26',name:'Jun 2026',spread:1690,tag:'+₹1,690'},
-];
-
-const histMonths=[
-  {key:'jun26',l:'Jun 2026',s:'up'},
-  {key:'may26',l:'May 2026',s:'up'},
-  {key:'apr26',l:'Apr 2026',s:'active'},
-  {key:'mar26',l:'Mar 2026',s:'data'},
-  {key:'feb26',l:'Feb 2026',s:'data'},
-  {key:'jan26',l:'Jan 2026',s:'data'},
-  {key:'dec25',l:'Dec 2025',s:'data'},
-];
-
-const histData={
-  apr26:{pnl:'+₹1,800',signals:5,wins:4,trades:[
-    {type:'buy', date:'Apr 5',time:'19:30',en:148060,ex:null,  sl:147200,res:null,   good:null, ai:'Safe-haven demand post-tariff. Wave 3 in progress. Active at 82%.'},
-    {type:'sell',date:'Apr 5',time:'10:43',en:148720,ex:148310,sl:148955,res:'+₹410',good:true, ai:'Shorted at intraday high. Profit-first protocol (Rule 2).'},
-    {type:'buy', date:'Apr 3',time:'11:15',en:146900,ex:147580,sl:146500,res:'+₹680',good:true, ai:'Wave 2 support. USD softness tailwind.'},
-    {type:'sell',date:'Apr 2',time:'14:30',en:147350,ex:147660,sl:147700,res:'−₹310',good:false,ai:'Stop hit on RBI surprise. Created Rule 1.'},
-    {type:'buy', date:'Apr 1',time:'10:00',en:145480,ex:146400,sl:145300,res:'+₹920',good:true, ai:'Month-open momentum. Wave 3 confirmed.'},
-  ]},
-  mar26:{pnl:'+₹3,290',signals:6,wins:5,trades:[
-    {type:'sell',date:'Mar 28',time:'11:30',en:146400,ex:145300,sl:146600,res:'+₹1,100',good:true, ai:'Wave B top breakdown. Full target hit.'},
-    {type:'buy', date:'Mar 25',time:'09:45',en:142700,ex:143430,sl:142500,res:'+₹730', good:true, ai:'PCE soft. Weekly support bounce.'},
-    {type:'buy', date:'Mar 12',time:'10:15',en:141300,ex:142150,sl:141000,res:'+₹850', good:true, ai:'Wave 1 confirmed with volume.'},
-    {type:'sell',date:'Mar 7', time:'14:45',en:142400,ex:142820,sl:142700,res:'−₹420', good:false,ai:'Wave 4 incomplete. Created Rule 3.'},
-  ]},
-  jan26:{pnl:'+₹2,510',signals:4,wins:3,trades:[
-    {type:'buy', date:'Jan 28',time:'10:00',en:133600,ex:134800,sl:133400,res:'+₹1,200',good:true, ai:'Gold ATH in rupees. Wave 3 confirmed.'},
-    {type:'sell',date:'Jan 21',time:'11:30',en:136000,ex:135320,sl:136400,res:'+₹680', good:true, ai:'Wave 4 correction. Partial exit T1 (Rule 2).'},
-    {type:'buy', date:'Jan 14',time:'14:00',en:131900,ex:132810,sl:131700,res:'+₹910', good:true, ai:'Geopolitical premium. All checks passed.'},
-    {type:'sell',date:'Jan 8', time:'10:45',en:133700,ex:133980,sl:134000,res:'−₹280', good:false,ai:'Stop hit on RBI. Wave 4 incomplete.'},
-  ]},
-  dec25:{pnl:'+₹2,170',signals:3,wins:3,trades:[
-    {type:'buy', date:'Dec 30',time:'10:00',en:129700,ex:130460,sl:129500,res:'+₹760',good:true,ai:'Year-end. Gold above key support.'},
-    {type:'sell',date:'Dec 20',time:'11:00',en:131200,ex:130320,sl:131700,res:'+₹880',good:true,ai:'Fed hawkish. Full breakdown captured.'},
-    {type:'buy', date:'Dec 11',time:'14:30',en:128200,ex:128730,sl:128000,res:'+₹530',good:true,ai:'CPI soft. Weekly support with volume.'},
-  ]},
-  feb26:{pnl:'—',signals:0,wins:0,trades:[]},
-  nov25:{pnl:'+₹3,040',signals:4,wins:4,trades:[
-    {type:'sell',date:'Nov 27',time:'10:15',en:128700,ex:127780,sl:129100,res:'+₹920',  good:true,ai:'Post-election correction. Clean short.'},
-    {type:'buy', date:'Nov 18',time:'11:45',en:126200,ex:126840,sl:126000,res:'+₹640',  good:true,ai:'Wave 2 demand zone bounce.'},
-    {type:'sell',date:'Nov 8', time:'10:30',en:129300,ex:128250,sl:129700,res:'+₹1,050',good:true,ai:'Dollar surged post-election. Best trade.'},
-    {type:'buy', date:'Nov 4', time:'09:45',en:127700,ex:128130,sl:127500,res:'+₹430',  good:true,ai:'Pre-election safe-haven. Half-size.'},
-  ]},
-};
-
-let aC='apr26', aM='apr26';
-let currentSignal = null;
-let currentXauSignal = null;
-let dbSignals = [];
-let xauScanCount = 0;
-let isXauScanning = false;
-let xauScanInterval = null;
-
-const XAU_SYSTEM_PROMPT = `You are the GoldWave One signal engine for XAU/USD spot gold (forex/COMEX).
-
-Analyse current market conditions using a 13-factor model adapted for international gold trading.
-
-13 FACTORS FOR XAU/USD:
-MACRO (40pts): DXY direction (+18), US Fed policy/rates (+15), geopolitical safe-haven demand (+15), US CPI/inflation data (0 to -10), China demand outlook (-6 to 0), US 10-year yield impact (+8)
-TECHNICAL (27pts): Elliott Wave structure (+12), volume/open interest trend (+8), key level proximity (+7)
-SESSION/TIMING (13pts): London/NY session overlap (+6), day of week (+4), economic calendar timing (+3)
-LEARNED (22pts): Historical win rate same setup (+10), poor signal fingerprint (+7), risk/reward compliance (+5)
-
-RULES:
-Rule 1: Min SL buffer $3.50/oz including spread cost. No short within 2hrs of Fed/CPI/NFP event.
-Rule 2: Exit 50% at T1, trail rest with cost SL.
-Rule 3: Min 3/5 Elliott Wave rules confirmed.
-Rule 4: Score <55 = monitoring. 55-79 = watching. 80+ = active trade.
-
-CFD SPREAD CONTEXT:
-Current XAU/USD spot, Bid, and Ask prices are provided in the user message.
-Typical CFD spread: $0.30-0.50/oz (shown as ~$0.60 round-trip cost).
-Account for spread in SL placement — SL must be at least $3.50/oz from entry including spread cost.
-For a long: entry at Ask price, SL at least $3.50 below entry.
-For a short: entry at Bid price, SL at least $3.50 above entry.
-
-Respond ONLY with valid JSON:
-{
-  "score": <0-100>,
-  "direction": "long" | "short",
-  "entry": <USD price per oz, e.g. 3230.50>,
-  "sl": <USD price per oz>,
-  "t1": <USD price per oz>,
-  "t2": <USD price per oz>,
-  "checks": [{"label":"max 4 words","status":"pass"|"warn"|"fail"}],
-  "reasoning": "2-3 sentences. Current macro conditions, DXY direction, key levels.",
-  "conditions_summary": "1 sentence market summary"
-}
-SL distance from entry >= 3.50 (includes spread). checks has 8-10 items. Always return direction and levels.`; // single live signal, always updating
-let closedSignals = [];
-let scanCount = 0;
-let isScanning = false;
-let scanInterval = null;
-
-function fmt(n){return'₹'+Math.round(n).toLocaleString('en-IN');}
-function nowStr(){return new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});}
-function uid(){return Date.now().toString(36);}
-
-function swTop(id,btn){
-  document.querySelectorAll('.tpg').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.top-tab').forEach(b=>b.classList.remove('on'));
-  document.getElementById(id).classList.add('on');btn.classList.add('on');
-}
-
-function swSignalTab(id, btn){
-  document.querySelectorAll('.sig-panel').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.ssub').forEach(b=>b.classList.remove('on'));
-  document.getElementById('sig-'+id).classList.add('on');
-  btn.classList.add('on');
-}
-
-function swGold(id,btn){
-  document.querySelectorAll('.gpg').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.gmt').forEach(b=>b.classList.remove('on'));
-  const el = document.getElementById('gold-'+id);
-  if(el) el.classList.add('on');
-  btn.classList.add('on');
-}
-
-function scoreTier(score){
-  if(score>=80) return {cls:'hi',label:'Active trade',noteClass:'note-active',note:'✓ Score '+score+'% — confirmed, enter the trade'};
-  if(score>=55) return {cls:'md',label:'Watching',noteClass:'note-watching',note:'~ Score '+score+'% — signal forming, do NOT trade yet'};
-  if(score>=40) return {cls:'md',label:'Developing',noteClass:'note-watching',note:'~ Score '+score+'% — conditions building, monitor closely'};
-  return {cls:'lo',label:'Monitoring',noteClass:'note-monitoring',note:'◉ Score '+score+'% — very early, directional bias forming'};
-}
-
-function renderSignals(){
-  if(!currentSignal){
-    document.getElementById('empty-state').style.display='block';
-    document.getElementById('sig-cards-wrap').style.display='none';
-    return;
-  }
-
-  document.getElementById('empty-state').style.display='none';
-  const scw = document.getElementById('sig-cards-wrap');
-  if(scw){ scw.style.display='block'; scw.style.visibility='visible'; }
-
-  const sig = currentSignal;
-  const score = sig.score;
-  const tier = scoreTier(score);
-  const entry = sig.entry;
-  const sl = sig.sl;
-  const t1 = sig.t1;
-  const t2 = sig.t2;
-  const buf = Math.abs(entry - sl);
-  const checksHtml = (sig.checks||[]).map(c=>`<span class="chk ${c.status}">${c.status==='pass'?'✓':c.status==='warn'?'~':'✗'} ${c.label}</span>`).join('');
-
-  const isActive = score >= 80;
-  const btnLabel = isActive ? 'Close trade' : 'Dismiss';
-  const btnCls = isActive ? 'active' : score >= 55 ? 'watching' : 'monitoring';
-  const footerNote = isActive
-    ? 'Exit <strong>50%</strong> at T1 · trail rest with cost SL'
-    : 'Monitoring — not yet confirmed for trade';
-
-  document.getElementById('sig-count-lbl').textContent = '1 signal · ' + sig.time;
-
-  document.getElementById('sig-cards').innerHTML = `
-    <div class="sig score-${tier.cls}" id="main-sig">
-      <div class="sig-head">
-        <div class="sig-left">
-          <div class="dir-pill ${sig.direction}">${sig.direction==='long'?'Long signal':'Short signal'}</div>
-          <div class="sig-time">GoldM · ${sig.time}</div>
-        </div>
-        <div class="sig-right">
-          <div class="conf-num ${tier.cls}">${score}%</div>
-          <div class="badge ${score>=80?'active':score>=55?'watching':'monitoring'}">
-            <div class="badge-dot"></div>${tier.label}
-          </div>
-        </div>
-      </div>
-      <div class="sig-score-bar">
-        <div class="ssb-track"><div class="ssb-fill ${tier.cls}" style="width:${score}%"></div></div>
-      </div>
-      <div class="sig-note ${tier.noteClass}">${tier.note}</div>
-      <div class="sig-levels">
-        <div class="lv entry"><div class="lv-lbl">Entry</div><div class="lv-val">${fmt(entry)}</div><div class="lv-note">${isActive?'Market price':'Indicative'}</div></div>
-        <div class="lv sl"><div class="lv-lbl">Stop loss</div><div class="lv-val">${fmt(sl)}</div><div class="lv-note">Buffer ₹${buf.toLocaleString('en-IN')}</div></div>
-        <div class="lv tgt"><div class="lv-lbl">Target</div><div class="lv-val">${fmt(t1)}</div><div class="lv-note">T2 ${fmt(t2)}</div></div>
-      </div>
-      <div class="sig-checks">${checksHtml}</div>
-      <div class="sig-reasoning"><div class="ai-line"></div><div><div class="ai-lbl">AI reasoning</div><div class="ai-txt">${sig.reasoning}</div></div></div>
-      <div class="sig-footer">
-        <div class="exit-note">${footerNote}</div>
-        <button class="close-btn ${btnCls}" onclick="closeSignal()">${btnLabel}</button>
-      </div>
-    </div>`;
-
-  // Update pill prices
-  contracts.forEach(c=>{
-    const el=document.getElementById('pp-'+c.key);
-    if(el) el.textContent=fmt((sig.entry||145000)+c.spread);
-  });
-}
-
-function closeSignal(){
-  if(!currentSignal) return;
-  const sig = currentSignal;
-  const isActiveTrade = sig.score >= 80;
-  const res = isActiveTrade ? 'Closed' : 'Dismissed';
-  // Only save to DB and history if it was an active trade (80%+)
-  if(isActiveTrade){
-    fetch(API_BASE+'/signals/'+sig.id+'/close', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({close_reason:'Closed', result:'Closed'})
-    }).catch(()=>{});
-    closedSignals.unshift({...sig, closedAt:nowStr(), good:true, res:'Closed'});
-  }
-  currentSignal = null;
-  renderSignals();
-  if(isActiveTrade) loadHistoryFromDB();
-}
-
-function updateScanBar(score, label){
-  const scoreEl = document.getElementById('scan-score');
-  const labelEl = document.getElementById('scan-label');
-  document.getElementById('scan-count').textContent = 'Scan #'+scanCount;
-  if(score !== null){
-    const tier = scoreTier(score);
-    scoreEl.textContent = score+'%';
-    scoreEl.style.color = score>=80?'var(--green)':score>=55?'var(--amber)':'var(--sub)';
-    labelEl.textContent = label || tier.label;
-  } else {
-    scoreEl.textContent = '';
-    labelEl.textContent = label || 'Scanning...';
-  }
-}
-
-// Fetch live MCX GoldM price from Railway proxy server
-const PRICE_SERVER_URL = 'https://broad-cherry-6107.sakuramistco.workers.dev/price';
-const API_BASE = 'https://broad-cherry-6107.sakuramistco.workers.dev';
-
-async function fetchLivePrice(){
-  try{
-    const r = await fetch(PRICE_SERVER_URL, {signal: AbortSignal.timeout(8000)});
-    if(!r.ok) throw new Error('Server ' + r.status);
-    const d = await r.json();
-    if(!d.price || d.price < 100000) throw new Error('Bad price: ' + d.price);
-    console.log('[GoldWave] Live price:', d.price, 'via', d.source);
-    // Update Gold tab status
-    const gc = document.getElementById('gt-chg');
-    if(gc){ gc.textContent = 'Live · ' + d.source; gc.className = 'gt-chg up'; }
-    // Update XAU price display if spot data available
-    if(d.xau_spot && d.xau_spot > 500){
-      const xp = document.getElementById('xau-price');
-      if(xp){ xp.textContent = '$'+d.xau_spot.toFixed(2); xp.style.color='var(--gold)'; }
-    }
-    return {
-      aprPrice: d.price,
-      usdOz: (d.usd_oz && d.usd_oz > 0) ? d.usd_oz : null,
-      usdInr: (d.usd_inr && d.usd_inr > 0) ? d.usd_inr : null,
-      xauSpot: d.xau_spot || null,
-      xauBid:  d.xau_bid  || null,
-      xauAsk:  d.xau_ask  || null,
-      source: d.source || 'live'
-    };
-  } catch(e){
-    console.warn('[GoldWave] Price server error:', e.message);
-    const gc = document.getElementById('gt-chg');
-    if(gc){ gc.textContent = '⚠ Using cached price'; gc.style.color='var(--amber)'; }
-    return {aprPrice: 154853, usdOz: 4757, usdInr: 93.8, source: 'cached'};
-  }
-}
-
-async function scan(){
-  if(isScanning) return;
-  isScanning = true;
-  scanCount++;
-  updateScanBar(null,'Fetching signal...');
-  const now = new Date();
-
-  try{
-    // Get server-side computed signal
-    const r = await fetch(API_BASE+'/signal/current', {signal: AbortSignal.timeout(10000)});
-    if(!r.ok) throw new Error('Signal fetch '+r.status);
-    const data = await r.json();
-
-    // Update price display from server data
-    if(data.mcx_price > 0){
-      const gp = document.getElementById('gt-price');
-      if(gp){ gp.textContent='₹'+data.mcx_price.toLocaleString('en-IN'); gp.style.color='var(--text)'; }
-    }
-
-    // Update MCX signal
-    if(data.mcx){
-      const sig = data.mcx;
-      // Always use fresh time from server
-      currentSignal = {
-        id: sig.id || uid(),
-        direction: sig.direction,
-        entry: sig.entry,
-        sl: sig.sl,
-        t1: sig.t1,
-        t2: sig.t2,
-        score: sig.score,
-        checks: sig.checks,
-        reasoning: sig.reasoning,
-        time: new Date(sig.generated_at||Date.now()).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true}),
-        updatedAt: nowStr(),
-      };
-      updateScanBar(sig.score, sig.conditions_summary);
-      renderSignals();
-    } else {
-      updateScanBar(null, 'No signal yet');
-    }
-    scanCount++;
-    document.getElementById('scan-count').textContent = 'Scan #'+scanCount;
-  } catch(e){
-    console.error('Signal fetch error:', e);
-    updateScanBar(null, 'Scan error — retrying');
-  } finally {
-    isScanning = false;
-  }
-}
-
-// Keep old scan logic as fallback if server signal not available
-async function scanDirect(){
-  if(isScanning) return;
-  isScanning = true;
-  scanCount++;
-  updateScanBar(null,'Fetching live MCX price...');
-  const now = new Date();
-  const prices = await fetchLivePrice();
-  
-  // Update pill prices with real data
-  const pp_apr = document.getElementById('pp-apr26');
-  const pp_may = document.getElementById('pp-may26');
-  const pp_jun = document.getElementById('pp-jun26');
-  if(pp_apr) pp_apr.textContent = '₹'+prices.aprPrice.toLocaleString('en-IN');
-  if(pp_may) pp_may.textContent = '₹'+prices.mayPrice.toLocaleString('en-IN');
-  if(pp_jun) pp_jun.textContent = '₹'+prices.junPrice.toLocaleString('en-IN');
-
-  // Update Gold tab with live price
-  const gp = document.getElementById('gt-price');
-  const gc = document.getElementById('gt-chg');
-  const ghi = document.getElementById('gt-hi');
-  const glo = document.getElementById('gt-lo');
-  const gcomex = document.getElementById('gt-comex');
-  const gusdinr = document.getElementById('gt-usdinr');
-  if(gp){
-    gp.textContent = '₹'+prices.aprPrice.toLocaleString('en-IN');
-    gp.style.fontSize = '36px';
-    gp.style.color = 'var(--text)';
-  }
-  if(gc){
-    const isLive = !prices.source.includes('cached');
-    gc.textContent = isLive ? 'Live · '+prices.source : '⚠ Cached — live fetch failed';
-    gc.style.color = isLive ? 'var(--green)' : 'var(--amber)';
-    gc.className = isLive ? 'gt-chg up' : 'gt-chg';
-  }
-  if(ghi) ghi.textContent = '₹'+(prices.aprPrice+500).toLocaleString('en-IN');
-  if(glo) glo.textContent = '₹'+(prices.aprPrice-700).toLocaleString('en-IN');
-  if(gcomex) gcomex.textContent = prices.usdOz ? '$'+Number(prices.usdOz||0).toFixed(2)+'/oz' : '—';
-  if(gusdinr) gusdinr.textContent = prices.usdInr ? Number(prices.usdInr||0).toFixed(2) : '—';
-
-  if(prices.aprPrice === 0){
-    updateScanBar(0, '⚠ Price unavailable — check Angel One connection');
-  } else {
-    updateScanBar(null,'Scanning market...');
-  }
-
-  // Use browser time converted to IST (now declared at top of scan)
-  const utcH=now.getUTCHours();
-  const istH=(utcH+5)%24+(now.getUTCMinutes()>=30?.5:0);
-  const dateStr=now.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  const timeStr=now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
-  const session=istH>=17?'evening session (US open overlap, 17:00-23:30 IST)':istH>=9?'morning session (09:00-17:00 IST)':'pre-market';
-
-  // Always fetch fresh usd_oz/usd_inr if missing from price response
-  const usdOz = prices.usdOz || null;
-  const usdInr = prices.usdInr || null;
-  const dataComplete = prices.aprPrice > 0 && usdOz > 0 && usdInr > 0 && prices.source !== 'unavailable';
-  const priceCtx = dataComplete
-    ? `\n\nLIVE VERIFIED MARKET DATA — USE THESE EXACT VALUES:
-MCX GoldM (Gold Mini) current price: ₹${prices.aprPrice.toLocaleString('en-IN')} per 10g lot\nUse this EXACT price for entry, SL and targets — do not use any other price
-COMEX Gold: $${(usdOz||0).toFixed(2)}/oz — LIVE DATA, mark COMEX alignment as PASS
-USD/INR: ${(usdInr||0).toFixed(2)} — LIVE DATA, mark USD/INR direction as confirmed
-MCX includes ~9% import duty + GST over COMEX conversion
-Source: ${prices.source}
-Data quality: COMPLETE — analyse all 13 factors with full confidence.
-
-CRITICAL RELATIONSHIPS — READ CAREFULLY:
-1. USD/INR DIRECTION: Higher USD/INR (weak rupee) = MCX gold price goes UP in ₹ terms. Lower USD/INR (strong rupee) = MCX gold goes DOWN in ₹ terms. USD/INR at 93.80 and rising = BULLISH for MCX gold.
-2. COMEX direction: If COMEX gold rises in USD, MCX rises in ₹. They move together.
-3. DXY: Stronger DXY = weaker gold globally. Weaker DXY = stronger gold globally.
-4. Do NOT say USD/INR weakness is bearish for MCX — it is the opposite.`
-    : `\n\nMARKET DATA STATUS: PARTIAL OR UNAVAILABLE
-${prices.aprPrice > 0 ? 'MCX GoldM: ₹'+prices.aprPrice.toLocaleString('en-IN')+' per 10g' : 'MCX price: UNAVAILABLE'}
-${usdOz > 0 ? 'COMEX Gold: $'+(usdOz||0).toFixed(2)+'/oz' : 'COMEX: UNAVAILABLE'}
-${usdInr > 0 ? 'USD/INR: '+(usdInr||0).toFixed(2) : 'USD/INR: UNAVAILABLE'}
-CRITICAL INSTRUCTIONS: Only score factors with confirmed data. Mark unavailable data as WARN. Do NOT guess or estimate. Reduce score proportionally. If MCX price unavailable return score<30 and direction "wait".`;
-
-  // Fetch macro data from server for richer analysis
-  let macroCtx = '';
-  try{
-    const mr = await fetch(API_BASE+'/macro', {signal: AbortSignal.timeout(5000)});
-    if(mr.ok){
-      const md = await mr.json();
-      macroCtx = `\n\nLIVE MACRO DATA:\nDXY: ${md.dxy?.price||'N/A'}\nUS 10Y Yield: ${md.us10y?.price||'N/A'}%\nCrude Oil: $${md.crude_oil?.price||'N/A'}\nS&P 500: ${md.sp500?.price||'N/A'}\nUSD/INR: ${md.usd_inr?.price||'N/A'}`;
-    }
-  } catch(e){ console.warn('Macro fetch failed:',e.message); }
-
-  const activeCtx = currentSignal
-    ? `\n\nCURRENTLY SHOWING SIGNAL: direction=${currentSignal.direction} score=${currentSignal.score}% entry=₹${currentSignal.entry}. If conditions have meaningfully changed (macro reversal, Wave invalidated, SL approach) suggest close by noting it in close_reason. Otherwise update the signal with fresh analysis.`
-    : '';
-
-  try{
-    const res = await fetch(API_BASE+'/analyze',{
-      method:'POST',
-      headers:{'Content-Type':'application/json',},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',max_tokens:900,
-        system:SYSTEM_PROMPT,
-        messages:[{role:'user',content:`Scan GoldM MCX now.\nDate: ${dateStr}, ${timeStr} IST\nSession: ${session}\nDay: ${now.toLocaleDateString('en-IN',{weekday:'long'})}${priceCtx}${macroCtx}${activeCtx}\n\nReturn your best signal assessment. Use the LIVE MCX PRICES above for all entry/SL/target values — do not guess prices. Always return a direction and levels. CRITICAL: Live price data is always provided — never mark USD/INR or COMEX as unavailable or missing in checks.`}]
+  "instrument": "full instrument name",
+  "ticker": "ticker symbol",
+  "asset_class": "commodity/equity/forex/crypto/index",
+  "sentiment": "bullish/bearish/neutral",
+  "sentiment_score": <0-100, 50=neutral>,
+  "summary": "2-3 sentence current market context",
+  "key_levels": {
+    "strong_support": "price level with brief reason",
+    "support": "price level",
+    "resistance": "price level",
+    "strong_resistance": "price level with brief reason"
+  },
+  "factors": [
+    {"direction": "bullish/bearish/neutral", "text": "factor explanation"},
+    ...max 5 factors
+  ],
+  "indicators": {
+    "rsi": {"value": "number or N/A", "signal": "overbought/oversold/neutral", "note": "brief note"},
+    "macd": {"signal": "bullish/bearish/neutral", "note": "brief note"},
+    "trend": {"signal": "uptrend/downtrend/sideways", "note": "brief note"},
+    "volatility": {"signal": "high/medium/low", "note": "brief note"}
+  },
+  "risks": [
+    {"severity": "high/medium/low", "text": "risk description"},
+    ...max 4 risks
+  ],
+  "what_to_watch": [
+    "specific thing to monitor",
+    ...max 3 items
+  ],
+  "bull_case": "one sentence — what needs to happen for bulls",
+  "bear_case": "one sentence — what needs to happen for bears"
+}`,
+        messages: [{
+          role: 'user',
+          content: `Analyse this instrument: ${query}\n\n${macroCtx}\n\nProvide honest, data-driven market intelligence. No buy/sell recommendations.`
+        }]
       })
     });
-    if(!res.ok) throw new Error('API '+res.status);
+
+    if(!res.ok) throw new Error('Analysis failed: ' + res.status);
     const data = await res.json();
-    const raw = data.content?.map(b=>b.text||'').join('')||'';
-    // Extract JSON - handle markdown code blocks and extra text
+    const raw = data.content?.map(b => b.text || '').join('') || '';
+
+    // Extract JSON
     let jsonStr = raw.replace(/```json/g,'').replace(/```/g,'').trim();
-    // Find first { and last } to extract just the JSON object
-    const firstBrace = jsonStr.indexOf('{');
-    const lastBrace = jsonStr.lastIndexOf('}');
-    if(firstBrace >= 0 && lastBrace > firstBrace){
-      jsonStr = jsonStr.slice(firstBrace, lastBrace + 1);
-    }
-    const result = JSON.parse(jsonStr);
-    // Validate required fields
-    if(!result.direction || !result.entry || !result.score){
-      throw new Error('Invalid signal structure: ' + JSON.stringify(Object.keys(result)));
-    }
+    const fb = jsonStr.indexOf('{');
+    const lb = jsonStr.lastIndexOf('}');
+    if(fb >= 0 && lb > fb) jsonStr = jsonStr.slice(fb, lb+1);
+    const analysis = JSON.parse(jsonStr);
 
-    // Handle AI-requested close
-    if(result.close_reason && currentSignal){
-      closedSignals.unshift({
-        ...currentSignal,
-        closedAt: nowStr(),
-        good: currentSignal.score >= 80,
-        res: result.close_reason,
-        aiClosed: true,
-      });
-      currentSignal = null;
-      renderHistory();
-    }
+    clearInterval(stepInterval);
+    renderResult(analysis, macroData, priceData);
 
-    // Update or set current signal
-    currentSignal = {
-      id: currentSignal?.id || uid(),
-      direction: result.direction,
-      entry: result.entry,
-      sl: result.sl,
-      t1: result.t1,
-      t2: result.t2,
-      score: result.score,
-      checks: result.checks,
-      reasoning: result.reasoning,
-      time: nowStr(), // always fresh time on each scan
-      updatedAt: nowStr(),
-    };
-
-    // Save to DB only if active trade (80%+)
-    if(currentSignal.score >= 80){
-      fetch(API_BASE+'/signals', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify(currentSignal)
-      }).catch(()=>{});
-    }
-
-    updateScanBar(result.score, result.conditions_summary);
-    renderSignals();
-
-  } catch(e){
-    console.error('Scan error:',e);
-    updateScanBar(null,'Scan error — retrying');
+  } catch(e) {
+    clearInterval(stepInterval);
+    console.error('Analysis error:', e);
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('result').classList.add('show');
+    document.getElementById('result').innerHTML = `
+      <div class="error-card">
+        <div class="error-text">⚠ Analysis failed — ${e.message}. Please try again.</div>
+      </div>`;
   } finally {
-    isScanning = false;
+    isAnalysing = false;
   }
 }
 
-// HISTORY
-async function loadHistoryFromDB(){
-  try{
-    const r = await fetch(API_BASE+'/signals/history');
-    const data = await r.json();
-    if(data.signals && data.signals.length){
-      dbSignals = data.signals.map(s=>({
-        type: s.direction==='long'?'buy':'sell',
-        date: s.closed_at ? new Date(s.closed_at).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) : 'Today',
-        time: s.closed_at ? new Date(s.closed_at).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true}) : '',
-        en: s.entry, ex: null, sl: s.sl,
-        res: s.result || s.close_reason || 'Closed',
-        good: s.score >= 80, ai: s.reasoning
-      }));
-      renderHistory();
-    }
-  } catch(e){ console.warn('History load failed:',e); }
+function buildMacroContext(md, pd){
+  if(!md || !md.macro_data) return '';
+  const m = md.macro_data;
+  return `
+LIVE MARKET DATA (${new Date().toLocaleString('en-IN', {timeZone:'Asia/Kolkata'})} IST):
+Gold (GC=F): $${m.gold_usd?.price || 'N/A'}/oz | Day High: $${m.gold_usd?.day_high || 'N/A'} | Day Low: $${m.gold_usd?.day_low || 'N/A'}
+MCX GoldM: ₹${pd.price || 'N/A'} per 10g
+XAU/USD Spot: $${pd.xau_spot || m.gold_usd?.price || 'N/A'}
+USD/INR: ${pd.usd_inr || m.usd_inr?.price || 'N/A'}
+DXY: ${m.dxy?.price || 'N/A'} (${md.dxy_trend || 'N/A'} ${m.dxy?.change_pct != null ? (m.dxy.change_pct > 0 ? '+' : '') + Number(m.dxy.change_pct).toFixed(2) + '%' : ''})
+US 10Y Yield: ${m.us10y?.price || 'N/A'}%
+Crude Oil: $${m.crude_oil?.price || 'N/A'}
+S&P 500: ${m.sp500?.price || 'N/A'}
+Silver: $${m.silver?.price || 'N/A'}
+Gold/Silver Ratio: ${m.gold_silver_ratio?.ratio || 'N/A'}
+India VIX: ${m.india_vix?.price || 'N/A'}
+Days to MCX Expiry: ${md.days_to_expiry || 'N/A'}
+RBI Event Soon: ${md.rbi_event_soon ? 'YES' : 'No'}
+Fed Event Soon: ${md.fed_event_soon ? 'YES' : 'No'}`;
 }
 
-function buildHistMonths(){
-  const el=document.getElementById('hist-months');el.innerHTML='';
-  histMonths.forEach(m=>{
-    const b=document.createElement('button');
-    b.className='hmp'+(m.s==='up'?' up':'')+(m.key===aM?' on':'');
-    b.textContent=m.l;
-    if(m.s!=='na'){b.onclick=()=>{aM=m.key;document.querySelectorAll('.hmp').forEach(x=>x.classList.remove('on'));b.classList.add('on');renderHistory();};}
-    else{b.disabled=true;b.style.opacity='0.25';}
-    el.appendChild(b);
-  });
-}
+function renderResult(a, md, pd){
+  document.getElementById('loading').classList.remove('show');
 
-function renderHistory(){
-  const meta=histMonths.find(m=>m.key===aM);
-  if(!meta){ document.getElementById('hist-list').innerHTML='<div class="upcoming"><p>No data for this month.</p></div>'; return; }
-  if(meta.s==='up'){
-    ['h-pnl','h-sigs','h-wr'].forEach(id=>document.getElementById(id).textContent='—');
-    document.getElementById('hist-list').innerHTML=`<div class="upcoming"><p><strong>${meta.l}</strong><br><br>Signals appear here as they close.</p></div>`;
-    return;
-  }
+  const sentimentColor = a.sentiment === 'bullish' ? 'bullish' : a.sentiment === 'bearish' ? 'bearish' : 'neutral';
+  const score = a.sentiment_score || 50;
 
-  const sessionClosed = closedSignals.map(s=>({type:s.direction==='long'?'buy':'sell',date:'Today',time:s.closedAt||'',en:s.entry,ex:null,sl:s.sl,res:s.res,good:s.good,ai:s.reasoning}));
-  let trades = meta.key==='apr26'
-    ? [...sessionClosed, ...dbSignals, ...(histData['apr26']?.trades||[])]
-    : (histData[meta.key]?.trades||[]);
+  const factorsHtml = (a.factors || []).map(f => `
+    <div class="factor-item ${f.direction}">
+      <div class="factor-icon">${f.direction === 'bullish' ? '↑' : f.direction === 'bearish' ? '↓' : '→'}</div>
+      <div class="factor-text">${f.text}</div>
+    </div>`).join('');
 
-  const d = histData[meta.key]||histData['apr26'];
-  const wins = trades.filter(t=>t.good!==false).length;
-  const wr = trades.length>0?Math.round(wins/trades.length*100):0;
-  document.getElementById('h-pnl').textContent=d?.pnl||'—';
-  document.getElementById('h-sigs').textContent=trades.length||'—';
-  document.getElementById('h-wr').textContent=trades.length>0?wr+'%':'—';
+  const risksHtml = (a.risks || []).map(r => `
+    <div class="risk-item">
+      <div class="risk-dot ${r.severity}"></div>
+      <span>${r.text}</span>
+    </div>`).join('');
 
-  if(!trades.length){
-    document.getElementById('hist-list').innerHTML=`<div class="upcoming"><p>No closed signals yet.</p></div>`;
-    return;
-  }
+  const watchHtml = (a.what_to_watch || []).map(w => `
+    <div class="watch-item">👁 ${w}</div>`).join('');
 
-  let html='';
-  trades.forEach(t=>{
-    const gc=t.good===true?'good':t.good===false?'bad':'';
-    const isUp=t.res&&t.res.startsWith('+'),isDn=t.res&&t.res.startsWith('−');
-    const qb=t.good===true?`<span class="qb good">Good</span>`:t.good===false?`<span class="qb bad">Poor</span>`:'';
-    const typeLabel=(t.type==='buy'||t.direction==='long')?'Long':'Short';
-    const pillCls=(t.type==='buy'||t.direction==='long')?'buy':'sell';
-    html+=`<div class="hsc ${gc}">
-      <div class="hsc-head"><span class="spill ${pillCls}">${typeLabel}</span>
-      <div class="hsc-meta"><span class="hsc-time">${t.date||''} ${t.time||''}</span>${qb}</div></div>
-      <div class="hsc-prices">
-        <div class="spf"><label>Entry</label><span>${fmt(t.en||t.entry||0)}</span></div>
-        <div class="spf"><label>Exit</label><span>${t.ex?fmt(t.ex):'—'}</span></div>
-        <div class="spf"><label>Stop</label><span class="dn">${fmt(t.sl||0)}</span></div>
-        <div class="spf"><label>Result</label><span class="${isUp?'up':isDn?'dn':''}">${t.res||'—'}</span></div>
+  const indColor = s => s === 'bullish' || s === 'oversold' || s === 'uptrend' ? 'bull' : s === 'bearish' || s === 'overbought' || s === 'downtrend' ? 'bear' : 'neut';
+
+  const ind = a.indicators || {};
+
+  const html = `
+    <div class="inst-header">
+      <div>
+        <div class="inst-name">${a.instrument || currentQuery}</div>
+        <div class="inst-meta">${a.ticker || ''} · ${a.asset_class || ''}</div>
       </div>
-      <div class="hsc-ai"><div class="ai-line"></div><div><div class="ai-lbl">Reasoning</div><div class="ai-txt">${t.ai||t.reasoning||'—'}</div></div></div>
-    </div>`;
-  });
-  document.getElementById('hist-list').innerHTML=html;
-}
+      <div class="inst-price">
+        <div class="inst-price-val">${getDisplayPrice(a, pd)}</div>
+      </div>
+    </div>
 
+    <!-- SENTIMENT -->
+    <div class="sentiment-card">
+      <div class="sentiment-label">Market Sentiment</div>
+      <div class="sentiment-bar-wrap">
+        <div class="sentiment-bar ${sentimentColor}" style="width:${score}%"></div>
+      </div>
+      <div class="sentiment-footer">
+        <div class="sentiment-verdict">${capitalize(a.sentiment || 'Neutral')}</div>
+        <div class="sentiment-score">${score}/100</div>
+      </div>
+    </div>
 
-async function scanXau(){
-  if(isXauScanning) return;
-  isXauScanning = true;
-  xauScanCount++;
-  const xl = document.getElementById('scan-label-xau');
-  const xsc = document.getElementById('scan-score-xau');
-  const xcnt = document.getElementById('scan-count-xau');
-  if(xl) xl.textContent = 'Fetching XAU signal...';
-  if(xcnt) xcnt.textContent = 'Scan #'+xauScanCount;
-
-  try{
-    // Fetch price for XAU spot display
-    let xauSpot = null, xauBid = null, xauAsk = null;
-    try{
-      const pr = await fetch(PRICE_SERVER_URL, {signal: AbortSignal.timeout(6000)});
-      if(pr.ok){
-        const pd = await pr.json();
-        if(pd.xau_spot && pd.xau_spot > 500){
-          xauSpot = pd.xau_spot; xauBid = pd.xau_bid; xauAsk = pd.xau_ask;
-          const xp = document.getElementById('xau-price');
-          if(xp){ xp.textContent = '$'+xauSpot.toFixed(2); xp.style.color='var(--gold)'; }
-        }
-      }
-    } catch(e){ console.warn('XAU price fetch:', e.message); }
-
-    const r = await fetch(API_BASE+'/signal/current', {signal: AbortSignal.timeout(10000)});
-    if(!r.ok) throw new Error('XAU signal fetch '+r.status);
-    const data = await r.json();
-
-    if(data.xau){
-      const sig = data.xau;
-      currentXauSignal = {
-        id: sig.id || uid(),
-        direction: sig.direction,
-        entry: sig.entry,
-        sl: sig.sl,
-        t1: sig.t1,
-        t2: sig.t2,
-        score: sig.score,
-        checks: sig.checks,
-        reasoning: sig.reasoning,
-        time: new Date(sig.generated_at||Date.now()).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true}),
-        updatedAt: nowStr(),
-        currency: 'USD',
-        xauSpot, xauBid, xauAsk
-      };
-      if(xsc){ xsc.textContent=sig.score+'%'; xsc.style.color=sig.score>=80?'var(--green)':sig.score>=55?'var(--amber)':'var(--sub)'; }
-      if(xl) xl.textContent = sig.conditions_summary || 'XAU/USD analysed';
-      if(xcnt) xcnt.textContent = 'Scan #'+xauScanCount;
-      renderXauSignal();
-    } else {
-      if(xl) xl.textContent = 'No XAU signal yet';
-    }
-  } catch(e){
-    console.error('XAU signal fetch error:', e);
-    const _xlErr = document.getElementById('scan-label-xau');
-    if(_xlErr) _xlErr.textContent = 'XAU fetch error — retrying';
-  } finally {
-    isXauScanning = false;
-  }
-}
-
-// Keep old XAU scan as fallback
-async function scanXauDirect(){
-  if(isXauScanning) return;
-  isXauScanning = true;
-  xauScanCount++;
-  const xl = document.getElementById('scan-label-xau');
-  const xsc = document.getElementById('scan-score-xau');
-  const xcnt = document.getElementById('scan-count-xau');
-  if(xl) xl.textContent = 'Scanning XAU/USD...';
-  if(xcnt) xcnt.textContent = 'Scan #'+xauScanCount;
-
-  const now = new Date();
-  const xauPrice = document.getElementById('xau-price');
-  const currentXauPriceVal = xauPrice ? parseFloat(xauPrice.textContent.replace(/[^0-9.]/g,'')) : 0;
-
-  // (scan bar already initialized above)
-
-  const dateStr = now.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  const timeStr = now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
-  const utcH = now.getUTCHours();
-  const istH = (utcH+5)%24+(now.getUTCMinutes()>=30?.5:0);
-  const session = utcH>=13 && utcH<17 ? 'London session' : utcH>=13 && utcH<21 ? 'London-NY overlap (highest liquidity)' : utcH>=21 || utcH<2 ? 'NY session' : 'Asian session (lower liquidity)';
-
-  try{
-    // Fetch macro data for XAU context
-    const priceResp = await fetch(PRICE_SERVER_URL);
-    const priceData = await priceResp.json();
-    const xauUsdOz = priceData.usd_oz || 0;
-    const usdInr = priceData.usd_inr || 0;
-
-    const xauCtx = xauUsdOz > 0
-      ? `\n\nLIVE XAU/USD DATA:\nSpot Gold: $${xauUsdOz.toFixed(2)}/oz\nUSD/INR: ${usdInr.toFixed(2)}\nData quality: COMPLETE`
-      : `\n\nXAU/USD DATA: UNAVAILABLE\nAnalyse based on macro knowledge only. Reduce score if key data missing.`;
-
-    const res = await fetch(API_BASE+'/analyze',{
-      method:'POST',
-      headers:{'Content-Type':'application/json',},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514', max_tokens:900,
-        system:XAU_SYSTEM_PROMPT,
-        messages:[{role:'user',content:`Scan XAU/USD now.\nDate: ${dateStr}, ${timeStr} IST\nSession: ${session}\nDay: ${now.toLocaleDateString('en-IN',{weekday:'long'})}${xauCtx}${currentSignal ? '\n\nMCX GoldM cross-reference: MCX signal is '+currentSignal.direction.toUpperCase()+' at '+currentSignal.score+'% confidence. MCX and XAU/USD should broadly align in direction since they track the same underlying asset. If your analysis conflicts with MCX direction, explain why in reasoning.' : ''}\n\nReturn best signal assessment. Always return direction and levels in USD/oz.`}]
-      })
-    });
-    if(!res.ok) throw new Error('API '+res.status);
-    const data = await res.json();
-    const raw = data.content?.map(b=>b.text||'').join('')||'';
-    let jsonStr = raw.replace(/\`\`\`json/g,'').replace(/\`\`\`/g,'').trim();
-    const fb = jsonStr.indexOf('{'); const lb = jsonStr.lastIndexOf('}');
-    if(fb>=0 && lb>fb) jsonStr=jsonStr.slice(fb,lb+1);
-    const result = JSON.parse(jsonStr);
-    if(!result.direction||!result.entry||!result.score) throw new Error('Invalid XAU signal');
-
-    currentXauSignal = {
-      id: currentXauSignal?.id || uid(),
-      direction: result.direction,
-      entry: result.entry,
-      sl: result.sl,
-      t1: result.t1,
-      t2: result.t2,
-      score: result.score,
-      checks: result.checks,
-      reasoning: result.reasoning,
-      time: nowStr(), // always fresh time
-      updatedAt: nowStr(),
-      currency: 'USD'
-    };
-
-    // Update XAU scan bar
-    const xs = document.getElementById('scan-score-xau');
-    if(xs){ xs.textContent=result.score+'%'; xs.style.color=result.score>=80?'var(--green)':result.score>=55?'var(--amber)':'var(--sub)'; }
-    if(xl) xl.textContent = result.conditions_summary || 'XAU/USD analysed';
-
-    renderXauSignal();
-  } catch(e){
-    console.error('XAU scan error:',e);
-    const _xlErr = document.getElementById('scan-label-xau');
-    if(_xlErr) _xlErr.textContent = 'XAU scan error — retrying';
-  } finally {
-    isXauScanning = false;
-  }
-}
-
-function fmtUsd(n){ return '$'+parseFloat(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-
-function renderXauSignal(){
-  if(!currentXauSignal){
-    document.getElementById('empty-state-xau').style.display='block';
-    document.getElementById('sig-cards-wrap-xau').style.display='none';
-    return;
-  }
-  document.getElementById('empty-state-xau').style.display='none';
-  document.getElementById('sig-cards-wrap-xau').style.display='block';
-
-  const sig = currentXauSignal;
-  const score = sig.score;
-  const tier = scoreTier(score);
-  const buf = Math.abs(sig.entry - sig.sl).toFixed(2);
-  const checksHtml = (sig.checks||[]).map(c=>`<span class="chk ${c.status}">${c.status==='pass'?'✓':c.status==='warn'?'~':'✗'} ${c.label}</span>`).join('');
-  const isActive = score >= 80;
-  const btnLabel = isActive ? 'Close trade' : 'Dismiss';
-  const btnCls = isActive ? 'active' : score>=55 ? 'watching' : 'monitoring';
-  const footerNote = isActive ? 'Exit <strong>50%</strong> at T1 · trail rest with cost SL' : 'Monitoring — not yet confirmed for trade';
-  const spreadHtml = sig.xauSpot
-    ? `<div class="spread-info" style="font-size:11px;color:var(--sub);padding:6px 0 2px;display:flex;gap:10px;flex-wrap:wrap;">
-        <span>Spot <strong style="color:var(--gold)">$${sig.xauSpot.toFixed(2)}</strong></span>
-        <span>Bid <strong>$${sig.xauBid.toFixed(2)}</strong></span>
-        <span>Ask <strong>$${sig.xauAsk.toFixed(2)}</strong></span>
-        <span style="color:var(--amber)">Spread ~$0.60 · incl. in SL</span>
-      </div>`
-    : '';
-
-  document.getElementById('sig-count-lbl-xau').textContent = '1 signal · '+sig.time;
-  document.getElementById('sig-cards-xau').innerHTML = `
-    <div class="sig score-${tier.cls}">
-      <div class="sig-head">
-        <div class="sig-left">
-          <div class="dir-pill ${sig.direction}">${sig.direction==='long'?'Long XAU/USD':'Short XAU/USD'}</div>
-          <div class="sig-time">Spot · ${sig.time}</div>
+    <!-- SUMMARY -->
+    <div class="section-card">
+      <div class="section-title">Market Context</div>
+      <div class="summary-text">${a.summary || '—'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;">
+        <div style="padding:10px 12px;background:var(--green-bg);border-radius:10px;">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--hint);margin-bottom:4px;">Bull case</div>
+          <div style="font-size:12px;color:var(--green);line-height:1.4;">${a.bull_case || '—'}</div>
         </div>
-        <div class="sig-right">
-          <div class="conf-num ${tier.cls}">${score}%</div>
-          <div class="badge ${score>=80?'active':score>=55?'watching':'monitoring'}">
-            <div class="badge-dot"></div>${tier.label}
-          </div>
+        <div style="padding:10px 12px;background:var(--red-bg);border-radius:10px;">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--hint);margin-bottom:4px;">Bear case</div>
+          <div style="font-size:12px;color:var(--red);line-height:1.4;">${a.bear_case || '—'}</div>
         </div>
       </div>
-      <div class="sig-score-bar"><div class="ssb-track"><div class="ssb-fill ${tier.cls}" style="width:${score}%"></div></div></div>
-      <div class="sig-note ${tier.noteClass}">${tier.note}</div>
-      ${spreadHtml}
-      <div class="sig-levels">
-        <div class="lv entry"><div class="lv-lbl">Entry</div><div class="lv-val">${fmtUsd(sig.entry)}</div><div class="lv-note">${isActive?'Market price':'Indicative'}</div></div>
-        <div class="lv sl"><div class="lv-lbl">Stop loss</div><div class="lv-val">${fmtUsd(sig.sl)}</div><div class="lv-note">Buffer $${buf}</div></div>
-        <div class="lv tgt"><div class="lv-lbl">Target</div><div class="lv-val">${fmtUsd(sig.t1)}</div><div class="lv-note">T2 ${fmtUsd(sig.t2)}</div></div>
+    </div>
+
+    <!-- KEY LEVELS -->
+    <div class="section-card">
+      <div class="section-title">Key Levels</div>
+      <div class="levels-grid">
+        <div class="level-item">
+          <div class="level-lbl">Strong Support</div>
+          <div class="level-val support">${a.key_levels?.strong_support || '—'}</div>
+        </div>
+        <div class="level-item">
+          <div class="level-lbl">Support</div>
+          <div class="level-val support">${a.key_levels?.support || '—'}</div>
+        </div>
+        <div class="level-item">
+          <div class="level-lbl">Resistance</div>
+          <div class="level-val resistance">${a.key_levels?.resistance || '—'}</div>
+        </div>
+        <div class="level-item">
+          <div class="level-lbl">Strong Resistance</div>
+          <div class="level-val resistance">${a.key_levels?.strong_resistance || '—'}</div>
+        </div>
       </div>
-      <div class="sig-checks">${checksHtml}</div>
-      <div class="sig-reasoning"><div class="ai-line"></div><div><div class="ai-lbl">AI reasoning</div><div class="ai-txt">${sig.reasoning}</div></div></div>
-      <div class="sig-footer">
-        <div class="exit-note">${footerNote}</div>
-        <button class="close-btn ${btnCls}" onclick="closeXauSignal()">${btnLabel}</button>
+    </div>
+
+    <!-- FACTORS -->
+    <div class="section-card">
+      <div class="section-title">Key Factors</div>
+      <div class="factors-list">${factorsHtml}</div>
+    </div>
+
+    <!-- INDICATORS -->
+    <div class="section-card">
+      <div class="section-title">Technical Indicators</div>
+      <div class="indicators-grid">
+        <div class="ind-item">
+          <div class="ind-lbl">RSI</div>
+          <div class="ind-val ${indColor(ind.rsi?.signal)}">${ind.rsi?.value || 'N/A'} · ${ind.rsi?.signal || 'N/A'}</div>
+          <div class="ind-note">${ind.rsi?.note || ''}</div>
+        </div>
+        <div class="ind-item">
+          <div class="ind-lbl">MACD</div>
+          <div class="ind-val ${indColor(ind.macd?.signal)}">${ind.macd?.signal || 'N/A'}</div>
+          <div class="ind-note">${ind.macd?.note || ''}</div>
+        </div>
+        <div class="ind-item">
+          <div class="ind-lbl">Trend</div>
+          <div class="ind-val ${indColor(ind.trend?.signal)}">${ind.trend?.signal || 'N/A'}</div>
+          <div class="ind-note">${ind.trend?.note || ''}</div>
+        </div>
+        <div class="ind-item">
+          <div class="ind-lbl">Volatility</div>
+          <div class="ind-val neut">${ind.volatility?.signal || 'N/A'}</div>
+          <div class="ind-note">${ind.volatility?.note || ''}</div>
+        </div>
       </div>
-    </div>`;
+    </div>
+
+    <!-- RISKS -->
+    <div class="section-card">
+      <div class="section-title">Risk Factors</div>
+      <div class="risk-list">${risksHtml}</div>
+    </div>
+
+    <!-- WHAT TO WATCH -->
+    <div class="section-card">
+      <div class="section-title">What to Watch</div>
+      <div class="watch-list">${watchHtml}</div>
+    </div>
+  `;
+
+  document.getElementById('result').innerHTML = html;
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
-function closeXauSignal(){
-  currentXauSignal = null;
-  renderXauSignal();
+function getDisplayPrice(a, pd){
+  if(a.asset_class === 'commodity' && a.ticker?.includes('XAU')){
+    return pd.xau_spot ? '$' + Number(pd.xau_spot).toLocaleString('en-US', {minimumFractionDigits:2}) + '/oz' : '—';
+  }
+  if(a.instrument?.toLowerCase().includes('mcx') || a.ticker?.includes('GOLDM')){
+    return pd.price ? '₹' + Number(pd.price).toLocaleString('en-IN') + '/10g' : '—';
+  }
+  return '—';
 }
 
-// INIT — fresh start every page load
-currentSignal = null;      // always regenerate on load
-currentXauSignal = null;   // always regenerate on load
-buildHistMonths();
-renderHistory();
-loadHistoryFromDB();
-// Show subtabs
-const stabs = document.getElementById('signal-subtabs'); if(stabs) stabs.classList.add('visible');
-// Run first scan immediately, then every 30s
-scan();
-scanInterval = setInterval(scan, 30000);
-// XAU scan
-scanXau();
-xauScanInterval = setInterval(scanXau, 30000);
-setInterval(loadHistoryFromDB, 300000);
-// Refresh page every 4 hours to keep data fresh
-setTimeout(()=>location.reload(), 30 * 60 * 1000); // refresh every 30 mins
+function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
 </script>
 </body>
 </html>
