@@ -3,576 +3,584 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>GoldWave ONE · Market Intelligence</title>
+<title>GoldWave ONE · Gold Intelligence</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --cream:#FAF7F2;
-  --warm:#F2EDE4;
-  --border:#E8E0D0;
-  --text:#1A1612;
-  --sub:#6B6158;
-  --hint:#A09488;
-  --gold:#B8860B;
-  --gold-light:#D4A017;
-  --gold-bg:rgba(184,134,11,0.08);
-  --green:#1A7A4A;
-  --green-bg:rgba(26,122,74,0.08);
-  --red:#C0392B;
-  --red-bg:rgba(192,57,43,0.08);
-  --amber:#B8600B;
-  --amber-bg:rgba(184,96,11,0.08);
-  --blue:#1A4A7A;
-  --blue-bg:rgba(26,74,122,0.08);
-  --card:#FFFFFF;
-  --shadow:0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
-  --shadow-lg:0 4px 24px rgba(0,0,0,0.10);
-  --radius:16px;
-  --mono:'DM Mono', monospace;
-  --serif:'DM Serif Display', serif;
-  --sans:'DM Sans', sans-serif;
+  --cream:#FAF7F2;--warm:#F2EDE4;--border:#E8E0D0;--text:#1A1612;--sub:#6B6158;--hint:#A09488;
+  --gold:#B8860B;--gold-light:#D4A017;--gold-bg:rgba(184,134,11,0.08);
+  --green:#1A7A4A;--green-bg:rgba(26,122,74,0.08);
+  --red:#C0392B;--red-bg:rgba(192,57,43,0.08);
+  --amber:#B8600B;--amber-bg:rgba(184,96,11,0.08);
+  --blue:#1A4A7A;--blue-bg:rgba(26,74,122,0.08);
+  --card:#FFFFFF;--shadow:0 1px 3px rgba(0,0,0,0.06),0 4px 16px rgba(0,0,0,0.04);
+  --radius:16px;--mono:'DM Mono',monospace;--serif:'DM Serif Display',serif;--sans:'DM Sans',sans-serif;
 }
 html,body{height:100%;background:var(--cream);color:var(--text);font-family:var(--sans);}
-
-/* ── LAYOUT ── */
 .app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;}
 
-/* ── HEADER ── */
+/* HEADER */
 .header{padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between;}
 .logo{display:flex;align-items:center;gap:10px;}
 .logo-icon{width:36px;height:36px;background:var(--text);border-radius:10px;display:flex;align-items:center;justify-content:center;}
-.logo-icon svg{width:20px;height:20px;fill:var(--cream);}
-.logo-name{font-family:var(--serif);font-size:20px;color:var(--text);letter-spacing:-0.3px;}
+.logo-icon svg{width:20px;height:20px;stroke:var(--cream);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.logo-name{font-family:var(--serif);font-size:20px;color:var(--text);}
 .logo-name span{color:var(--gold);}
 .logo-badge{font-family:var(--mono);font-size:9px;color:var(--hint);letter-spacing:0.1em;margin-left:2px;vertical-align:super;}
-.status-pill{display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--card);border:1px solid var(--border);border-radius:20px;font-family:var(--mono);font-size:11px;color:var(--sub);}
-.status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+.live-pill{display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--card);border:1px solid var(--border);border-radius:20px;font-family:var(--mono);font-size:11px;color:var(--sub);}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
 
-/* ── HERO SEARCH ── */
-.hero{padding:32px 20px 20px;}
-.hero-title{font-family:var(--serif);font-size:28px;line-height:1.2;color:var(--text);margin-bottom:6px;}
-.hero-title em{color:var(--gold);font-style:italic;}
-.hero-sub{font-size:13px;color:var(--sub);margin-bottom:24px;line-height:1.5;}
+/* TABS */
+.tabs{display:flex;margin:24px 20px 0;background:var(--warm);border-radius:12px;padding:4px;gap:4px;}
+.tab{flex:1;padding:10px;text-align:center;font-family:var(--mono);font-size:12px;font-weight:500;color:var(--hint);border-radius:8px;cursor:pointer;transition:all 0.2s;border:none;background:none;}
+.tab.on{background:var(--card);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,0.08);}
 
-.search-wrap{position:relative;}
-.search-input{width:100%;padding:16px 50px 16px 18px;border:1.5px solid var(--border);border-radius:14px;font-size:15px;font-family:var(--sans);background:var(--card);color:var(--text);outline:none;transition:border-color 0.2s,box-shadow 0.2s;box-shadow:var(--shadow);}
-.search-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-bg);}
-.search-input::placeholder{color:var(--hint);}
-.search-btn{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:36px;height:36px;background:var(--text);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
-.search-btn:hover{background:var(--gold);}
-.search-btn svg{width:16px;height:16px;fill:var(--cream);}
+/* PRICE BANNER */
+.price-banner{margin:16px 20px 0;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);}
+.pb-row{display:flex;align-items:flex-start;justify-content:space-between;}
+.pb-name{font-size:13px;color:var(--hint);font-family:var(--mono);margin-bottom:4px;}
+.pb-price{font-family:var(--mono);font-size:26px;font-weight:500;color:var(--text);}
+.pb-right{text-align:right;}
+.pb-meta{font-family:var(--mono);font-size:11px;color:var(--hint);}
+.pb-source{font-family:var(--mono);font-size:10px;color:var(--green);margin-top:2px;}
+.pb-stats{display:flex;gap:16px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.pb-stat{flex:1;}
+.pb-stat-lbl{font-family:var(--mono);font-size:10px;color:var(--hint);margin-bottom:2px;}
+.pb-stat-val{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--text);}
 
-/* ── QUICK PICKS ── */
-.quick-picks{padding:0 20px 24px;}
-.qp-label{font-family:var(--mono);font-size:10px;color:var(--hint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;}
-.qp-chips{display:flex;gap:8px;flex-wrap:wrap;}
-.qp-chip{padding:7px 14px;background:var(--card);border:1px solid var(--border);border-radius:20px;font-size:12px;font-family:var(--mono);color:var(--sub);cursor:pointer;transition:all 0.15s;white-space:nowrap;}
-.qp-chip:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-bg);}
-.qp-chip.active{border-color:var(--gold);color:var(--gold);background:var(--gold-bg);}
+/* ANALYSE BUTTON */
+.analyse-wrap{padding:16px 20px 0;}
+.analyse-btn{width:100%;padding:14px;background:var(--text);color:var(--cream);border:none;border-radius:12px;font-family:var(--mono);font-size:13px;font-weight:500;cursor:pointer;transition:background 0.2s;letter-spacing:0.02em;}
+.analyse-btn:hover{background:var(--gold);}
+.analyse-btn:disabled{background:var(--hint);cursor:not-allowed;}
+.last-scan{text-align:center;font-family:var(--mono);font-size:10px;color:var(--hint);margin-top:8px;}
 
-/* ── LOADING ── */
-.loading{padding:40px 20px;text-align:center;display:none;}
+/* LOADING */
+.loading{padding:32px 20px;text-align:center;display:none;}
 .loading.show{display:block;}
-.loading-ring{width:48px;height:48px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;}
+.loading-ring{width:40px;height:40px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.loading-text{font-family:var(--mono);font-size:12px;color:var(--hint);}
-.loading-steps{margin-top:8px;font-size:11px;color:var(--hint);}
+.loading-text{font-family:var(--mono);font-size:11px;color:var(--hint);}
 
-/* ── RESULT CARD ── */
-.result{padding:0 20px 40px;display:none;}
+/* RESULT */
+.result{padding:16px 20px 40px;display:none;}
 .result.show{display:block;}
 
-.inst-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;}
-.inst-name{font-family:var(--serif);font-size:24px;color:var(--text);}
-.inst-meta{font-size:12px;color:var(--hint);font-family:var(--mono);margin-top:2px;}
-.inst-price{text-align:right;}
-.inst-price-val{font-family:var(--mono);font-size:20px;font-weight:500;color:var(--text);}
-.inst-price-chg{font-family:var(--mono);font-size:11px;margin-top:2px;}
-.inst-price-chg.up{color:var(--green);}
-.inst-price-chg.dn{color:var(--red);}
+/* SENTIMENT */
+.sentiment-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow);}
+.section-lbl{font-family:var(--mono);font-size:10px;color:var(--hint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;}
+.sent-bar-wrap{height:6px;background:var(--warm);border-radius:3px;overflow:hidden;margin-bottom:8px;}
+.sent-bar{height:100%;border-radius:3px;transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1);}
+.sent-bar.bullish{background:linear-gradient(90deg,var(--green),#2ECC71);}
+.sent-bar.bearish{background:linear-gradient(90deg,var(--red),#E74C3C);}
+.sent-bar.neutral{background:linear-gradient(90deg,var(--amber),#F39C12);}
+.sent-row{display:flex;justify-content:space-between;align-items:center;}
+.sent-verdict{font-family:var(--serif);font-size:20px;}
+.sent-score{font-family:var(--mono);font-size:12px;color:var(--hint);}
 
-/* Sentiment meter */
-.sentiment-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:12px;box-shadow:var(--shadow);}
-.sentiment-label{font-family:var(--mono);font-size:10px;color:var(--hint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;}
-.sentiment-bar-wrap{height:8px;background:var(--warm);border-radius:4px;overflow:hidden;margin-bottom:8px;}
-.sentiment-bar{height:100%;border-radius:4px;transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1);}
-.sentiment-bar.bullish{background:linear-gradient(90deg,var(--green),#2ECC71);}
-.sentiment-bar.bearish{background:linear-gradient(90deg,var(--red),#E74C3C);}
-.sentiment-bar.neutral{background:linear-gradient(90deg,var(--amber),#F39C12);}
-.sentiment-footer{display:flex;justify-content:space-between;align-items:center;}
-.sentiment-verdict{font-family:var(--serif);font-size:18px;color:var(--text);}
-.sentiment-score{font-family:var(--mono);font-size:12px;color:var(--hint);}
+/* SECTION CARD */
+.sc{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow);}
+.sc-title{font-family:var(--mono);font-size:10px;color:var(--hint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.sc-title::after{content:'';flex:1;height:1px;background:var(--border);}
 
-/* Section cards */
-.section-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:12px;box-shadow:var(--shadow);}
-.section-title{font-family:var(--mono);font-size:10px;color:var(--hint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:6px;}
-.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+/* SUMMARY */
+.summary{font-size:13px;color:var(--text);line-height:1.7;}
+.bull-bear{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
+.bb-box{padding:10px 12px;border-radius:10px;}
+.bb-box.bull{background:var(--green-bg);}
+.bb-box.bear{background:var(--red-bg);}
+.bb-lbl{font-family:var(--mono);font-size:10px;color:var(--hint);margin-bottom:4px;}
+.bb-text{font-size:12px;line-height:1.4;}
+.bb-box.bull .bb-text{color:var(--green);}
+.bb-box.bear .bb-text{color:var(--red);}
 
-/* Key levels */
+/* LEVELS */
 .levels-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.level-item{padding:12px;background:var(--warm);border-radius:10px;}
-.level-lbl{font-family:var(--mono);font-size:10px;color:var(--hint);margin-bottom:4px;}
-.level-val{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--text);}
-.level-val.support{color:var(--green);}
-.level-val.resistance{color:var(--red);}
-.level-val.target{color:var(--blue);}
+.lv{padding:12px;background:var(--warm);border-radius:10px;}
+.lv-lbl{font-family:var(--mono);font-size:10px;color:var(--hint);margin-bottom:4px;}
+.lv-val{font-family:var(--mono);font-size:13px;font-weight:500;line-height:1.3;}
+.lv-val.sup{color:var(--green);}
+.lv-val.res{color:var(--red);}
 
-/* Factors */
-.factors-list{display:flex;flex-direction:column;gap:8px;}
-.factor-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:10px;}
-.factor-item.bullish{background:var(--green-bg);}
-.factor-item.bearish{background:var(--red-bg);}
-.factor-item.neutral{background:var(--amber-bg);}
+/* FIBONACCI */
+.fib-grid{display:flex;flex-direction:column;gap:6px;}
+.fib-row{display:flex;align-items:center;gap:8px;}
+.fib-pct{font-family:var(--mono);font-size:11px;color:var(--hint);width:44px;flex-shrink:0;}
+.fib-bar-wrap{flex:1;height:4px;background:var(--warm);border-radius:2px;overflow:hidden;position:relative;}
+.fib-bar{height:100%;background:var(--gold);border-radius:2px;}
+.fib-val{font-family:var(--mono);font-size:11px;color:var(--text);width:70px;text-align:right;flex-shrink:0;}
+.fib-marker{position:absolute;top:-3px;width:2px;height:10px;background:var(--red);border-radius:1px;}
+
+/* ELLIOTT WAVE */
+.ew-box{padding:12px;background:var(--gold-bg);border-radius:10px;border:1px solid rgba(184,134,11,0.2);}
+.ew-position{font-family:var(--serif);font-size:16px;color:var(--gold);margin-bottom:4px;}
+.ew-confidence{font-family:var(--mono);font-size:10px;color:var(--hint);}
+.ew-note{font-size:12px;color:var(--text);margin-top:8px;line-height:1.5;}
+
+/* FACTORS */
+.factors{display:flex;flex-direction:column;gap:8px;}
+.factor{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:10px;}
+.factor.bullish{background:var(--green-bg);}
+.factor.bearish{background:var(--red-bg);}
+.factor.neutral{background:var(--amber-bg);}
 .factor-icon{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;}
-.factor-item.bullish .factor-icon{background:var(--green);color:white;}
-.factor-item.bearish .factor-icon{background:var(--red);color:white;}
-.factor-item.neutral .factor-icon{background:var(--amber);color:white;}
+.factor.bullish .factor-icon{background:var(--green);color:white;}
+.factor.bearish .factor-icon{background:var(--red);color:white;}
+.factor.neutral .factor-icon{background:var(--amber);color:white;}
 .factor-text{font-size:13px;color:var(--text);line-height:1.4;}
-.factor-text strong{font-weight:600;}
 
-/* Indicators */
-.indicators-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.ind-item{padding:12px;background:var(--warm);border-radius:10px;}
+/* INDICATORS */
+.ind-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.ind{padding:12px;background:var(--warm);border-radius:10px;}
 .ind-lbl{font-family:var(--mono);font-size:10px;color:var(--hint);margin-bottom:4px;}
-.ind-val{font-family:var(--mono);font-size:13px;font-weight:500;}
+.ind-val{font-family:var(--mono);font-size:12px;font-weight:500;}
 .ind-val.bull{color:var(--green);}
 .ind-val.bear{color:var(--red);}
 .ind-val.neut{color:var(--amber);}
-.ind-note{font-size:10px;color:var(--hint);margin-top:2px;}
+.ind-note{font-size:10px;color:var(--hint);margin-top:2px;line-height:1.3;}
 
-/* News */
-.news-list{display:flex;flex-direction:column;gap:10px;}
-.news-item{padding:12px;background:var(--warm);border-radius:10px;cursor:pointer;}
-.news-item:hover{background:var(--border);}
-.news-headline{font-size:13px;color:var(--text);line-height:1.4;margin-bottom:4px;}
-.news-meta{font-family:var(--mono);font-size:10px;color:var(--hint);}
-
-/* Summary */
-.summary-text{font-size:14px;color:var(--text);line-height:1.7;}
-
-/* Risk factors */
-.risk-list{display:flex;flex-direction:column;gap:6px;}
-.risk-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text);}
-.risk-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0;}
+/* RISKS */
+.risks{display:flex;flex-direction:column;gap:6px;}
+.risk{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--text);line-height:1.4;}
+.risk-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px;}
 .risk-dot.high{background:var(--red);}
+.risk-dot.medium{background:var(--amber);}
 .risk-dot.low{background:var(--green);}
 
-/* What to watch */
-.watch-list{display:flex;flex-direction:column;gap:8px;}
+/* WATCH */
+.watch{display:flex;flex-direction:column;gap:8px;}
 .watch-item{padding:10px 12px;background:var(--blue-bg);border-radius:10px;font-size:13px;color:var(--blue);line-height:1.4;}
 
-/* Disclaimer */
-.disclaimer{padding:16px 20px;font-size:11px;color:var(--hint);text-align:center;border-top:1px solid var(--border);margin-top:8px;}
+/* MACRO ROW */
+.macro-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.macro-item{padding:10px 12px;background:var(--warm);border-radius:10px;}
+.macro-lbl{font-family:var(--mono);font-size:10px;color:var(--hint);margin-bottom:3px;}
+.macro-val{font-family:var(--mono);font-size:13px;color:var(--text);font-weight:500;}
+.macro-note{font-size:10px;color:var(--hint);margin-top:1px;}
 
-/* Error */
-.error-card{background:var(--red-bg);border:1px solid rgba(192,57,43,0.2);border-radius:var(--radius);padding:18px;margin-bottom:12px;}
-.error-text{font-size:13px;color:var(--red);}
-
-/* Skeleton */
-.skeleton{background:linear-gradient(90deg,var(--warm) 25%,var(--border) 50%,var(--warm) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px;}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
-@media(max-width:480px){
-  .hero-title{font-size:24px;}
-  .inst-name{font-size:20px;}
-}
+.disclaimer{padding:16px 20px;font-size:11px;color:var(--hint);text-align:center;border-top:1px solid var(--border);}
 </style>
 </head>
 <body>
 <div class="app">
 
-  <!-- HEADER -->
-  <div class="header">
-    <div class="logo">
-      <div class="logo-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-      </div>
-      <div>
-        <span class="logo-name">GoldWave<span>ONE</span></span><span class="logo-badge">BETA</span>
-      </div>
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
     </div>
-    <div class="status-pill">
-      <div class="status-dot"></div>
-      Live
-    </div>
+    <div><span class="logo-name">GoldWave<span>ONE</span></span><span class="logo-badge">BETA</span></div>
   </div>
-
-  <!-- HERO SEARCH -->
-  <div class="hero">
-    <div class="hero-title">Market<br><em>Intelligence</em></div>
-    <div class="hero-sub">Search any instrument — get AI-powered context, key levels, and what to watch.</div>
-    <div class="search-wrap">
-      <input class="search-input" id="search-input" type="text" placeholder="Search: Gold, XAUUSD, Apple, Reliance..." autocomplete="off" autocorrect="off">
-      <button class="search-btn" id="search-btn" onclick="runAnalysis()">
-        <svg viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- QUICK PICKS -->
-  <div class="quick-picks">
-    <div class="qp-label">Quick picks</div>
-    <div class="qp-chips">
-      <div class="qp-chip" onclick="quickSearch('XAU/USD Gold')">XAU/USD</div>
-      <div class="qp-chip" onclick="quickSearch('MCX GoldM India futures')">MCX GoldM</div>
-      <div class="qp-chip" onclick="quickSearch('Silver XAG/USD')">Silver</div>
-      <div class="qp-chip" onclick="quickSearch('Crude Oil WTI')">Crude Oil</div>
-      <div class="qp-chip" onclick="quickSearch('Nifty 50 India')">Nifty 50</div>
-      <div class="qp-chip" onclick="quickSearch('Bitcoin BTC/USD')">Bitcoin</div>
-      <div class="qp-chip" onclick="quickSearch('US Dollar Index DXY')">DXY</div>
-    </div>
-  </div>
-
-  <!-- LOADING -->
-  <div class="loading" id="loading">
-    <div class="loading-ring"></div>
-    <div class="loading-text">Analysing market conditions...</div>
-    <div class="loading-steps" id="loading-steps">Fetching live data</div>
-  </div>
-
-  <!-- RESULT -->
-  <div class="result" id="result"></div>
-
-  <!-- DISCLAIMER -->
-  <div class="disclaimer">
-    GoldWave ONE · Educational purposes only · Not financial advice · Always do your own research
-  </div>
-
+  <div class="live-pill"><div class="live-dot"></div>Live</div>
 </div>
 
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab on" onclick="switchTab('mcx',this)">MCX GoldM ₹</button>
+  <button class="tab" onclick="switchTab('xau',this)">XAU/USD $</button>
+</div>
+
+<!-- PRICE BANNER -->
+<div class="price-banner" id="price-banner">
+  <div class="pb-row">
+    <div>
+      <div class="pb-name" id="pb-name">MCX GoldM · 10g lot</div>
+      <div class="pb-price" id="pb-price">Loading...</div>
+    </div>
+    <div class="pb-right">
+      <div class="pb-meta" id="pb-meta">MCX India</div>
+      <div class="pb-source" id="pb-source">● Live</div>
+    </div>
+  </div>
+  <div class="pb-stats">
+    <div class="pb-stat"><div class="pb-stat-lbl">USD/INR</div><div class="pb-stat-val" id="pb-usdinr">—</div></div>
+    <div class="pb-stat"><div class="pb-stat-lbl">COMEX Gold</div><div class="pb-stat-val" id="pb-comex">—</div></div>
+    <div class="pb-stat"><div class="pb-stat-lbl">DXY</div><div class="pb-stat-val" id="pb-dxy">—</div></div>
+    <div class="pb-stat"><div class="pb-stat-lbl">US 10Y</div><div class="pb-stat-val" id="pb-10y">—</div></div>
+  </div>
+</div>
+
+<!-- ANALYSE BUTTON -->
+<div class="analyse-wrap">
+  <button class="analyse-btn" id="analyse-btn" onclick="runAnalysis()">
+    Analyse Now
+  </button>
+  <div class="last-scan" id="last-scan"></div>
+</div>
+
+<!-- LOADING -->
+<div class="loading" id="loading">
+  <div class="loading-ring"></div>
+  <div class="loading-text" id="loading-text">Fetching live data...</div>
+</div>
+
+<!-- RESULT -->
+<div class="result" id="result"></div>
+
+<div class="disclaimer">GoldWave ONE · Educational purposes only · Not financial advice</div>
+
+</div>
 <script>
-const API_BASE = 'https://web-production-4e4b5.up.railway.app';
-
-let currentQuery = '';
+const API_BASE = 'https://broad-cherry-6107.sakuramistco.workers.dev';
+let currentTab = 'mcx';
+let priceData = {};
+let macroData = {};
 let isAnalysing = false;
+let lastAnalysis = {mcx: null, xau: null};
 
-// Enter key support
-document.getElementById('search-input').addEventListener('keydown', e => {
-  if(e.key === 'Enter') runAnalysis();
-});
+// Init
+window.onload = async () => {
+  await fetchPriceData();
+  setInterval(fetchPriceData, 60000); // refresh price every minute
+};
 
-function quickSearch(query){
-  document.getElementById('search-input').value = query;
-  document.querySelectorAll('.qp-chip').forEach(c => c.classList.remove('active'));
-  event.target.classList.add('active');
-  runAnalysis();
+async function fetchPriceData(){
+  try {
+    const [pr, mr] = await Promise.all([
+      fetch(API_BASE + '/price', {signal: AbortSignal.timeout(8000)}).then(r => r.json()),
+      fetch(API_BASE + '/macro', {signal: AbortSignal.timeout(8000)}).then(r => r.json())
+    ]);
+    priceData = pr;
+    macroData = mr;
+    updatePriceBanner();
+  } catch(e) {
+    console.warn('Price fetch failed:', e);
+  }
+}
+
+function updatePriceBanner(){
+  const m = macroData?.macro_data || {};
+  if(currentTab === 'mcx'){
+    document.getElementById('pb-name').textContent = 'MCX GoldM · 10g lot · Jun 2026';
+    document.getElementById('pb-price').textContent = priceData.price ? '₹' + Number(priceData.price).toLocaleString('en-IN') : '—';
+    document.getElementById('pb-meta').textContent = 'MCX India · ' + (priceData.source || '');
+  } else {
+    document.getElementById('pb-name').textContent = 'XAU/USD · Spot Gold · COMEX';
+    const xauP = priceData.xau_spot || priceData.usd_oz || m.gold_usd?.price;
+    document.getElementById('pb-price').textContent = xauP ? '$' + Number(xauP).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + '/oz' : '—';
+    document.getElementById('pb-meta').textContent = 'COMEX · Spot';
+  }
+  document.getElementById('pb-usdinr').textContent = priceData.usd_inr ? Number(priceData.usd_inr).toFixed(2) : '—';
+  document.getElementById('pb-comex').textContent = m.gold_usd?.price ? '$' + Number(m.gold_usd.price).toFixed(0) : '—';
+  document.getElementById('pb-dxy').textContent = m.dxy?.price ? Number(m.dxy.price).toFixed(2) : '—';
+  document.getElementById('pb-10y').textContent = m.us10y?.price ? Number(m.us10y.price).toFixed(2) + '%' : '—';
+}
+
+function switchTab(tab, btn){
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  btn.classList.add('on');
+  updatePriceBanner();
+  // Show cached analysis if available
+  if(lastAnalysis[tab]){
+    renderResult(lastAnalysis[tab]);
+  } else {
+    document.getElementById('result').classList.remove('show');
+    document.getElementById('result').innerHTML = '';
+  }
 }
 
 async function runAnalysis(){
-  const query = document.getElementById('search-input').value.trim();
-  if(!query || isAnalysing) return;
-
-  currentQuery = query;
+  if(isAnalysing) return;
   isAnalysing = true;
-
-  // Show loading
+  document.getElementById('analyse-btn').disabled = true;
+  document.getElementById('analyse-btn').textContent = 'Analysing...';
   document.getElementById('loading').classList.add('show');
   document.getElementById('result').classList.remove('show');
-  document.getElementById('result').innerHTML = '';
 
-  // Animate loading steps
-  const steps = ['Fetching live data', 'Getting macro context', 'Running AI analysis', 'Building report'];
-  let stepIdx = 0;
-  const stepInterval = setInterval(() => {
-    stepIdx = (stepIdx + 1) % steps.length;
-    document.getElementById('loading-steps').textContent = steps[stepIdx];
-  }, 1500);
+  const steps = ['Fetching live price data', 'Calculating indicators', 'Running Elliott Wave', 'Generating analysis'];
+  let si = 0;
+  const si_interval = setInterval(() => {
+    document.getElementById('loading-text').textContent = steps[++si % steps.length];
+  }, 1200);
 
   try {
-    // Fetch macro data for context
-    let macroData = {};
+    const m = macroData?.macro_data || {};
+    const xauPrice = priceData.xau_spot || priceData.usd_oz || m.gold_usd?.price || 4750;
+    const mcxPrice = priceData.price || 150000;
+    const usdInr = priceData.usd_inr || 94.92;
+
+    const isMcx = currentTab === 'mcx';
+    const instrument = isMcx ? 'MCX GoldM' : 'XAU/USD';
+    const currentPrice = isMcx ? mcxPrice : xauPrice;
+    const currency = isMcx ? '₹' : '$';
+    const unit = isMcx ? 'per 10g' : '/oz';
+
+    // Fetch Elliott Wave data from server
+    let ewData = {};
     try {
-      const mr = await fetch(API_BASE + '/macro', {signal: AbortSignal.timeout(8000)});
-      if(mr.ok) macroData = await mr.json();
-    } catch(e) { console.warn('Macro fetch failed:', e); }
+      const ewr = await fetch(API_BASE + '/macro');
+      const ewJson = await ewr.json();
+      ewData = ewJson.elliott_wave || ewJson.fibonacci_levels || {};
+    } catch(e){}
 
-    // Fetch price data
-    let priceData = {};
-    try {
-      const pr = await fetch(API_BASE + '/price', {signal: AbortSignal.timeout(8000)});
-      if(pr.ok) priceData = await pr.json();
-    } catch(e) { console.warn('Price fetch failed:', e); }
+    const prompt = buildPrompt(isMcx, currentPrice, xauPrice, mcxPrice, usdInr, m, ewData);
 
-    // Build context for Claude
-    const macroCtx = buildMacroContext(macroData, priceData);
-
-    // Call Claude via /analyze
     const res = await fetch(API_BASE + '/analyze', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 1500,
-        system: `You are GoldWave ONE — a professional market intelligence assistant. You provide clear, honest market analysis for traders and investors.
-
-When given an instrument to analyse, you NEVER give buy/sell signals or price predictions. Instead you provide:
-1. Current market context and what is driving price
-2. Key support and resistance levels (with reasoning)
-3. Technical indicator interpretation (RSI, MACD, Bollinger Bands if data available)
-4. Macro factors affecting this instrument
-5. Key risks to watch
-6. What conditions would favour bulls vs bears
-7. What events/levels to monitor
-
-Always be honest about uncertainty. If data is limited, say so. Never fabricate specific price levels without reasoning.
-
-CRITICAL: You will receive LIVE MARKET DATA in the user message. You MUST use these exact prices for all analysis. Do NOT use your training data prices. Gold is currently around $4,500-4,800/oz in 2026 — NOT $1,800-$2,100. Always base key levels on the LIVE price provided, not historical training data.
-
-Respond ONLY with valid JSON in this exact structure:
-{
-  "instrument": "full instrument name",
-  "ticker": "ticker symbol",
-  "asset_class": "commodity/equity/forex/crypto/index",
-  "sentiment": "bullish/bearish/neutral",
-  "sentiment_score": <0-100, 50=neutral>,
-  "summary": "2-3 sentence current market context",
-  "key_levels": {
-    "strong_support": "price level with brief reason",
-    "support": "price level",
-    "resistance": "price level",
-    "strong_resistance": "price level with brief reason"
-  },
-  "factors": [
-    {"direction": "bullish/bearish/neutral", "text": "factor explanation"},
-    ...max 5 factors
-  ],
-  "indicators": {
-    "rsi": {"value": "number or N/A", "signal": "overbought/oversold/neutral", "note": "brief note"},
-    "macd": {"signal": "bullish/bearish/neutral", "note": "brief note"},
-    "trend": {"signal": "uptrend/downtrend/sideways", "note": "brief note"},
-    "volatility": {"signal": "high/medium/low", "note": "brief note"}
-  },
-  "risks": [
-    {"severity": "high/medium/low", "text": "risk description"},
-    ...max 4 risks
-  ],
-  "what_to_watch": [
-    "specific thing to monitor",
-    ...max 3 items
-  ],
-  "bull_case": "one sentence — what needs to happen for bulls",
-  "bear_case": "one sentence — what needs to happen for bears"
-}`,
-        messages: [{
-          role: 'user',
-          content: `Analyse this instrument: ${query}\n\n${macroCtx}\n\nProvide honest, data-driven market intelligence. No buy/sell recommendations.`
-        }]
+        max_tokens: 2000,
+        system: buildSystemPrompt(isMcx, currentPrice, currency),
+        messages: [{role: 'user', content: prompt}]
       })
     });
 
-    if(!res.ok) throw new Error('Analysis failed: ' + res.status);
+    if(!res.ok) throw new Error('API ' + res.status);
     const data = await res.json();
-    const raw = data.content?.map(b => b.text || '').join('') || '';
-
-    // Extract JSON
+    const raw = data.content?.map(b => b.text||'').join('') || '';
     let jsonStr = raw.replace(/```json/g,'').replace(/```/g,'').trim();
-    const fb = jsonStr.indexOf('{');
-    const lb = jsonStr.lastIndexOf('}');
+    const fb = jsonStr.indexOf('{'); const lb = jsonStr.lastIndexOf('}');
     if(fb >= 0 && lb > fb) jsonStr = jsonStr.slice(fb, lb+1);
     const analysis = JSON.parse(jsonStr);
-
-    clearInterval(stepInterval);
-    renderResult(analysis, macroData, priceData);
-
+    analysis._tab = currentTab;
+    analysis._price = currentPrice;
+    analysis._currency = currency;
+    analysis._unit = unit;
+    lastAnalysis[currentTab] = analysis;
+    clearInterval(si_interval);
+    renderResult(analysis);
+    document.getElementById('last-scan').textContent = 'Last analysis: ' + new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
   } catch(e) {
-    clearInterval(stepInterval);
-    console.error('Analysis error:', e);
+    clearInterval(si_interval);
+    console.error(e);
     document.getElementById('loading').classList.remove('show');
     document.getElementById('result').classList.add('show');
-    document.getElementById('result').innerHTML = `
-      <div class="error-card">
-        <div class="error-text">⚠ Analysis failed — ${e.message}. Please try again.</div>
-      </div>`;
+    document.getElementById('result').innerHTML = `<div style="padding:16px;background:var(--red-bg);border-radius:12px;color:var(--red);font-size:13px;">⚠ Analysis failed — ${e.message}. Please try again.</div>`;
   } finally {
     isAnalysing = false;
+    document.getElementById('analyse-btn').disabled = false;
+    document.getElementById('analyse-btn').textContent = 'Analyse Now';
+    document.getElementById('loading').classList.remove('show');
   }
 }
 
-function buildMacroContext(md, pd){
-  const m = (md && md.macro_data) ? md.macro_data : {};
-  const now = new Date().toLocaleString('en-IN', {timeZone:'Asia/Kolkata'});
-  
-  // Always build context even if macro fetch failed
-  const goldPrice = (m.gold_usd?.price) || (pd.usd_oz) || (pd.xau_spot) || 4750;
-  const xauSpot = pd.xau_spot || pd.usd_oz || goldPrice;
-  const mcxPrice = pd.price || 0;
-  const usdInr = pd.usd_inr || m.usd_inr?.price || 94.92;
-  
-  return `LIVE MARKET DATA AS OF ${now} IST — USE THESE EXACT PRICES FOR ALL ANALYSIS:
+function buildSystemPrompt(isMcx, price, currency){
+  return `You are GoldWave ONE — a professional gold market intelligence system.
 
-GOLD PRICES (current, not historical):
-• XAU/USD Spot: $${Number(xauSpot).toFixed(2)}/oz  ← USE THIS as current gold price
-• MCX GoldM: ₹${mcxPrice > 0 ? Number(mcxPrice).toLocaleString('en-IN') : 'N/A'} per 10g
-• COMEX GC=F: $${goldPrice}/oz
-• Day High: $${m.gold_usd?.day_high || 'N/A'} | Day Low: $${m.gold_usd?.day_low || 'N/A'}
+You analyse ${isMcx ? 'MCX GoldM (Indian gold futures, 10g lot)' : 'XAU/USD (spot gold, COMEX)'}.
 
-GOLD IS AT $${Number(xauSpot).toFixed(0)} — ALL KEY LEVELS MUST BE NEAR THIS PRICE.
-DO NOT use 2023 prices ($1,800-$2,200). Current range is $4,500-$5,000.
+CURRENT LIVE PRICE: ${currency}${Number(price).toLocaleString()} ${isMcx ? 'per 10g' : '/oz'}
 
-MACRO DATA:
-• USD/INR: ${usdInr}
-• DXY: ${m.dxy?.price || 'N/A'} (${md?.dxy_trend || 'falling'})
-• US 10Y Yield: ${m.us10y?.price || 'N/A'}%
-• Crude Oil WTI: $${m.crude_oil?.price || 'N/A'}
-• S&P 500: ${m.sp500?.price || 'N/A'}
-• Silver: $${m.silver?.price || 'N/A'}/oz
-• Gold/Silver Ratio: ${m.gold_silver_ratio?.ratio || 'N/A'}
-• India VIX: ${m.india_vix?.price || 'N/A'}
-• Fed Event Soon: ${md?.fed_event_soon ? 'YES — heightened volatility' : 'No'}
-• RBI Event Soon: ${md?.rbi_event_soon ? 'YES' : 'No'}
-• Days to MCX Expiry: ${md?.days_to_expiry || 'N/A'}`;
+CRITICAL RULES:
+1. ALL key levels must be within ±5% of the current price above
+2. NEVER use 2023/2024 price levels — gold is at ${currency}${Number(price).toLocaleString()} RIGHT NOW in May 2026
+3. Do NOT give buy/sell signals — provide market intelligence only
+4. Base Fibonacci levels on actual price swings provided in the data
+5. If Elliott Wave data is provided, use it — otherwise estimate from price context
+
+Respond ONLY with valid JSON:
+{
+  "sentiment": "bullish/bearish/neutral",
+  "sentiment_score": <0-100>,
+  "summary": "2-3 sentences on current market context",
+  "key_levels": {
+    "strong_support": "${currency}XXXX — reason",
+    "support": "${currency}XXXX",
+    "resistance": "${currency}XXXX",
+    "strong_resistance": "${currency}XXXX — reason"
+  },
+  "fibonacci": {
+    "swing_high": ${price},
+    "swing_low": ${price},
+    "level_786": ${price},
+    "level_618": ${price},
+    "level_500": ${price},
+    "level_382": ${price},
+    "level_236": ${price},
+    "current_level": "price is between X% and Y% retracement"
+  },
+  "elliott_wave": {
+    "estimated_wave": "Wave 3 of impulse / Wave B correction / etc",
+    "confidence": "low/medium/high",
+    "implication": "one sentence on what this means for next move",
+    "swing_high": ${price},
+    "swing_low": ${price}
+  },
+  "factors": [
+    {"direction": "bullish/bearish/neutral", "text": "explanation"},
+    {"direction": "bullish/bearish/neutral", "text": "explanation"},
+    {"direction": "bullish/bearish/neutral", "text": "explanation"},
+    {"direction": "bullish/bearish/neutral", "text": "explanation"},
+    {"direction": "bullish/bearish/neutral", "text": "explanation"}
+  ],
+  "indicators": {
+    "rsi": {"value": "XX", "signal": "overbought/oversold/neutral", "note": "brief"},
+    "macd": {"signal": "bullish/bearish/neutral", "note": "brief"},
+    "bollinger": {"signal": "upper/middle/lower", "note": "brief"},
+    "trend": {"signal": "uptrend/downtrend/sideways", "note": "brief"}
+  },
+  "risks": [
+    {"severity": "high/medium/low", "text": "risk"},
+    {"severity": "high/medium/low", "text": "risk"},
+    {"severity": "high/medium/low", "text": "risk"}
+  ],
+  "what_to_watch": ["item 1", "item 2", "item 3"],
+  "bull_case": "one sentence",
+  "bear_case": "one sentence"
+}`;
 }
 
-function renderResult(a, md, pd){
-  document.getElementById('loading').classList.remove('show');
+function buildPrompt(isMcx, currentPrice, xauPrice, mcxPrice, usdInr, m, ewData){
+  const currency = isMcx ? '₹' : '$';
+  return `Analyse ${isMcx ? 'MCX GoldM' : 'XAU/USD'} now.
 
-  const sentimentColor = a.sentiment === 'bullish' ? 'bullish' : a.sentiment === 'bearish' ? 'bearish' : 'neutral';
+LIVE DATA (May 2026):
+Current ${isMcx ? 'MCX GoldM' : 'XAU/USD'} price: ${currency}${Number(currentPrice).toLocaleString()} ${isMcx ? 'per 10g' : '/oz'}
+XAU/USD Spot: $${Number(xauPrice).toFixed(2)}/oz
+MCX GoldM: ₹${Number(mcxPrice).toLocaleString('en-IN')}/10g
+USD/INR: ${usdInr}
+DXY: ${m.dxy?.price || 'N/A'} (${macroData?.dxy_trend || 'falling'})
+US 10Y Yield: ${m.us10y?.price || 'N/A'}%
+Crude Oil: $${m.crude_oil?.price || 'N/A'}
+S&P 500: ${m.sp500?.price || 'N/A'}
+Silver: $${m.silver?.price || 'N/A'}/oz
+Gold/Silver Ratio: ${m.gold_silver_ratio?.ratio || 'N/A'}
+India VIX: ${m.india_vix?.price || 'N/A'}
+COMEX Volume: ${m.comex_volume || 'N/A'}
+Day High: $${m.gold_usd?.day_high || 'N/A'} | Day Low: $${m.gold_usd?.day_low || 'N/A'}
+Fed Event: ${macroData?.fed_event_soon ? 'YES — within 48hrs' : 'No'}
+RBI Event: ${macroData?.rbi_event_soon ? 'YES' : 'No'}
+Days to MCX Expiry: ${macroData?.days_to_expiry || 'N/A'}
+
+${ewData && Object.keys(ewData).length > 0 ? `ELLIOTT WAVE DATA FROM PRICE HISTORY:
+${JSON.stringify(ewData, null, 2)}` : `PRICE HISTORY: Building — limited data available for Elliott Wave.`}
+
+All Fibonacci levels and key levels must be within ±5% of ${currency}${Number(currentPrice).toLocaleString()}.`;
+}
+
+function indColor(s){
+  if(!s) return 'neut';
+  if(['bullish','oversold','lower','uptrend'].includes(s)) return 'bull';
+  if(['bearish','overbought','upper','downtrend'].includes(s)) return 'bear';
+  return 'neut';
+}
+
+function renderResult(a){
+  document.getElementById('loading').classList.remove('show');
+  const sc = a.sentiment === 'bullish' ? 'bullish' : a.sentiment === 'bearish' ? 'bearish' : 'neutral';
   const score = a.sentiment_score || 50;
+  const c = a._currency || '$';
+  const fmt = v => {
+    if(!v || v === 'N/A') return '—';
+    const n = parseFloat(String(v).replace(/[^0-9.]/g, ''));
+    if(isNaN(n)) return String(v);
+    return c === '₹' ? c + n.toLocaleString('en-IN') : c + n.toLocaleString('en-US', {minimumFractionDigits:0});
+  };
+
+  const fib = a.fibonacci || {};
+  const ew = a.elliott_wave || {};
+  const fibLevels = [
+    {pct:'78.6%', val:fib.level_786},
+    {pct:'61.8%', val:fib.level_618},
+    {pct:'50.0%', val:fib.level_500},
+    {pct:'38.2%', val:fib.level_382},
+    {pct:'23.6%', val:fib.level_236},
+  ];
+
+  const fibHtml = fib.swing_high && fib.swing_low ? `
+    <div class="sc">
+      <div class="sc-title">Fibonacci Retracement</div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--hint);margin-bottom:10px;">
+        Swing High: ${fmt(fib.swing_high)} → Swing Low: ${fmt(fib.swing_low)}
+      </div>
+      <div class="fib-grid">
+        ${fibLevels.map(f => `
+          <div class="fib-row">
+            <div class="fib-pct">${f.pct}</div>
+            <div class="fib-bar-wrap"><div class="fib-bar" style="width:${parseFloat(f.pct)}%"></div></div>
+            <div class="fib-val">${fmt(f.val)}</div>
+          </div>`).join('')}
+      </div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--gold);margin-top:10px;">${fib.current_level || ''}</div>
+    </div>` : '';
+
+  const ewHtml = ew.estimated_wave ? `
+    <div class="sc">
+      <div class="sc-title">Elliott Wave</div>
+      <div class="ew-box">
+        <div class="ew-position">${ew.estimated_wave}</div>
+        <div class="ew-confidence">Confidence: ${ew.confidence || 'low'}</div>
+        <div class="ew-note">${ew.implication || ''}</div>
+      </div>
+    </div>` : '';
 
   const factorsHtml = (a.factors || []).map(f => `
-    <div class="factor-item ${f.direction}">
-      <div class="factor-icon">${f.direction === 'bullish' ? '↑' : f.direction === 'bearish' ? '↓' : '→'}</div>
+    <div class="factor ${f.direction}">
+      <div class="factor-icon">${f.direction==='bullish'?'↑':f.direction==='bearish'?'↓':'→'}</div>
       <div class="factor-text">${f.text}</div>
     </div>`).join('');
 
-  const risksHtml = (a.risks || []).map(r => `
-    <div class="risk-item">
-      <div class="risk-dot ${r.severity}"></div>
-      <span>${r.text}</span>
-    </div>`).join('');
-
-  const watchHtml = (a.what_to_watch || []).map(w => `
-    <div class="watch-item">👁 ${w}</div>`).join('');
-
-  const indColor = s => s === 'bullish' || s === 'oversold' || s === 'uptrend' ? 'bull' : s === 'bearish' || s === 'overbought' || s === 'downtrend' ? 'bear' : 'neut';
-
   const ind = a.indicators || {};
+  const risksHtml = (a.risks || []).map(r => `
+    <div class="risk"><div class="risk-dot ${r.severity}"></div><span>${r.text}</span></div>`).join('');
+  const watchHtml = (a.what_to_watch || []).map(w => `<div class="watch-item">👁 ${w}</div>`).join('');
 
   const html = `
-    <div class="inst-header">
-      <div>
-        <div class="inst-name">${a.instrument || currentQuery}</div>
-        <div class="inst-meta">${a.ticker || ''} · ${a.asset_class || ''}</div>
-      </div>
-      <div class="inst-price">
-        <div class="inst-price-val">${getDisplayPrice(a, pd)}</div>
-      </div>
-    </div>
-
-    <!-- SENTIMENT -->
     <div class="sentiment-card">
-      <div class="sentiment-label">Market Sentiment</div>
-      <div class="sentiment-bar-wrap">
-        <div class="sentiment-bar ${sentimentColor}" style="width:${score}%"></div>
-      </div>
-      <div class="sentiment-footer">
-        <div class="sentiment-verdict">${capitalize(a.sentiment || 'Neutral')}</div>
-        <div class="sentiment-score">${score}/100</div>
+      <div class="section-lbl">Market Sentiment</div>
+      <div class="sent-bar-wrap"><div class="sent-bar ${sc}" style="width:${score}%"></div></div>
+      <div class="sent-row">
+        <div class="sent-verdict">${sc.charAt(0).toUpperCase()+sc.slice(1)}</div>
+        <div class="sent-score">${score}/100</div>
       </div>
     </div>
 
-    <!-- SUMMARY -->
-    <div class="section-card">
-      <div class="section-title">Market Context</div>
-      <div class="summary-text">${a.summary || '—'}</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;">
-        <div style="padding:10px 12px;background:var(--green-bg);border-radius:10px;">
-          <div style="font-family:var(--mono);font-size:10px;color:var(--hint);margin-bottom:4px;">Bull case</div>
-          <div style="font-size:12px;color:var(--green);line-height:1.4;">${a.bull_case || '—'}</div>
-        </div>
-        <div style="padding:10px 12px;background:var(--red-bg);border-radius:10px;">
-          <div style="font-family:var(--mono);font-size:10px;color:var(--hint);margin-bottom:4px;">Bear case</div>
-          <div style="font-size:12px;color:var(--red);line-height:1.4;">${a.bear_case || '—'}</div>
-        </div>
+    <div class="sc">
+      <div class="sc-title">Market Context</div>
+      <div class="summary">${a.summary || '—'}</div>
+      <div class="bull-bear">
+        <div class="bb-box bull"><div class="bb-lbl">Bull case</div><div class="bb-text">${a.bull_case||'—'}</div></div>
+        <div class="bb-box bear"><div class="bb-lbl">Bear case</div><div class="bb-text">${a.bear_case||'—'}</div></div>
       </div>
     </div>
 
-    <!-- KEY LEVELS -->
-    <div class="section-card">
-      <div class="section-title">Key Levels</div>
+    <div class="sc">
+      <div class="sc-title">Key Levels</div>
       <div class="levels-grid">
-        <div class="level-item">
-          <div class="level-lbl">Strong Support</div>
-          <div class="level-val support">${a.key_levels?.strong_support || '—'}</div>
-        </div>
-        <div class="level-item">
-          <div class="level-lbl">Support</div>
-          <div class="level-val support">${a.key_levels?.support || '—'}</div>
-        </div>
-        <div class="level-item">
-          <div class="level-lbl">Resistance</div>
-          <div class="level-val resistance">${a.key_levels?.resistance || '—'}</div>
-        </div>
-        <div class="level-item">
-          <div class="level-lbl">Strong Resistance</div>
-          <div class="level-val resistance">${a.key_levels?.strong_resistance || '—'}</div>
-        </div>
+        <div class="lv"><div class="lv-lbl">Strong Support</div><div class="lv-val sup">${a.key_levels?.strong_support||'—'}</div></div>
+        <div class="lv"><div class="lv-lbl">Support</div><div class="lv-val sup">${a.key_levels?.support||'—'}</div></div>
+        <div class="lv"><div class="lv-lbl">Resistance</div><div class="lv-val res">${a.key_levels?.resistance||'—'}</div></div>
+        <div class="lv"><div class="lv-lbl">Strong Resistance</div><div class="lv-val res">${a.key_levels?.strong_resistance||'—'}</div></div>
       </div>
     </div>
 
-    <!-- FACTORS -->
-    <div class="section-card">
-      <div class="section-title">Key Factors</div>
-      <div class="factors-list">${factorsHtml}</div>
+    ${fibHtml}
+    ${ewHtml}
+
+    <div class="sc">
+      <div class="sc-title">Key Factors</div>
+      <div class="factors">${factorsHtml}</div>
     </div>
 
-    <!-- INDICATORS -->
-    <div class="section-card">
-      <div class="section-title">Technical Indicators</div>
-      <div class="indicators-grid">
-        <div class="ind-item">
-          <div class="ind-lbl">RSI</div>
-          <div class="ind-val ${indColor(ind.rsi?.signal)}">${ind.rsi?.value || 'N/A'} · ${ind.rsi?.signal || 'N/A'}</div>
-          <div class="ind-note">${ind.rsi?.note || ''}</div>
-        </div>
-        <div class="ind-item">
-          <div class="ind-lbl">MACD</div>
-          <div class="ind-val ${indColor(ind.macd?.signal)}">${ind.macd?.signal || 'N/A'}</div>
-          <div class="ind-note">${ind.macd?.note || ''}</div>
-        </div>
-        <div class="ind-item">
-          <div class="ind-lbl">Trend</div>
-          <div class="ind-val ${indColor(ind.trend?.signal)}">${ind.trend?.signal || 'N/A'}</div>
-          <div class="ind-note">${ind.trend?.note || ''}</div>
-        </div>
-        <div class="ind-item">
-          <div class="ind-lbl">Volatility</div>
-          <div class="ind-val neut">${ind.volatility?.signal || 'N/A'}</div>
-          <div class="ind-note">${ind.volatility?.note || ''}</div>
-        </div>
+    <div class="sc">
+      <div class="sc-title">Technical Indicators</div>
+      <div class="ind-grid">
+        <div class="ind"><div class="ind-lbl">RSI</div><div class="ind-val ${indColor(ind.rsi?.signal)}">${ind.rsi?.value||'N/A'} · ${ind.rsi?.signal||'—'}</div><div class="ind-note">${ind.rsi?.note||''}</div></div>
+        <div class="ind"><div class="ind-lbl">MACD</div><div class="ind-val ${indColor(ind.macd?.signal)}">${ind.macd?.signal||'N/A'}</div><div class="ind-note">${ind.macd?.note||''}</div></div>
+        <div class="ind"><div class="ind-lbl">Bollinger</div><div class="ind-val ${indColor(ind.bollinger?.signal)}">${ind.bollinger?.signal||'N/A'}</div><div class="ind-note">${ind.bollinger?.note||''}</div></div>
+        <div class="ind"><div class="ind-lbl">Trend</div><div class="ind-val ${indColor(ind.trend?.signal)}">${ind.trend?.signal||'N/A'}</div><div class="ind-note">${ind.trend?.note||''}</div></div>
       </div>
     </div>
 
-    <!-- RISKS -->
-    <div class="section-card">
-      <div class="section-title">Risk Factors</div>
-      <div class="risk-list">${risksHtml}</div>
+    <div class="sc">
+      <div class="sc-title">Risk Factors</div>
+      <div class="risks">${risksHtml}</div>
     </div>
 
-    <!-- WHAT TO WATCH -->
-    <div class="section-card">
-      <div class="section-title">What to Watch</div>
-      <div class="watch-list">${watchHtml}</div>
-    </div>
-  `;
+    <div class="sc">
+      <div class="sc-title">What to Watch</div>
+      <div class="watch">${watchHtml}</div>
+    </div>`;
 
   document.getElementById('result').innerHTML = html;
   document.getElementById('result').classList.add('show');
-  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'start'});
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
 }
-
-function getDisplayPrice(a, pd){
-  if(a.asset_class === 'commodity' && a.ticker?.includes('XAU')){
-    return pd.xau_spot ? '$' + Number(pd.xau_spot).toLocaleString('en-US', {minimumFractionDigits:2}) + '/oz' : '—';
-  }
-  if(a.instrument?.toLowerCase().includes('mcx') || a.ticker?.includes('GOLDM')){
-    return pd.price ? '₹' + Number(pd.price).toLocaleString('en-IN') + '/10g' : '—';
-  }
-  return '—';
-}
-
-function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
 </script>
 </body>
 </html>
